@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>form+javascript</title>
+</head>
+<body>
+<a href="myweb_1.html">返回首页</a><br>
+<form action="">
+    姓名：<input type="text" id="name" name="name" value=""><br>
+    <!--    在正式系统 中，采集身份证号，不采集年龄-->
+    年龄：<input type="text" id="age" name="age" value=""><br>
+    性别：
+    <input type="radio" id="male" name="gender" value="1">男
+    <input type="radio" id="female" name="gender" value="2">女
+    <br>
+    选课
+    <input type="checkbox" id="javascript" name="course" value="javascript">Javascript
+    <input type="checkbox" id="webview" name="course" value="webview">Webview
+    <input type="checkbox" id="spring-boot" name="course" value="spring-boot">spring-boot
+    <input type="checkbox" id="html5" name="course" value="html5">HTML5
+    <br>
+    籍贯:
+    <select id="hometown" name="hometown">
+        <option value="-9">请选择</option>
+        <option value="bj">北京</option>
+        <option value="510100">成都</option>
+        <option value="cq">重庆</option>
+    </select>
+    <br>
+    简历:
+    <textarea id="resume" name="resume" rows="6" cols="40"></textarea><br>
+    照片:
+    <!--    此控件的value不能通过程序进行修改，安全问题-->
+    <input type="file" id="photo" name="photo" value=""><br>
+    <input type="submit" id="ok" name="ok" value="提交">
+    <input type="button" id="check" name="check" value="check" onclick="doCheck()">
+
+
+</form>
+<script>
+    function doCheck() {
+        console.log("in doCheck");
+        let objName=document.getElementById("name");
+        if(objName.value==""){
+            console.log("姓名不能为空")
+        }
+        //判断性别是否选中
+        let genderChecked=false;//关开变量
+        let objGender=document.getElementsByName("gender");
+        for(let i=0;i<objGender.length;i++){
+            console.log(objGender[i].value);
+            if(objGender[i].checked==true){
+                genderChecked=true;
+            }
+        }
+        if(genderChecked==false){
+            console.log("请选择性别")
+        }
+
+
+    }
+</script>
+</body>
+</html>
