@@ -1,0 +1,1808 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python刷题系统 - 完整版</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
+        }
+
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+
+        header {
+            text-align: center;
+            padding: 20px;
+            background: linear-gradient(135deg, #306998 0%, #4B8BBE 100%);
+            color: white;
+            border-radius: 12px;
+            box-shadow: 0 6px 15px rgba(48, 105, 152, 0.2);
+        }
+
+        h1 {
+            font-size: 2.4rem;
+            margin-bottom: 10px;
+            letter-spacing: 1px;
+        }
+
+        .subtitle {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .main-content {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 25px;
+        }
+
+        .questions-section {
+            flex: 3;
+            min-width: 300px;
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            max-height: 85vh;
+            overflow-y: auto;
+        }
+
+        .stats-section {
+            flex: 1;
+            min-width: 250px;
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            max-height: 85vh;
+            overflow-y: auto;
+        }
+
+        .questions-container {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+
+        .question-item {
+            border: 2px solid #eaeaea;
+            border-radius: 10px;
+            padding: 20px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .question-item:hover {
+            border-color: #b3d1ff;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        .question-item.correct {
+            border-color: #4CAF50;
+            background-color: #f9fff9;
+        }
+
+        .question-item.incorrect {
+            border-color: #f44336;
+            background-color: #fff9f9;
+        }
+
+        .question-item.answered {
+            border-color: #4d94ff;
+        }
+
+        .question-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .question-number {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #306998;
+        }
+
+        .question-type {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 15px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .single-choice {
+            background-color: #e6f2ff;
+            color: #0066cc;
+        }
+
+        .true-false {
+            background-color: #fff0e6;
+            color: #cc6600;
+        }
+
+        .fill-blank {
+            background-color: #e6ffe6;
+            color: #009933;
+        }
+
+        .question-text {
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .question-text img {
+            max-width: 100%;
+            height: auto;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        .knowledge-tag {
+            display: inline-block;
+            background-color: #f0f0f0;
+            color: #666;
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            margin-bottom: 15px;
+        }
+
+        .options-container {
+            margin-bottom: 15px;
+        }
+
+        .option {
+            margin-bottom: 10px;
+            padding: 12px;
+            border: 1px solid #eaeaea;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .option:hover {
+            border-color: #b3d1ff;
+            background-color: #f5f9ff;
+        }
+
+        .option.selected {
+            border-color: #4d94ff;
+            background-color: #e6f0ff;
+        }
+
+        .option.correct-answer {
+            border-color: #4CAF50;
+            background-color: #e6ffe6;
+        }
+
+        .option.incorrect-answer {
+            border-color: #f44336;
+            background-color: #ffe6e6;
+        }
+
+        .option input {
+            margin-right: 10px;
+        }
+
+        .fill-input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+
+        .fill-input:focus {
+            border-color: #4d94ff;
+            outline: none;
+        }
+
+        .fill-input.correct {
+            border-color: #4CAF50;
+            background-color: #f9fff9;
+        }
+
+        .fill-input.incorrect {
+            border-color: #f44336;
+            background-color: #fff9f9;
+        }
+
+        .true-false-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 10px;
+        }
+
+        .true-btn, .false-btn {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .true-btn {
+            background-color: #e6ffe6;
+            color: #009933;
+            border: 1px solid #b3e6b3;
+        }
+
+        .true-btn:hover {
+            background-color: #ccffcc;
+        }
+
+        .true-btn.selected {
+            background-color: #4CAF50;
+            color: white;
+            border-color: #4CAF50;
+        }
+
+        .false-btn {
+            background-color: #ffe6e6;
+            color: #cc0000;
+            border: 1px solid #ffb3b3;
+        }
+
+        .false-btn:hover {
+            background-color: #ffcccc;
+        }
+
+        .false-btn.selected {
+            background-color: #f44336;
+            color: white;
+            border-color: #f44336;
+        }
+
+        .feedback {
+            padding: 15px;
+            border-radius: 6px;
+            margin-top: 15px;
+            font-size: 0.95rem;
+            display: none;
+        }
+
+        .feedback.correct {
+            background-color: #e6ffe6;
+            border-left: 4px solid #4CAF50;
+        }
+
+        .feedback.incorrect {
+            background-color: #ffe6e6;
+            border-left: 4px solid #f44336;
+        }
+
+        .feedback-title {
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .correct-answer {
+            margin-top: 10px;
+            padding: 8px;
+            background-color: white;
+            border-radius: 4px;
+            border: 1px dashed #ccc;
+            font-weight: 600;
+        }
+
+        .explanation {
+            margin-top: 15px;
+            padding: 12px;
+            background-color: #f9f9f9;
+            border-radius: 6px;
+            border-left: 3px solid #4d94ff;
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        .pagination-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 2px solid #f0f0f0;
+            gap: 15px;
+        }
+
+        .page-btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            background-color: #f0f0f0;
+            color: #333;
+        }
+
+        .page-btn:hover {
+            background-color: #e0e0e0;
+        }
+
+        .page-btn.active {
+            background-color: #306998;
+            color: white;
+        }
+
+        .nav-btn {
+            padding: 10px 25px;
+            border: none;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .prev-btn {
+            background-color: #666;
+            color: white;
+        }
+
+        .prev-btn:hover {
+            background-color: #555;
+        }
+
+        .submit-btn {
+            background-color: #306998;
+            color: white;
+        }
+
+        .submit-btn:hover {
+            background-color: #25567d;
+        }
+
+        .next-btn {
+            background-color: #009933;
+            color: white;
+        }
+
+        .next-btn:hover {
+            background-color: #007a29;
+        }
+
+        .reset-btn {
+            background-color: #cc3300;
+            color: white;
+        }
+
+        .reset-btn:hover {
+            background-color: #b32b00;
+        }
+
+        .reset-all-btn {
+            background-color: #9933cc;
+            color: white;
+        }
+
+        .reset-all-btn:hover {
+            background-color: #8822bb;
+        }
+
+        .action-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+            gap: 15px;
+        }
+
+        .action-btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .reset-options {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .stats-title {
+            font-size: 1.4rem;
+            margin-bottom: 20px;
+            color: #306998;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .progress-container {
+            margin-bottom: 25px;
+        }
+
+        .progress-bar {
+            height: 12px;
+            background-color: #e0e0e0;
+            border-radius: 6px;
+            overflow: hidden;
+            margin-bottom: 8px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(to right, #4CAF50, #8BC34A);
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+
+        .progress-text {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.95rem;
+            color: #666;
+        }
+
+        .stats-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .stats-label {
+            color: #666;
+        }
+
+        .stats-value {
+            font-weight: 600;
+        }
+
+        .knowledge-progress {
+            margin-top: 20px;
+        }
+
+        .knowledge-item {
+            margin-bottom: 10px;
+        }
+
+        .knowledge-name {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+            font-size: 0.9rem;
+        }
+
+        .knowledge-bar {
+            height: 8px;
+            background-color: #e0e0e0;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .knowledge-fill {
+            height: 100%;
+            background-color: #4d94ff;
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+
+        .page-stats {
+            background-color: #f9f9f9;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+            border-left: 4px solid #4d94ff;
+        }
+
+        .page-stats-title {
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #306998;
+        }
+
+        .page-stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .page-stats-item {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 20px;
+            color: #777;
+            font-size: 0.9rem;
+            margin-top: 20px;
+        }
+
+        @media (max-width: 1024px) {
+            .main-content {
+                flex-direction: column;
+            }
+
+            .questions-section, .stats-section {
+                width: 100%;
+                max-height: none;
+            }
+
+            h1 {
+                font-size: 1.8rem;
+            }
+
+            .action-buttons {
+                flex-wrap: wrap;
+            }
+
+            .action-btn {
+                flex: 1;
+                min-width: 120px;
+            }
+
+            .reset-options {
+                flex-direction: column;
+            }
+        }
+
+        /* 滚动条样式 */
+        .questions-section::-webkit-scrollbar,
+        .stats-section::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .questions-section::-webkit-scrollbar-track,
+        .stats-section::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 4px;
+        }
+
+        .questions-section::-webkit-scrollbar-thumb,
+        .stats-section::-webkit-scrollbar-thumb {
+            background: #c1c1c1;
+            border-radius: 4px;
+        }
+
+        .questions-section::-webkit-scrollbar-thumb:hover,
+        .stats-section::-webkit-scrollbar-thumb:hover {
+            background: #a8a8a8;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <header>
+        <h1>Python刷题系统 - 完整版</h1>
+        <p class="subtitle">包含Python基础、数据类型、函数、面向对象、文件操作、Numpy、Pandas等知识 | 每题附带详细解析</p>
+    </header>
+
+    <div class="main-content">
+        <section class="questions-section">
+            <div class="questions-container" id="questions-container">
+                <!-- 题目将在这里动态生成 -->
+            </div>
+
+            <div class="pagination-container">
+                <!-- 分页按钮将在这里动态生成 -->
+            </div>
+
+            <div class="action-buttons">
+                <button class="action-btn prev-btn" onclick="prevPage()">上一页</button>
+                <button class="action-btn submit-btn" onclick="submitPage()">提交本页答案</button>
+                <button class="action-btn next-btn" onclick="nextPage()">下一页</button>
+            </div>
+
+            <div class="reset-options">
+                <button class="action-btn reset-btn" onclick="resetCurrentPage()">重置本页</button>
+                <button class="action-btn reset-all-btn" onclick="resetAllPages()">重置全部</button>
+            </div>
+        </section>
+
+        <section class="stats-section">
+            <h3 class="stats-title">答题统计</h3>
+
+            <div class="progress-container">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progress-fill"></div>
+                </div>
+                <div class="progress-text">
+                    <span>进度</span>
+                    <span id="progress-text">0/0</span>
+                </div>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stats-item">
+                    <span class="stats-label">总题数:</span>
+                    <span class="stats-value" id="total-questions">0</span>
+                </div>
+                <div class="stats-item">
+                    <span class="stats-label">已回答:</span>
+                    <span class="stats-value" id="answered-questions">0</span>
+                </div>
+                <div class="stats-item">
+                    <span class="stats-label">正确题数:</span>
+                    <span class="stats-value" id="correct-questions">0</span>
+                </div>
+                <div class="stats-item">
+                    <span class="stats-label">正确率:</span>
+                    <span class="stats-value" id="accuracy-rate">0%</span>
+                </div>
+                <div class="stats-item">
+                    <span class="stats-label">当前页:</span>
+                    <span class="stats-value" id="current-page">1/1</span>
+                </div>
+                <div class="stats-item">
+                    <span class="stats-label">得分:</span>
+                    <span class="stats-value" id="score">0</span>
+                </div>
+            </div>
+
+            <div class="page-stats" id="page-stats">
+                <div class="page-stats-title">本页统计</div>
+                <div class="page-stats-grid">
+                    <div class="page-stats-item">
+                        <span>本页题数:</span>
+                        <span id="page-total">0</span>
+                    </div>
+                    <div class="page-stats-item">
+                        <span>本页已答:</span>
+                        <span id="page-answered">0</span>
+                    </div>
+                    <div class="page-stats-item">
+                        <span>本页正确:</span>
+                        <span id="page-correct">0</span>
+                    </div>
+                    <div class="page-stats-item">
+                        <span>本页得分:</span>
+                        <span id="page-score">0</span>
+                    </div>
+                </div>
+            </div>
+
+            <h3 class="stats-title" style="margin-top: 30px;">知识点掌握情况</h3>
+            <div class="knowledge-progress" id="knowledge-progress">
+                <!-- 知识点掌握情况动态生成 -->
+            </div>
+
+            <h3 class="stats-title" style="margin-top: 30px;">题型分布</h3>
+            <div class="stats-grid">
+                <div class="stats-item">
+                    <span class="stats-label">单选题:</span>
+                    <span class="stats-value" id="single-count">0</span>
+                </div>
+                <div class="stats-item">
+                    <span class="stats-label">判断题:</span>
+                    <span class="stats-value" id="truefalse-count">0</span>
+                </div>
+                <div class="stats-item">
+                    <span class="stats-label">填空题:</span>
+                    <span class="stats-value" id="fill-count">0</span>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <div class="footer">
+        <p>Python刷题系统 - 完整版 &copy; 2025 | 基于《第一次作业基础知识练习题》和《第二次作业数据分析练习题》</p>
+        <p style="font-size: 0.8rem; margin-top: 5px;">题目总数: 70题 | 每页10题 | 知识点: 20个 | 题型: 3种 | 每题附带详细解析</p>
+    </div>
+</div>
+
+<script>
+    // Python题库 - 基于提供的题目内容
+    const questions = [
+        // ==================== 判断题 ====================
+        {
+            type: "truefalse",
+            text: "Python中的变量无须先创建和赋值而可以直接使用。",
+            answer: false,
+            knowledge: "Python基础",
+            explanation: "Python中的变量必须先创建和赋值才能使用，否则会抛出NameError异常。"
+        },
+        {
+            type: "truefalse",
+            text: "列表中的元素的数据类型可以各不相同，如int, string类型，甚至可以是一个列表类型。",
+            answer: true,
+            knowledge: "数据类型",
+            explanation: "Python列表是异构的，可以包含不同类型的元素，包括其他列表。"
+        },
+        {
+            type: "truefalse",
+            text: "只有Python扩展库才需要导入以后才能使用其中的对象，Python内置的标准库不需要导入即可使用其中的所有对象和方法。",
+            answer: false,
+            knowledge: "模块导入",
+            explanation: "无论是扩展库还是标准库，都需要先导入（import）才能使用其中的对象和方法。"
+        },
+        {
+            type: "truefalse",
+            text: "列表中的元素可以是不同数据类型，元组中的元素只能是同一数据类型。",
+            answer: false,
+            knowledge: "数据类型",
+            explanation: "列表和元组的元素都可以是不同的数据类型，元组()不可变，列表[]可变。"
+        },
+        {
+            type: "truefalse",
+            text: "迭代器都可以用for语句迭代的，可以迭代的元素都是迭代器。",
+            answer: false,
+            knowledge: "迭代器",
+            explanation: "可迭代对象（如列表、元组）可以用for语句迭代，但不是所有可迭代对象都是迭代器。迭代器是实现了__iter__()和__next__()方法的对象。"
+        },
+        {
+            type: "truefalse",
+            text: "在定义函数时，通过定义关键参数形式，可以有效避免必填参数顺序错误或遗漏的麻烦。",
+            answer: true,
+            knowledge: "函数定义",
+            explanation: "使用关键字参数可以指定参数名，这样就不需要按照定义顺序传递参数，避免了顺序错误。"
+        },
+        {
+            type: "truefalse",
+            text: "Python中类的构造函数是_construct_,用来为属性设置初始值,在建立对象时自动执行。",
+            answer: false,
+            knowledge: "面向对象",
+            explanation: "Python中类的构造函数是__init__()，不是_construct_。"
+        },
+        {
+            type: "truefalse",
+            text: "条件if x:,只要x是非0数值、非空字符串、非空list等,就判断为True,否则判断为False。",
+            answer: true,
+            knowledge: "条件判断",
+            explanation: "Python中，非零数值、非空字符串、非空列表等都会被视为True，而0、空字符串、空列表、None等被视为False。"
+        },
+        {
+            type: "truefalse",
+            text: "查看一个Numpy数组的结构（维度形态）是使用np.shape方法。",
+            answer: true,
+            knowledge: "Numpy",
+            explanation: "np.shape或数组的.shape属性可以查看数组的维度形态，如(2,3)表示2行3列。"
+        },
+        {
+            type: "truefalse",
+            text: "S2 = pandas.Series([25,23,42,21,23],index=['Jack','Lucy','Helen','Milky','Jasper']),程序23 in S2的执行结果为False。",
+            answer: true,
+            knowledge: "Pandas",
+            explanation: "在pandas Series中，使用in操作符检查的是索引（index），而不是值（values）。由于23不在索引中，所以返回False。"
+        },
+
+        // ==================== 单选题 ====================
+        {
+            type: "single",
+            text: "'年龄小于等于12或者性别为女'表达正确的是？",
+            options: ["age < 12 or gender == '女'", "age <= 12 or gender = '女'", "age <= 12 or gender == '女'", "age < 12 or gender = '女'"],
+            answer: 2,
+            knowledge: "条件表达式",
+            explanation: "正确的表达式是：年龄小于等于12（age <= 12）或者（or）性别等于女（gender == '女'）。注意使用==进行比较，而不是=。"
+        },
+        {
+            type: "single",
+            text: "以下关于Python语言中'缩进'说法正确的是：",
+            options: ["缩进统一为4个空格", "缩进在程序中长度统一且强制使用", "缩进可以用在任何语句之后，表示语句间的包含关系", "缩进是非强制的，仅为了提高代码可读性"],
+            answer: 1,
+            knowledge: "Python语法",
+            explanation: "Python中缩进是强制的，用于表示代码块结构，但并没有规定必须是几个空格（通常使用4个空格）。同一代码块的缩进必须一致。"
+        },
+        {
+            type: "single",
+            text: "如下条件分支语句：<br>score = 65<br>if score >= 90:<br>&nbsp;&nbsp;print('3个红花')<br>elif score >= 80:<br>&nbsp;&nbsp;print('2个红花')<br>elif score >= 60:<br>&nbsp;&nbsp;print('1个红花')<br>else:<br>&nbsp;&nbsp;print('继续努力')<br>成绩等级输出的结果是：",
+            options: ["3个红花", "2个红花", "1个红花", "继续努力"],
+            answer: 2,
+            knowledge: "条件语句",
+            explanation: "score=65，满足score>=60的条件，因此会执行对应的代码块，输出'1个红花'。"
+        },
+        {
+            type: "single",
+            text: "如果字符串定义为：helloString = \"Hello Python\"，那么下列哪个字符串切片的用法是错误的？",
+            options: ["helloString[0]", "helloString[:4]", "helloString[-4:]", "helloString[-2:-4]"],
+            answer: 3,
+            knowledge: "字符串操作",
+            explanation: "D选项的切片是从-2到-4，但默认步长为1（从左向右），而-2>-4，所以会得到空字符串。正确的写法应该是helloString[-4:-2]或helloString[-2:-4:-1]。"
+        },
+        {
+            type: "single",
+            text: "以下代码运行结果是什么？<br>names1 = ['Amir', 'Barry', 'Chales', 'Dao']<br>if 'amir' in names1:<br>&nbsp;&nbsp;print(1)<br>else:<br>&nbsp;&nbsp;print(2)",
+            options: ["1", "2", "An exception is thrown", "Nothing"],
+            answer: 1,
+            knowledge: "列表操作",
+            explanation: "Python字符串是区分大小写的，'amir'与列表中的'Amir'不同，因此不在列表中，执行else分支，输出2。"
+        },
+        {
+            type: "single",
+            text: "x是一个两位的整数变量，哪个是将其十位数与个位数交换位置的语句？",
+            options: ["(x/10)%10+x//10", "(x/10)%10+x%10", "(x%10)*10+x%10", "(x%10)*10+x//10"],
+            answer: 3,
+            knowledge: "数值运算",
+            explanation: "x%10得到个位数，x//10得到十位数。交换后，个位数变成十位数：(x%10)*10，十位数变成个位数：x//10。所以结果是(x%10)*10 + x//10。"
+        },
+        {
+            type: "single",
+            text: "下列哪种说法是错误的？",
+            options: ["字典不能用于布尔测试", "空字符串的布尔值是False", "空列表对象的布尔值是False", "值为0的整型对象的布尔值是False"],
+            answer: 0,
+            knowledge: "布尔测试",
+            explanation: "字典可以用于布尔测试，空字典的布尔值是False，非空字典的布尔值是True。"
+        },
+        {
+            type: "single",
+            text: "关于try-except，哪个选项的描述是正确的？",
+            options: ["try-except可以捕获所有类型的程序错误", "编写程序时应尽可能多的使用try-except，以提供更好的用户体验", "try-except在程序中不可替代", "try-except通常用于检查用户输入的合法性、文件打开或网络获取的成功性等"],
+            answer: 3,
+            knowledge: "异常处理",
+            explanation: "try-except主要用于处理可预见的异常，如用户输入错误、文件不存在、网络连接失败等，不应该滥用。"
+        },
+        {
+            type: "single",
+            text: "元组操作，(1,2,3)*3的执行结果将得到：",
+            options: ["(1,2,3,1,2,3,1,2,3)", "(1,2,3) (1,2,3) (1,2,3)", "(3,6,9)", "出错"],
+            answer: 0,
+            knowledge: "元组操作",
+            explanation: "元组的乘法是将元组重复指定次数，生成一个新的元组，而不会修改原元组的内容。"
+        },
+        {
+            type: "single",
+            text: "定义一个返回两个数乘积的函数(可以带默认值)，下面写法中哪个是正确的：",
+            options: ["def multiplication(x=2, y): return x*y", "def multiplication(x): return x*y", "def multiplication(x,2): return x*y", "def multiplication(x, y=2): return x*y"],
+            answer: 3,
+            knowledge: "函数定义",
+            explanation: "在Python函数定义中，如果参数有默认值（即默认参数），则必须放在参数列表的末尾，即所有非默认参数的后面。"
+        },
+        {
+            type: "single",
+            text: "Pandas有两种常用的数据结构是：",
+            options: ["ndarray和Series", "ndarray和DataFrame", "Series和DataFrame", "分片和DataFrame"],
+            answer: 2,
+            knowledge: "Pandas",
+            explanation: "Pandas的两种主要数据结构是Series（一维）和DataFrame（二维）。"
+        },
+        {
+            type: "single",
+            text: "计算Numpy中元素个数的方法是：",
+            options: ["np.data()", "np.size", "np.itemsize", "np.shape"],
+            answer: 1,
+            knowledge: "Numpy",
+            explanation: "np.size或数组的.size属性返回数组中元素的总数。.itemsize返回每个元素占用的字节数，.shape返回数组的维度形状。"
+        },
+        {
+            type: "single",
+            text: "若Z = numpy.arange(8)，那么Z = Z[ : :-1]的结果是：",
+            options: ["[7 6 5 4 3 2 1 0]", "[-1 0 1 2 3 4 5 6]", "[7]", "[0]"],
+            answer: 0,
+            knowledge: "Numpy切片",
+            explanation: "Z = Z[::-1]表示将数组反转，步长为-1，从末尾到开头。"
+        },
+        {
+            type: "single",
+            text: "Pandas的DataFrame数据类型显示所有列标签的用法是：",
+            options: ["columns", "rows", "index", "head"],
+            answer: 0,
+            knowledge: "Pandas",
+            explanation: "DataFrame的.columns属性返回所有列标签，.index返回行索引，.head()返回前几行数据。"
+        },
+        {
+            type: "single",
+            text: "对于序列s，哪个选项能够返回序列s中第i到j以k为步长的元素子序列？",
+            options: ["s[i,j,k]", "s[i;j;k]", "s[i:j:k]", "s(i,j,k)"],
+            answer: 2,
+            knowledge: "序列切片",
+            explanation: "Python中使用s[i:j:k]表示从i到j（不包括j）以k为步长的切片。"
+        },
+        {
+            type: "single",
+            text: "下列选项中不是Python对文件读操作方法的是：",
+            options: ["read()", "readlines()", "readline()", "readall()"],
+            answer: 3,
+            knowledge: "文件操作",
+            explanation: "Python文件对象常用的读取方法包括read()、readline()和readlines()，没有readall()方法。"
+        },
+        {
+            type: "single",
+            text: "列表ls，哪个选项对ls.append(x)的描述是正确的？",
+            options: ["向ls中增加元素，如果x是一个列表，则可以同时增加多个元素", "只能向列表ls最后增加一个元素x", "向列表ls最前面增加一个元素x", "替换列表ls最后一个元素为x"],
+            answer: 1,
+            knowledge: "列表操作",
+            explanation: "ls.append(x)只能向列表末尾添加一个元素x。如果要添加多个元素，可以使用extend()方法；要在前面添加元素，可以使用insert(0, x)。"
+        },
+        {
+            type: "single",
+            text: "以下关于字符串.strip()方法功能说明正确的是？",
+            options: ["去掉字符串两侧指定字符", "替换字符串中特定字符", "按照指定字符分割字符串为数组", "连接两个字符串序列"],
+            answer: 0,
+            knowledge: "字符串操作",
+            explanation: ".strip()方法用于移除字符串头尾指定的字符（默认为空白字符，如空格、换行符等）。"
+        },
+        {
+            type: "single",
+            text: "在每个Python类中，都包含一个特殊的变量（ ）。它表示当前类自身，可以使用它来引用类中的成员变量和成员函数。",
+            options: ["this", "self", "me", "与类同名"],
+            answer: 1,
+            knowledge: "面向对象",
+            explanation: "Python中使用self作为实例方法的第一个参数，代表类的实例对象本身。"
+        },
+
+        // ==================== 填空题 ====================
+        {
+            type: "fill",
+            text: "四舍五入函数round(7.0 / 3.0 , 1)的结果为( )。",
+            answer: "2.3",
+            knowledge: "数值运算",
+            explanation: "7.0/3.0≈2.333333，保留1位小数四舍五入后为2.3。"
+        },
+        {
+            type: "fill",
+            text: "Python语句list(range(1,10,3))执行结果为( )。",
+            answer: "[1, 4, 7]",
+            knowledge: "range函数",
+            explanation: "range(1,10,3)生成从1开始到10结束（不包括10），步长为3的序列：1,4,7。"
+        },
+        {
+            type: "fill",
+            text: "Python中获取数据的类型可以使用( )函数。",
+            answer: "type()",
+            knowledge: "类型函数",
+            explanation: "type()函数用于获取对象的类型。"
+        },
+        {
+            type: "fill",
+            text: "在Python的内置函数中，( )函数可以返回字符串x的长度。",
+            answer: "len(x)",
+            knowledge: "内置函数",
+            explanation: "len()函数返回对象（字符串、列表、元组等）的长度或元素个数。"
+        },
+        {
+            type: "fill",
+            text: "字符串格式化：'%s is %d years old'%('Jack',25)的字符串为（ ）。",
+            answer: "'Jack is 25 years old'",
+            knowledge: "字符串格式化",
+            explanation: "%s被替换为'Jack'，%d被替换为25。"
+        },
+        {
+            type: "fill",
+            text: "已知列表 x = [1, 2, 3, 4]，那么执行语句 del x[1] 之后x的值为（ ）。",
+            answer: "[1, 3, 4]",
+            knowledge: "列表操作",
+            explanation: "del x[1]删除索引为1的元素（即2），列表变为[1, 3, 4]。"
+        },
+        {
+            type: "fill",
+            text: "表达式 'abcab'.strip('ab') 的值为（ ）。",
+            answer: "'c'",
+            knowledge: "字符串操作",
+            explanation: ".strip('ab')移除字符串两侧的'a'或'b'字符，所以移除开头和结尾的'ab'后剩下'c'。"
+        },
+        {
+            type: "fill",
+            text: "构造函数是类的一个特殊函数，在Python中，构造函数的名称为（ ）。",
+            answer: "__init__()",
+            knowledge: "面向对象",
+            explanation: "Python中的构造函数是__init__()方法，在创建对象时自动调用。"
+        },
+        {
+            type: "fill",
+            text: "Numpy中求数据最大值方法为（ ）。",
+            answer: ".max()",
+            knowledge: "Numpy",
+            explanation: "Numpy数组的.max()方法或np.max()函数可以计算数组中的最大值。"
+        },
+        {
+            type: "fill",
+            text: "导入numpy库并命名为np的语句是（ ）。",
+            answer: "import numpy as np",
+            knowledge: "模块导入",
+            explanation: "这是导入numpy并为其创建别名np的标准写法。"
+        },
+
+        // ==================== 读程序题 ====================
+        {
+            type: "single",
+            text: "写出以下程序的运行结果：<br>name= 'Python语言程序设计课程'<br>print(name[0],name[2:-2],name[-1])",
+            options: ["P thon语言程序设计课 程", "P ython语言程序设计课 课", "P thon语言程序设计 程", "y thon语言程序设计课 程"],
+            answer: 0,
+            knowledge: "字符串切片",
+            explanation: "name[0]是'P'，name[2:-2]是从索引2到倒数第2个（不包括-2），即'thon语言程序设计课'，name[-1]是'程'。"
+        },
+        {
+            type: "single",
+            text: "写出以下程序的运行结果：<br>list = ['x','y','b','x']<br>list.remove('x')<br>print(list)",
+            options: ["['x', 'y', 'b', 'x']", "['y', 'b', 'x']", "['x', 'y', 'b']", "['y', 'b']"],
+            answer: 1,
+            knowledge: "列表操作",
+            explanation: "list.remove('x')移除列表中第一个匹配到的指定元素，所以移除第一个'x'，列表变为['y','b','x']。"
+        },
+        {
+            type: "single",
+            text: "写出以下程序的运行结果：<br>def f(a,b):<br>&nbsp;&nbsp;a=4<br>&nbsp;&nbsp;return a+b<br>def main():<br>&nbsp;&nbsp;a=5<br>&nbsp;&nbsp;b=6<br>&nbsp;&nbsp;print(f(a,b),a+b)<br>main()",
+            options: ["10 11", "10 10", "11 11", "9 10"],
+            answer: 0,
+            knowledge: "函数作用域",
+            explanation: "f(a,b)中a被重新赋值为4，返回4+6=10。main()中a和b仍然是5和6，所以a+b=11。"
+        },
+        {
+            type: "fill",
+            text: "写出以下程序的运行结果：<br>t = ['you', 'are', 'so', 'beautiful']<br>s= ' '.join(t)<br>print(s)",
+            answer: "you are so beautiful",
+            knowledge: "字符串操作",
+            explanation: "使用一个空格作为连接符，将列表t中的所有元素连接成一个字符串。"
+        },
+        {
+            type: "fill",
+            text: "写出以下程序的运行结果：<br>def f(a,b):<br>&nbsp;&nbsp;if b==0:<br>&nbsp;&nbsp;&nbsp;&nbsp;print(a)<br>&nbsp;&nbsp;else:<br>&nbsp;&nbsp;&nbsp;&nbsp;f(b,a%b)<br>print(f(9,6))",
+            answer: "3",
+            knowledge: "递归函数",
+            explanation: "这是求最大公约数的辗转相除法，9和6的最大公约数是3。"
+        },
+        {
+            type: "fill",
+            text: "如果student.txt文件中的文本为'我叫李明浩，我来自成都'，那么如下代码的结果为：<br>f=open('student.txt','r')<br>s=f.read(5)<br>f.close()<br>print(s)",
+            answer: "我叫李明浩",
+            knowledge: "文件操作",
+            explanation: "f.read(5)读取文件的前5个字符（在UTF-8编码中，中文字符通常占3个字节，但Python的read(5)会读取5个字符）。"
+        },
+        {
+            type: "fill",
+            text: "写出以下程序的运行结果：<br>def power(x, n):<br>&nbsp;&nbsp;s = 1<br>&nbsp;&nbsp;while n > 0:<br>&nbsp;&nbsp;&nbsp;&nbsp;n = n - 1<br>&nbsp;&nbsp;&nbsp;&nbsp;s=s*x<br>&nbsp;&nbsp;return s<br>p = power(5,2)<br>print(p)",
+            answer: "25",
+            knowledge: "函数定义",
+            explanation: "power函数计算x的n次方，5的2次方是25。"
+        },
+        {
+            type: "fill",
+            text: "写出以下程序的运行结果：<br>class Student(object):<br>&nbsp;&nbsp;def __init__(self, first='', last=''):<br>&nbsp;&nbsp;&nbsp;&nbsp;self.firstname = first<br>&nbsp;&nbsp;&nbsp;&nbsp;self.lastname = last<br>s=Student(last='Python',first='Hello')<br>print(s.firstname +' '+s.lastname)",
+            answer: "Hello Python",
+            knowledge: "面向对象",
+            explanation: "创建Student对象时使用了关键字参数，first='Hello', last='Python'，所以输出'Hello Python'。"
+        },
+        {
+            type: "single",
+            text: "写出以下numpy程序的运行结果：<br>import numpy as np<br>x = np.array([1,5,2])<br>y = np.array([7,4,1])<br>z = x + y<br>z = z*2<br>print(z)",
+            options: ["[16, 18, 6]", "[2, 10, 4]", "[8, 9, 3]", "[14, 8, 2]"],
+            answer: 0,
+            knowledge: "Numpy",
+            explanation: "x+y=[1+7,5+4,2+1]=[8,9,3]，然后乘以2得到[16,18,6]。"
+        },
+        {
+            type: "single",
+            text: "使用Pandas创建DataFrame数据如下：<br>df=pd.DataFrame(np.array([[10,20],[30,40]]),index=['a','b'],columns=['c1','c2'])<br>显示结果为<br><img src='pyQ40.png' width='200'><br>请写出执行以下代码之后的显示结果：<br>df.columns=[ 'column1' , 'column2' ]<br>df.index=[0,1]<br>print(df['column1'][0])",
+            options: ["10", "20", "30", "40"],
+            answer: 0,
+            knowledge: "Pandas",
+            explanation: "修改列名为column1和column2，行索引为0和1，然后获取'column1'列的第0行（原第0行，值为10）。"
+        },
+
+        // ==================== 程序填空题 ====================
+        {
+            type: "fill",
+            text: "打印出所有的'水仙花数'，所谓'水仙花数'是指一个三位数，其各位数字立方和等于该数本身。例如：153是一个'水仙花数'，因为153=1³+5³+3³。<br>程序：利用for循环控制100-999个数，每个数分解出个位，十位，百位。<br>for i in range(100,1000):<br>&nbsp;&nbsp;s= __(?)__<br>&nbsp;&nbsp;position1=int(s[-1])<br>&nbsp;&nbsp;position2=int(s[-2])<br>&nbsp;&nbsp;position3=int(s[-3])<br>&nbsp;&nbsp;if i == position1 ** 3 + position2 ** 3 + position3 ** 3:<br>&nbsp;&nbsp;&nbsp;&nbsp;print(i)",
+            answer: "str(i)",
+            knowledge: "数值运算",
+            explanation: "将整数i转换为字符串s，以便通过索引访问各位数字。"
+        },
+        {
+            type: "fill",
+            text: "创建一个数字全是0的10*10的二维numpy数组，并将其边界部分的数据全部设为1。<br><img src='pyQ51.png' width='400'><br>Z = (?)<br>Z[1:-1, 1:-1] = 0<br>print(Z)",
+            answer: "np.ones((10,10))",
+            knowledge: "Numpy",
+            explanation: "先创建一个10x10的全1数组，然后将内部区域（第1行到倒数第1行，第1列到倒数第1列）设为0，保留边界为1。"
+        },
+        {
+            type: "fill",
+            text: "读取student.txt文件每一行，student.txt文件数据示意如下：<br>chen,32,it<br>li,30,tcm<br>zhang,29,teacher<br>...<br>现在要求:<br>（1）使用readlines()读取文件的每一行<br>（2）每行用户数据用逗号,分割<br>（3）将全部用户数据保存为列表user<br>（4）关闭文件<br><br>f = open('student.txt', 'r')<br>(1)<br>user = []<br>for l in lines:<br>&nbsp;&nbsp;(2)<br>&nbsp;&nbsp;for ttt in range(len(tem)):<br>&nbsp;&nbsp;&nbsp;&nbsp;tem[ttt] = tem[ttt].replace('\\n', '')<br>&nbsp;&nbsp;(3)<br>print(user)<br>(4)<br><br>请填写第一空：",
+            answer: "lines = f.readlines()",
+            knowledge: "文件操作",
+            explanation: "使用readlines()方法读取文件所有行，返回一个包含每行内容的列表。"
+        },
+        {
+            type: "fill",
+            text: "接上题，请填写第二空：",
+            answer: "tem = l.split(',')",
+            knowledge: "字符串操作",
+            explanation: "使用split(',')将每行字符串按逗号分割成列表。"
+        },
+        {
+            type: "fill",
+            text: "接上题，请填写第三空：",
+            answer: "user.append(tem)",
+            knowledge: "列表操作",
+            explanation: "将分割后的列表tem添加到user列表中。"
+        },
+        {
+            type: "fill",
+            text: "接上题，请填写第四空：",
+            answer: "f.close()",
+            knowledge: "文件操作",
+            explanation: "使用完文件后应该关闭文件，释放资源。"
+        },
+        {
+            type: "fill",
+            text: "使用pandas读取欧洲杯2012数据Eueo2012.csv，并做以下处理：<br><img src='pyQ56.png' width='400'> <br>（1）使用pandas读取数据<br>（2）查看所有的列标签<br>（3）选择第6,7只队（第一只队伍下标为0）<br>（4）显示England的Shooting Accuracy（进球率数据）<br><br>import pandas as pd<br>euro12 = pd.read_csv('data/Eueo2012.csv')<br>(2) #查看所有的列标签<br>(3) #选择第6,7只队<br>euro12 = euro12.set_index('Team')<br>(4) #显示England的Shooting Accuracy（进球率数据）<br><br>请填写第4题代码：",
+            answer: "euro12.loc[['England']][['Shooting Accuracy']]",
+            knowledge: "Pandas",
+            explanation: "使用loc基于标签索引选择England行的Shooting Accuracy列。"
+        },
+        {
+            type: "fill",
+            text: "接上题，请填写第2空：",
+            answer: "print( euro12.columns )"
+        },
+        {
+            type: "fill",
+            text: "接上题，请填写第3空：",
+            answer: "euro12 = euro12. iloc[[6, 7]]"
+        },
+    ];
+
+    // 应用状态
+    const QUESTIONS_PER_PAGE = 10;
+    let currentPage = 0;
+    let totalPages = 0;
+    let userAnswers = new Array(questions.length).fill(null);
+    let questionStatus = new Array(questions.length).fill(null); // null=未答, true=正确, false=错误
+    let score = 0;
+    let answeredCount = 0;
+    let correctCount = 0;
+
+    // 知识点统计
+    let knowledgeStats = {};
+
+    // 初始化
+    document.addEventListener('DOMContentLoaded', function() {
+        initKnowledgeStats();
+        calculateTotalPages();
+        loadPage();
+        updateStats();
+    });
+
+    // 初始化知识点统计
+    function initKnowledgeStats() {
+        // 初始化知识点统计对象
+        const allKnowledge = [...new Set(questions.map(q => q.knowledge))];
+        knowledgeStats = {};
+        allKnowledge.forEach(knowledge => {
+            knowledgeStats[knowledge] = { total: 0, correct: 0 };
+        });
+
+        // 统计每个知识点的题目数量
+        questions.forEach((question, index) => {
+            if (knowledgeStats[question.knowledge]) {
+                knowledgeStats[question.knowledge].total++;
+            }
+        });
+    }
+
+    // 计算总页数
+    function calculateTotalPages() {
+        totalPages = Math.ceil(questions.length / QUESTIONS_PER_PAGE);
+    }
+
+    // 加载当前页的题目
+    function loadPage() {
+        const questionsContainer = document.getElementById('questions-container');
+        questionsContainer.innerHTML = '';
+
+        // 计算当前页的题目范围
+        const startIndex = currentPage * QUESTIONS_PER_PAGE;
+        const endIndex = Math.min(startIndex + QUESTIONS_PER_PAGE, questions.length);
+
+        // 生成当前页的题目
+        for (let i = startIndex; i < endIndex; i++) {
+            const question = questions[i];
+            const questionElement = createQuestionElement(question, i);
+            questionsContainer.appendChild(questionElement);
+        }
+
+        // 生成分页按钮
+        createPagination();
+
+        // 更新当前页显示
+        document.getElementById('current-page').textContent = `${currentPage + 1}/${totalPages}`;
+
+        // 更新本页统计
+        updatePageStats();
+    }
+
+    // 创建题目元素
+    function createQuestionElement(question, index) {
+        const questionElement = document.createElement('div');
+        questionElement.className = 'question-item';
+        questionElement.dataset.index = index;
+
+        // 根据答题状态设置样式
+        if (questionStatus[index] === true) {
+            questionElement.classList.add('correct');
+        } else if (questionStatus[index] === false) {
+            questionElement.classList.add('incorrect');
+        } else if (userAnswers[index] !== null) {
+            questionElement.classList.add('answered');
+        }
+
+        // 题目头部
+        const questionHeader = document.createElement('div');
+        questionHeader.className = 'question-header';
+
+        const questionNumber = document.createElement('div');
+        questionNumber.className = 'question-number';
+        questionNumber.textContent = `题目 #${index + 1}`;
+
+        const questionType = document.createElement('span');
+        questionType.className = `question-type ${question.type === 'single' ? 'single-choice' : question.type === 'truefalse' ? 'true-false' : 'fill-blank'}`;
+        questionType.textContent = question.type === 'single' ? '单选题' : question.type === 'truefalse' ? '判断题' : '填空题';
+
+        questionHeader.appendChild(questionNumber);
+        questionHeader.appendChild(questionType);
+
+        // 题目内容
+        const questionText = document.createElement('div');
+        questionText.className = 'question-text';
+        questionText.innerHTML = question.text; // 使用innerHTML以支持图片标签
+
+        // 知识点标签
+        const knowledgeTag = document.createElement('div');
+        knowledgeTag.className = 'knowledge-tag';
+        knowledgeTag.textContent = question.knowledge;
+
+        // 题目选项/输入区域
+        let questionContent;
+        if (question.type === 'single') {
+            questionContent = createSingleChoiceContent(question, index);
+        } else if (question.type === 'truefalse') {
+            questionContent = createTrueFalseContent(question, index);
+        } else {
+            questionContent = createFillBlankContent(question, index);
+        }
+
+        // 反馈区域
+        const feedbackElement = document.createElement('div');
+        feedbackElement.className = 'feedback';
+        feedbackElement.id = `feedback-${index}`;
+
+        // 组装题目元素
+        questionElement.appendChild(questionHeader);
+        questionElement.appendChild(questionText);
+        questionElement.appendChild(knowledgeTag);
+        questionElement.appendChild(questionContent);
+        questionElement.appendChild(feedbackElement);
+
+        return questionElement;
+    }
+
+    // 创建单选题内容
+    function createSingleChoiceContent(question, index) {
+        const container = document.createElement('div');
+        container.className = 'options-container';
+
+        question.options.forEach((option, optionIndex) => {
+            const optionElement = document.createElement('div');
+            optionElement.className = 'option';
+            if (userAnswers[index] === optionIndex) {
+                optionElement.classList.add('selected');
+
+                // 如果已经提交过答案，显示正确答案和错误答案的样式
+                if (questionStatus[index] !== null) {
+                    if (optionIndex === question.answer) {
+                        optionElement.classList.add('correct-answer');
+                    } else if (userAnswers[index] === optionIndex && optionIndex !== question.answer) {
+                        optionElement.classList.add('incorrect-answer');
+                    }
+                }
+            }
+            optionElement.dataset.optionIndex = optionIndex;
+            optionElement.onclick = () => selectOption(index, optionIndex);
+
+            const input = document.createElement('input');
+            input.type = 'radio';
+            input.name = `question-${index}`;
+            input.id = `question-${index}-option-${optionIndex}`;
+            input.checked = (userAnswers[index] === optionIndex);
+
+            const label = document.createElement('label');
+            label.htmlFor = `question-${index}-option-${optionIndex}`;
+            label.textContent = option;
+
+            optionElement.appendChild(input);
+            optionElement.appendChild(label);
+            container.appendChild(optionElement);
+        });
+
+        return container;
+    }
+
+    // 创建判断题内容
+    function createTrueFalseContent(question, index) {
+        const container = document.createElement('div');
+        container.className = 'true-false-buttons';
+
+        const trueBtn = document.createElement('button');
+        trueBtn.className = 'true-btn';
+        trueBtn.textContent = '正确';
+        if (userAnswers[index] === true) {
+            trueBtn.classList.add('selected');
+        }
+        trueBtn.onclick = () => selectTrueFalse(index, true);
+
+        const falseBtn = document.createElement('button');
+        falseBtn.className = 'false-btn';
+        falseBtn.textContent = '错误';
+        if (userAnswers[index] === false) {
+            falseBtn.classList.add('selected');
+        }
+        falseBtn.onclick = () => selectTrueFalse(index, false);
+
+        container.appendChild(trueBtn);
+        container.appendChild(falseBtn);
+        return container;
+    }
+
+    // 创建填空题内容
+    function createFillBlankContent(question, index) {
+        const container = document.createElement('div');
+
+        const input = document.createElement('input');
+        input.type = 'text';
+        input.className = 'fill-input';
+        input.id = `fill-input-${index}`;
+        input.placeholder = '请输入答案...';
+
+        // 如果已经回答过，显示答案
+        if (userAnswers[index] !== null) {
+            input.value = userAnswers[index];
+
+            // 如果已经提交过答案，显示正确/错误样式
+            if (questionStatus[index] !== null) {
+                const isCorrect = userAnswers[index].toLowerCase() === question.answer.toLowerCase();
+                input.classList.add(isCorrect ? 'correct' : 'incorrect');
+            }
+        }
+
+        input.oninput = () => {
+            userAnswers[index] = input.value.trim();
+            // 更新答题状态显示
+            const questionElement = document.querySelector(`.question-item[data-index="${index}"]`);
+            if (questionElement && input.value.trim() !== '') {
+                questionElement.classList.add('answered');
+                questionElement.classList.remove('correct', 'incorrect');
+            } else if (questionElement && input.value.trim() === '') {
+                questionElement.classList.remove('answered');
+            }
+            // 更新本页统计
+            updatePageStats();
+        };
+
+        container.appendChild(input);
+        return container;
+    }
+
+    // 选择单选题选项
+    function selectOption(questionIndex, optionIndex) {
+        userAnswers[questionIndex] = optionIndex;
+
+        // 更新选项显示
+        const questionElement = document.querySelector(`.question-item[data-index="${questionIndex}"]`);
+        const options = questionElement.querySelectorAll('.option');
+
+        options.forEach(option => {
+            option.classList.remove('selected');
+            const input = option.querySelector('input');
+            if (input) input.checked = false;
+        });
+
+        // 设置选中的选项
+        const selectedOption = questionElement.querySelector(`.option[data-option-index="${optionIndex}"]`);
+        if (selectedOption) {
+            selectedOption.classList.add('selected');
+            const input = selectedOption.querySelector('input');
+            if (input) input.checked = true;
+        }
+
+        // 更新答题状态显示
+        questionElement.classList.add('answered');
+        questionElement.classList.remove('correct', 'incorrect');
+
+        // 更新本页统计
+        updatePageStats();
+    }
+
+    // 选择判断题答案
+    function selectTrueFalse(questionIndex, answer) {
+        userAnswers[questionIndex] = answer;
+
+        // 更新按钮显示
+        const questionElement = document.querySelector(`.question-item[data-index="${questionIndex}"]`);
+        const trueBtn = questionElement.querySelector('.true-btn');
+        const falseBtn = questionElement.querySelector('.false-btn');
+
+        trueBtn.classList.remove('selected');
+        falseBtn.classList.remove('selected');
+
+        if (answer) {
+            trueBtn.classList.add('selected');
+        } else {
+            falseBtn.classList.add('selected');
+        }
+
+        // 更新答题状态显示
+        questionElement.classList.add('answered');
+        questionElement.classList.remove('correct', 'incorrect');
+
+        // 更新本页统计
+        updatePageStats();
+    }
+
+    // 创建分页按钮
+    function createPagination() {
+        const paginationContainer = document.querySelector('.pagination-container');
+        paginationContainer.innerHTML = '';
+
+        // 添加上一页按钮
+        const prevButton = document.createElement('button');
+        prevButton.className = 'page-btn';
+        prevButton.textContent = '«';
+        prevButton.onclick = prevPage;
+        paginationContainer.appendChild(prevButton);
+
+        // 添加页码按钮
+        for (let i = 0; i < totalPages; i++) {
+            const pageButton = document.createElement('button');
+            pageButton.className = 'page-btn';
+            if (i === currentPage) {
+                pageButton.classList.add('active');
+            }
+            pageButton.textContent = i + 1;
+            pageButton.onclick = () => goToPage(i);
+            paginationContainer.appendChild(pageButton);
+        }
+
+        // 添加下一页按钮
+        const nextButton = document.createElement('button');
+        nextButton.className = 'page-btn';
+        nextButton.textContent = '»';
+        nextButton.onclick = nextPage;
+        paginationContainer.appendChild(nextButton);
+    }
+
+    // 提交当前页答案
+    function submitPage() {
+        const startIndex = currentPage * QUESTIONS_PER_PAGE;
+        const endIndex = Math.min(startIndex + QUESTIONS_PER_PAGE, questions.length);
+
+        let hasUnanswered = false;
+        let unansweredIndices = [];
+
+        // 检查本页所有题目是否已答
+        for (let i = startIndex; i < endIndex; i++) {
+            if (userAnswers[i] === null || userAnswers[i] === '') {
+                hasUnanswered = true;
+                unansweredIndices.push(i + 1); // 题目编号是从1开始的
+            }
+        }
+
+        if (hasUnanswered) {
+            alert(`本页还有未完成的题目：第 ${unansweredIndices.join(', ')} 题，请先完成所有题目再提交！`);
+            return;
+        }
+
+        // 提交本页答案
+        let pageCorrectCount = 0;
+        let pageScore = 0;
+
+        for (let i = startIndex; i < endIndex; i++) {
+            // 如果已经提交过，跳过
+            if (questionStatus[i] !== null) continue;
+
+            const question = questions[i];
+            let isCorrect = false;
+
+            if (question.type === 'single') {
+                isCorrect = (userAnswers[i] === question.answer);
+            } else if (question.type === 'truefalse') {
+                isCorrect = (userAnswers[i] === question.answer);
+            } else {
+                isCorrect = (userAnswers[i].toLowerCase() === question.answer.toLowerCase());
+            }
+
+            // 更新答题状态
+            questionStatus[i] = isCorrect;
+
+            // 更新统计
+            answeredCount++;
+            if (isCorrect) {
+                correctCount++;
+                pageCorrectCount++;
+                score += 10;
+                pageScore += 10;
+
+                // 更新知识点统计
+                if (knowledgeStats[question.knowledge]) {
+                    knowledgeStats[question.knowledge].correct++;
+                }
+            }
+
+            // 显示反馈
+            showFeedback(i, isCorrect, question);
+
+            // 更新题目样式
+            const questionElement = document.querySelector(`.question-item[data-index="${i}"]`);
+            if (questionElement) {
+                questionElement.classList.remove('answered');
+                questionElement.classList.add(isCorrect ? 'correct' : 'incorrect');
+            }
+        }
+
+        // 更新统计信息
+        updateStats();
+
+        // 显示本页答题结果
+        const pageQuestionCount = endIndex - startIndex;
+        alert(`本页答题完成！\n正确: ${pageCorrectCount}题\n错误: ${pageQuestionCount - pageCorrectCount}题\n得分: ${pageScore}分`);
+    }
+
+    // 显示反馈
+    function showFeedback(questionIndex, isCorrect, question) {
+        const feedbackElement = document.getElementById(`feedback-${questionIndex}`);
+        if (!feedbackElement) return;
+
+        feedbackElement.className = `feedback ${isCorrect ? 'correct' : 'incorrect'}`;
+        feedbackElement.style.display = 'block';
+
+        let feedbackHTML = '';
+        if (isCorrect) {
+            feedbackHTML = '<div class="feedback-title">回答正确！</div><div>恭喜你，答案正确。</div>';
+        } else {
+            feedbackHTML = '<div class="feedback-title">回答错误！</div><div>你的答案不正确。</div>';
+
+            // 显示正确答案
+            let correctAnswerText = '';
+            if (question.type === 'single') {
+                correctAnswerText = question.options[question.answer];
+            } else if (question.type === 'truefalse') {
+                correctAnswerText = question.answer ? '正确' : '错误';
+            } else {
+                correctAnswerText = question.answer;
+            }
+
+            feedbackHTML += `<div class="correct-answer">正确答案：${correctAnswerText}</div>`;
+        }
+
+        // 添加解析
+        if (question.explanation) {
+            feedbackHTML += `<div class="explanation">解析：${question.explanation}</div>`;
+        }
+
+        feedbackElement.innerHTML = feedbackHTML;
+    }
+
+    // 上一页
+    function prevPage() {
+        if (currentPage > 0) {
+            currentPage--;
+            loadPage();
+            updateStats();
+        }
+    }
+
+    // 下一页
+    function nextPage() {
+        if (currentPage < totalPages - 1) {
+            currentPage++;
+            loadPage();
+            updateStats();
+        } else {
+            // 如果是最后一页，显示完成信息
+            const unansweredCount = questionStatus.filter(status => status === null).length;
+            if (unansweredCount === 0) {
+                alert(`恭喜！你已经完成了所有题目！\n\n总分: ${score}\n正确率: ${Math.round(correctCount/answeredCount*100)}%\n已回答: ${answeredCount}/${questions.length}`);
+            } else {
+                alert('还有未完成的题目，请返回完成所有题目！');
+            }
+        }
+    }
+
+    // 跳转到指定页
+    function goToPage(page) {
+        currentPage = page;
+        loadPage();
+        updateStats();
+    }
+
+    // 重置当前页
+    function resetCurrentPage() {
+        if (confirm(`确定要重置第${currentPage + 1}页的答题内容吗？本页的答题进度将被清除。`)) {
+            const startIndex = currentPage * QUESTIONS_PER_PAGE;
+            const endIndex = Math.min(startIndex + QUESTIONS_PER_PAGE, questions.length);
+
+            // 备份当前页的答题状态，以便重新计算统计
+            let pageAnsweredBefore = 0;
+            let pageCorrectBefore = 0;
+
+            for (let i = startIndex; i < endIndex; i++) {
+                // 记录重置前的答题状态
+                if (questionStatus[i] !== null) {
+                    pageAnsweredBefore++;
+                    if (questionStatus[i] === true) {
+                        pageCorrectBefore++;
+                    }
+                }
+
+                // 重置当前页的答题数据
+                userAnswers[i] = null;
+                questionStatus[i] = null;
+            }
+
+            // 重新计算全局统计
+            recalculateGlobalStats();
+
+            // 重新加载当前页
+            loadPage();
+
+            alert(`第${currentPage + 1}页已重置！\n清除答题记录：${pageAnsweredBefore}题`);
+        }
+    }
+
+    // 重置全部页面
+    function resetAllPages() {
+        if (confirm("确定要重置所有页面的答题内容吗？所有答题进度将被清除。")) {
+            // 重置所有答题数据
+            userAnswers = new Array(questions.length).fill(null);
+            questionStatus = new Array(questions.length).fill(null);
+            score = 0;
+            answeredCount = 0;
+            correctCount = 0;
+
+            // 重置知识点统计
+            initKnowledgeStats();
+
+            // 重新加载当前页
+            loadPage();
+            updateStats();
+
+            alert("所有页面已重置！所有答题记录已清除。");
+        }
+    }
+
+    // 重新计算全局统计（用于重置当前页后）
+    function recalculateGlobalStats() {
+        score = 0;
+        answeredCount = 0;
+        correctCount = 0;
+
+        // 重置知识点统计
+        Object.keys(knowledgeStats).forEach(knowledge => {
+            knowledgeStats[knowledge].correct = 0;
+        });
+
+        // 重新计算所有已答题目的统计
+        for (let i = 0; i < questions.length; i++) {
+            if (questionStatus[i] !== null) {
+                answeredCount++;
+                if (questionStatus[i] === true) {
+                    correctCount++;
+                    score += 10;
+
+                    // 更新知识点统计
+                    if (knowledgeStats[questions[i].knowledge]) {
+                        knowledgeStats[questions[i].knowledge].correct++;
+                    }
+                }
+            }
+        }
+    }
+
+    // 更新统计信息
+    function updateStats() {
+        // 更新进度条
+        const progressPercent = (answeredCount / questions.length) * 100;
+        document.getElementById('progress-fill').style.width = `${progressPercent}%`;
+        document.getElementById('progress-text').textContent = `${answeredCount}/${questions.length}`;
+
+        // 更新统计数据
+        document.getElementById('total-questions').textContent = questions.length;
+        document.getElementById('answered-questions').textContent = answeredCount;
+        document.getElementById('correct-questions').textContent = correctCount;
+
+        const accuracy = answeredCount > 0 ? Math.round(correctCount / answeredCount * 100) : 0;
+        document.getElementById('accuracy-rate').textContent = `${accuracy}%`;
+        document.getElementById('score').textContent = score;
+        document.getElementById('current-page').textContent = `${currentPage + 1}/${totalPages}`;
+
+        // 更新题型分布
+        const singleCount = questions.filter(q => q.type === "single").length;
+        const truefalseCount = questions.filter(q => q.type === "truefalse").length;
+        const fillCount = questions.filter(q => q.type === "fill").length;
+
+        document.getElementById('single-count').textContent = singleCount;
+        document.getElementById('truefalse-count').textContent = truefalseCount;
+        document.getElementById('fill-count').textContent = fillCount;
+
+        // 更新知识点掌握情况
+        updateKnowledgeProgress();
+
+        // 更新本页统计
+        updatePageStats();
+    }
+
+    // 更新本页统计
+    function updatePageStats() {
+        const startIndex = currentPage * QUESTIONS_PER_PAGE;
+        const endIndex = Math.min(startIndex + QUESTIONS_PER_PAGE, questions.length);
+
+        let pageTotal = endIndex - startIndex;
+        let pageAnswered = 0;
+        let pageCorrect = 0;
+        let pageScore = 0;
+
+        for (let i = startIndex; i < endIndex; i++) {
+            if (userAnswers[i] !== null && userAnswers[i] !== '') {
+                pageAnswered++;
+            }
+
+            if (questionStatus[i] === true) {
+                pageCorrect++;
+                pageScore += 10;
+            }
+        }
+
+        document.getElementById('page-total').textContent = pageTotal;
+        document.getElementById('page-answered').textContent = pageAnswered;
+        document.getElementById('page-correct').textContent = pageCorrect;
+        document.getElementById('page-score').textContent = pageScore;
+    }
+
+    // 更新知识点掌握情况
+    function updateKnowledgeProgress() {
+        const knowledgeProgressContainer = document.getElementById('knowledge-progress');
+        knowledgeProgressContainer.innerHTML = '';
+
+        // 只显示有题目的知识点
+        Object.keys(knowledgeStats).forEach(knowledge => {
+            const stat = knowledgeStats[knowledge];
+            if (stat.total > 0) {
+                const correct = stat.correct || 0;
+                const percentage = Math.round(correct / stat.total * 100);
+
+                const knowledgeItem = document.createElement('div');
+                knowledgeItem.className = 'knowledge-item';
+
+                const knowledgeName = document.createElement('div');
+                knowledgeName.className = 'knowledge-name';
+                knowledgeName.innerHTML = `<span>${knowledge}</span><span>${correct}/${stat.total}</span>`;
+
+                const knowledgeBar = document.createElement('div');
+                knowledgeBar.className = 'knowledge-bar';
+
+                const knowledgeFill = document.createElement('div');
+                knowledgeFill.className = 'knowledge-fill';
+                knowledgeFill.style.width = `${percentage}%`;
+
+                knowledgeBar.appendChild(knowledgeFill);
+                knowledgeItem.appendChild(knowledgeName);
+                knowledgeItem.appendChild(knowledgeBar);
+
+                knowledgeProgressContainer.appendChild(knowledgeItem);
+            }
+        });
+    }
+</script>
+</body>
+</html>

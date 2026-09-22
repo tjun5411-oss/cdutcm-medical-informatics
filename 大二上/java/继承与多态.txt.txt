@@ -1,0 +1,8 @@
+继承与多态：重用上次实训作业的代码：定义一个Human类和一个Student类。并在main方法中测试新的问题。具体要求如下：
+   首先,请实现上次的实训作业：定义一个Human类(包含身份证"id"及其他属性)和一个Student类(包含学号"xh"和其他属性)。在测试程序中分别生成1个人h1="张三”和2个学生s1=“李四”和s2=“王五”，并输出总人数、总学生数及这三个对象的所有信息。
+   然后,
+1. 请思考并测试这些属性或方法间的关系：
+   1)Human.counter、Student.counter、h1.counter、s1.counter；
+   2)h1.toString()、s1.toString()、Object中的toString()；
+   3)Student中的学号也命名为"id"，行不行？会不会与Human中的身份证"id"混淆？ 
+2. 执行代码h1=s1后，再次思考并测试上面的这些关系。
