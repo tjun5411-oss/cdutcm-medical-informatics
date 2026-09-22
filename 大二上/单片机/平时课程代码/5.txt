@@ -1,0 +1,56 @@
+#include <reg52.h>
+sbit wei = P2^0;  
+sbit duan = P2^1; 
+unsigned char code table[] = {
+    0x4F 
+};
+
+unsigned int num = 0;   
+unsigned char k = 0;    
+
+void Timer1_Init(void)
+{
+    TMOD |= 0x10;   
+    TH1 = 0x3C;     
+    TL1 = 0xB0;
+    EA = 1;        
+    ET1 = 1;        
+    TR1 = 1;        
+}
+
+void main(void)
+{
+    Timer1_Init(); 
+    
+    wei = 1;
+    P0 = 0xFE;      
+    wei = 0;
+    
+    duan = 1;
+    P0 = table[0]; 
+    duan = 0;
+    
+    while(1)
+    {
+        if(num >= 30)  
+        {
+            num = 0;   
+            
+            if(k == 0)
+                k = 1;
+            else
+                k = 0;
+            
+            duan = 1;
+            P0 = table[k];  
+            duan = 0;
+        }
+    }
+}
+
+void Timer1_ISR(void) interrupt 3
+{
+    TH1 = 0x3C;    
+    TL1 = 0xB0;
+    num++;          
+}

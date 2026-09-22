@@ -1,0 +1,136 @@
+#include<reg52.h>
+
+#define uint unsigned int
+#define uchar unsigned char
+
+
+sbit dula = P2^6;  
+sbit wela = P2^7;  
+
+
+uchar code table[] = {
+    0x3f,  // 0
+    0x06,  // 1
+    0x5b,  // 2
+    0x4f,  // 3
+    0x66,  // 4
+    0x6d,  // 5
+    0x7d,  // 6
+    0x07,  // 7
+    0x7f,  // 8
+    0x6f,  // 9
+    0x77,  // A
+    0x7c,  // B
+    0x39,  // C
+    0x5e,  // D
+    0x79,  // E
+    0x71,  // F
+    0x00   // ??(??16)
+};
+
+uchar key_value = 16; 
+
+
+void delay(uint z) {
+    uint x, y;
+    for(x = z; x > 0; x--)
+        for(y = 110; y > 0; y--);
+}
+
+
+uchar keyscan() {
+    uchar temp;
+    
+   
+    P3 = 0xfe;  
+    temp = P3;
+    temp &= 0xf0;  
+    if(temp != 0xf0) {  
+        delay(5);  
+        temp = P3;
+        temp &= 0xf0;
+        if(temp != 0xf0) {  
+            switch(P3) {
+                case 0xee: key_value = 0; break;  
+                case 0xde: key_value = 1; break;  
+                case 0xbe: key_value = 2; break;  
+                case 0x7e: key_value = 3; break;  
+            }
+            
+            while((P3 & 0xf0) != 0xf0);
+        }
+    }
+    
+   
+    P3 = 0xfd;  
+    temp = P3;
+    temp &= 0xf0;
+    if(temp != 0xf0) {
+        delay(5);
+        temp = P3;
+        temp &= 0xf0;
+        if(temp != 0xf0) {
+            switch(P3) {
+                case 0xed: key_value = 4; break; 
+                case 0xdd: key_value = 5; break;  
+                case 0xbd: key_value = 6; break;  
+                case 0x7d: key_value = 7; break;  
+            }
+            while((P3 & 0xf0) != 0xf0);
+        }
+    }
+    
+  
+    P3 = 0xfb;  
+    temp = P3;
+    temp &= 0xf0;
+    if(temp != 0xf0) {
+        delay(5);
+        temp = P3;
+        temp &= 0xf0;
+        if(temp != 0xf0) {
+            switch(P3) {
+                case 0xeb: key_value = 8; break;   
+                case 0xdb: key_value = 9; break;   
+                case 0xbb: key_value = 10; break;  
+                case 0x7b: key_value = 11; break;  
+            }
+            while((P3 & 0xf0) != 0xf0);
+        }
+    }
+    
+   
+    P3 = 0xf7; 
+    temp = P3;
+    temp &= 0xf0;
+    if(temp != 0xf0) {
+        delay(5);
+        temp = P3;
+        temp &= 0xf0;
+        if(temp != 0xf0) {
+            switch(P3) {
+                case 0xe7: key_value = 12; break;  
+                case 0xd7: key_value = 13; break;  
+                case 0xb7: key_value = 14; break;  
+                case 0x77: key_value = 15; break;  
+            }
+            while((P3 & 0xf0) != 0xf0);
+        }
+    }
+    
+    return key_value;
+}
+
+void main() {
+   
+    wela = 1;
+    P0 = 0xc0;  
+    wela = 0; 
+    
+    while(1) {
+        
+        dula = 1;
+        P0 = table[keyscan()];  
+        dula = 0;  
+    }
+}

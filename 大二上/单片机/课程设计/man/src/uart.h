@@ -1,0 +1,13 @@
+#ifndef __UART_H
+#define __UART_H
+
+#include "typedef.h"
+
+// ??1???(???9600)
+void uart1_init(void);
+// ??1??????
+void uart1_send_byte(uint8_t dat);
+// ??1?????
+void uart1_send_str(uint8_t *str);
+
+#endif
