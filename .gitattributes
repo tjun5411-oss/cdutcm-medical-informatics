@@ -1,0 +1,46 @@
+# 二进制文件：禁止行尾转换与文本 diff，避免损坏
+*.max    binary
+*.exe    binary
+*.dll    binary
+*.pdb    binary
+*.axf    binary
+*.hex    binary
+*.o      binary
+*.obj    binary
+*.crf    binary
+*.lib    binary
+*.doc    binary
+*.docx   binary
+*.xls    binary
+*.xlsx   binary
+*.ppt    binary
+*.pptx   binary
+*.pdf    binary
+*.zip    binary
+*.rar    binary
+*.7z     binary
+*.jpg    binary
+*.jpeg   binary
+*.png    binary
+*.gif    binary
+*.ico    binary
+*.mp4    binary
+*.pkt    binary
+*.pka    binary
+*.chm    binary
+
+# 文本文件：统一按 LF 存储，检出时保持原样
+*.c      text
+*.h      text
+*.cpp    text
+*.py     text
+*.java   text
+*.js     text
+*.css    text
+*.html   text
+*.md     text
+
+# 排除第三方与厂商资料，避免污染 GitHub 语言统计
+html/webview/lib/*      linguist-vendored
+大二上/单片机/**         linguist-vendored
+大二上/python/**         linguist-vendored
