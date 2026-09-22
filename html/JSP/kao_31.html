@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Prototype Example</title>
+</head>
+实现prototype<br>
+要求：<br>
+定义div，id为div_1。<br>
+增加div对象的show方法，带一个形参。<br>
+在show方法中，将形参的值写到div中。<br>
+<body>
+<div id="div_1"></div>
+<script>
+    const div = document.getElementById('div_1');
+    HTMLDivElement.prototype.show = function (content) {
+        this.textContent = content;
+    };
+    div.show('要显示的内容');
+</script>
+</body>
+
+</html>

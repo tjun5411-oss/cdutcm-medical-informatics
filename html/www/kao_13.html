@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JSON对象示例</title>
+</head>
+<body>
+定义JSON对象score，值为"english:95,computer:96,math:97"。<br>
+对象score请用var修饰。<br>
+<h1>成绩对象示例</h1>
+
+<script>
+
+    var score = {
+        "english": 95,
+        "computer": 96,
+        "math": 97
+    };
+
+    document.write("<p>英语成绩: " + score.english + "</p>");
+    document.write("<p>计算机成绩: " + score.computer + "</p>");
+    document.write("<p>数学成绩: " + score.math + "</p>");
+
+
+    console.log("成绩对象:", score);
+</script>
+</body>
+</html>

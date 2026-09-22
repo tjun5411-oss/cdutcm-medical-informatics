@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <title>获取服务器时间</title>
+</head>
+使用AJAX技术获取服务器时间。<br>
+要求如下：<br>
+获取的时间显示在div中，div的id为div_1。<br>
+服务器处理程序的地址为"/public_libs/server_ajax_1.php"<br>
+Jquery的引入地址为"/public_libs/jquery.js"（注此项非强制,可用原生代码实现）<br>
+<body>
+<div id="div_1"></div>
+<script>
+    const xhr = new XMLHttpRequest();
+    xhr.open('GET', '/public_libs/server_ajax_1.php', true);
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+            document.getElementById('div_1').innerHTML = xhr.responseText;
+        }
+    };
+    xhr.send();
+</script>
+</body>
+
+</html>

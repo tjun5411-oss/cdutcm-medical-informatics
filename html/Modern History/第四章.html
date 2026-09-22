@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>中国近现代史纲要 - 第四章</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif; }
+        body { background-color: #f5f7fa; color: #333; line-height: 1.6; padding: 20px; }
+        .container { max-width: 1400px; margin: 0 auto; }
+        header { text-align: center; padding: 20px; background: linear-gradient(135deg, #004d40 0%, #00796b 100%); color: white; border-radius: 12px; box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2); margin-bottom: 25px; }
+        h1 { font-size: 2.4rem; margin-bottom: 10px; letter-spacing: 1px; }
+        .subtitle { font-size: 1.1rem; opacity: 0.9; }
+        .section-container { background: white; border-radius: 12px; padding: 30px; box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08); margin-bottom: 30px; }
+        .section-title { font-size: 1.5rem; margin-bottom: 25px; color: #00796b; padding-bottom: 15px; border-bottom: 2px solid #eee; }
+        .question-item { border: 1px solid #eaeaea; border-radius: 10px; padding: 20px; margin-bottom: 20px; transition: all 0.3s ease; }
+        .question-item.correct { border-color: #4CAF50; background-color: #f9fff9; }
+        .question-item.incorrect { border-color: #f44336; background-color: #fff9f9; }
+        .question-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+        .question-number { font-size: 1.2rem; font-weight: 600; color: #00796b; }
+        .question-type { display: inline-block; padding: 4px 12px; border-radius: 15px; font-size: 0.85rem; font-weight: 600; }
+        .single-choice { background-color: #e6f2ff; color: #0066cc; }
+        .multiple-choice { background-color: #f0e6ff; color: #6600cc; }
+        .question-text { font-size: 1.1rem; margin-bottom: 20px; line-height: 1.6; }
+        .options-container { margin: 15px 0; }
+        .option { margin-bottom: 10px; padding: 12px 15px; border: 1px solid #eaeaea; border-radius: 6px; cursor: pointer; transition: all 0.2s ease; display: flex; align-items: center; }
+        .option:hover { border-color: #b2dfdb; background-color: #f0f4f4; }
+        .option.selected { border-color: #00796b; background-color: #e0f2f1; }
+        .feedback { padding: 15px; border-radius: 6px; margin-top: 15px; font-size: 0.95rem; display: none; }
+        .feedback.correct { background-color: #e6ffe6; border-left: 4px solid #4CAF50; }
+        .feedback.incorrect { background-color: #ffe6e6; border-left: 4px solid #f44336; }
+        .correct-answer { margin-top: 10px; padding: 8px; background-color: white; border-radius: 4px; border: 1px dashed #ccc; font-weight: 600; }
+        .explanation { margin-top: 15px; padding: 12px; background-color: #f9f9f9; border-radius: 6px; border-left: 3px solid #00796b; font-size: 0.95rem; }
+        .section-buttons { display: flex; gap: 15px; margin-top: 30px; }
+        .section-btn { padding: 12px 25px; border: none; border-radius: 6px; font-size: 1rem; font-weight: 600; cursor: pointer; transition: all 0.3s; }
+        .reset-section-btn { background-color: #666; color: white; }
+        .submit-section-btn { background-color: #00796b; color: white; }
+        .chapter-navigation { display: flex; justify-content: space-between; margin-top: 30px; }
+        .chapter-btn { padding: 12px 30px; border: none; border-radius: 6px; font-size: 1.1rem; font-weight: 600; cursor: pointer; transition: all 0.3s; display: flex; align-items: center; gap: 10px; }
+        .prev-chapter-btn { background-color: #666; color: white; }
+        .next-chapter-btn { background-color: #8B0000; color: white; }
+        .footer { text-align: center; padding: 20px; color: #777; font-size: 0.9rem; margin-top: 40px; border-top: 1px solid #eee; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <header>
+        <h1>中国近现代史纲要 - 第四章</h1>
+        <p class="subtitle">开天辟地的大事变 | 共52题</p>
+    </header>
+
+
+
+    <div id="quiz-sections"></div>
+
+    <div class="chapter-navigation">
+        <button class="chapter-btn prev-chapter-btn" onclick="location.href='第三章.html'">
+            <i class="fas fa-arrow-left"></i> 上一章
+        </button>
+
+        <button class="chapter-btn next-chapter-btn" onclick="location.href='第五章.html'">
+            第五章 <i class="fas fa-arrow-right"></i>
+        </button>
+    </div>
+
+    <div class="footer">
+        <p>中国近现代史纲要学习系统 &copy; 2025</p>
+    </div>
+</div>
+
+<script>
+    const questions = [
+        // 单选题 1-42
+        { type: "single", text: "新文化运动前期，陈独秀等人将“民主”与“科学”作为批判传统伦理的核心武器，其潜在的叙事逻辑是", options: ["A. 通过文化复古来拯救民族危亡", "B. 将中国问题的总根源归结为思想文化，并试图以西方现代性价值进行整体置换", "C. 认为经济制度的变革是解决一切社会问题的前提", "D. 号召通过政治革命直接建立资产阶级共和国"], answer: 1, explanation: "新文化运动主张从思想深处改造国民，通过引入西方的民主（德先生）和科学（赛先生）来解决中国问题。" },
+        { type: "single", text: "五四运动中，“内除国贼”的口号将矛头直接指向曹汝霖、章宗祥、陆宗舆等具体官僚。这一现象最能说明", options: ["A. 运动缺乏明确的政治纲领", "B. 当时民众对帝国主义本质的认识尚处于感性阶段", "C. 运动的主导权掌握在具有妥协性的资产阶级手中", "D. 这是为了集中斗争火力，避免树敌过多的策略"], answer: 1, explanation: "当时的人们更多地看到直接的卖国贼，而对帝国主义体系的深刻本质认识还不全面。" },
+        { type: "single", text: "李大钊在宣传马克思主义时，着重强调其“改造世界”的实践品格。他与胡适“多研究些问题”的分歧在于", options: ["A. 对待西方文化的态度不同", "B. 对社会改造的路径认知不同：根本解决 vs. 点滴改良", "C. 对马克思主义理论的理解深度不同", "D. 个人学术背景差异"], answer: 1, explanation: "李大钊主张通过根本性的社会革命来解决问题，而胡适主张一点一滴的改良。" },
+        { type: "single", text: "中共一大决定“不同其他党派建立任何关系”，这一决议反映了早期共产党人", options: ["A. 对国民党性质的深刻洞见", "B. 在理论上保持了纯洁性，但也在策略上陷入了自我孤立", "C. 已经找到了中国革命的正确同盟军", "D. 完全照搬了俄国革命经验"], answer: 1, explanation: "早期组织较为纯洁和稚嫩，尚未意识到统一战线的重要性。" },
+        { type: "single", text: "陈独秀从“思想启蒙领袖”转变为中共主要创始人，其思想轨迹的深层动因是", options: ["A. 个人政治野心", "B. 对“借思想文化以解决问题”的路径失望，转而寻求组织化改造", "C. 受到共产国际经费吸引", "D. 与胡适等人的决裂"], answer: 1, explanation: "现实斗争的失败让陈独秀意识到单纯的文化启蒙不足以救国，必须建立革命政党。" },
+        { type: "single", text: "五四运动后，知识分子中出现的“到民间去”的社会思潮，其实质是", options: ["A. 民粹主义对精英主义的否定", "B. 知识分子对“士大夫”传统角色的自我超越，寻求与工农结合", "C. 一种新型的乡村建设运动", "D. 对工业化的反思"], answer: 1, explanation: "这标志着中国先进知识分子开始关注底层劳工，是马克思主义与工人运动结合的开端。" },
+        { type: "single", text: "李大钊提出“主义”是解决“问题”的“尺度”和“航向”。旨在论证", options: ["A. 理论探讨比实践重要", "B. 马克思主义为解决中国社会根本问题提供了世界观和方法论", "C. 所有主义价值同等", "D. 应先确立主义再研究问题"], answer: 1, explanation: "强调了理论对实践的指导作用。" },
+        { type: "single", text: "中国共产党在成立之初，将工作重心完全放在城市工人运动上，这主要是由于", options: ["A. 对马克思主义基本原理和苏联革命模式的教条化理解", "B. 农村交通不便", "C. 农民缺乏革命要求", "D. 为与国民党争夺工人"], answer: 0, explanation: "早期党主要模仿俄国城市起义的经验，尚未发现农村的巨大潜力。" },
+        { type: "single", text: "相较于辛亥革命，五四运动所体现的“现代性”突破在于", options: ["A. 阶层更广泛", "B. 形成了具有新型组织形态和动员方式的社会运动", "C. 口号更激进", "D. 外交胜利"], answer: 1, explanation: "五四运动展示了现代群众运动的力量和动员效率。" },
+        { type: "single", text: "毛泽东指出五四运动在“干部上准备”了中共成立。这主要是指", options: ["A. 培养了技术人才", "B. 锻炼造就了一批具有初步共产主义思想并与工农结合的骨干", "C. 提供了活动经费", "D. 建立了全国组织"], answer: 1, explanation: "五四运动中涌现的积极分子后来成为了中共的骨干力量。" },
+
+        // 11-20
+        { type: "single", text: "新文化运动期间，对“孔教”的批判主要集中于", options: ["A. 缺乏国学功底", "B. 批判者目的在于打破与帝制相联系的意识形态枷锁", "C. 学术定论", "D. 迎合青年情绪"], answer: 1, explanation: "批判孔教是为了扫清通往共和制度的思想障碍。" },
+        { type: "single", text: "五四运动中，上海商人阶层的“罢市”行为反映了", options: ["A. 民族资产阶级成为领导阶级", "B. 稳固的工农联盟", "C. 近代中国民族主义情绪已超越阶级利益，成为动员旗帜", "D. 商人政治觉悟最高"], answer: 2, explanation: "民族危机让不同阶级在救亡图存的目标下团结在一起。" },
+        { type: "single", text: "中共二大提出“民主联合战线”策略，促成这一转变的最关键现实因素是", options: ["A. 共产国际指示", "B. 党对中国社会性质和革命任务的认识深化", "C. 孙中山的诚意", "D. 工人运动遭受挫折"], answer: 1, explanation: "二大区分了最高纲领和最低纲领，认识到当前阶段需要进行民主革命。" },
+        { type: "single", text: "鲁迅《狂人日记》最深刻的力量在于", options: ["A. 描绘底层生活", "B. 揭示了封建礼教“吃人”的本质", "C. 开创白话文学", "D. 号召反抗"], answer: 1, explanation: "通过“吃人”这一隐喻，鲁迅对几千年的封建宗法制度进行了毁灭性的批判。" },
+        { type: "single", text: "早期共产主义者与无政府主义者的核心分歧在于", options: ["A. 废除国家形式", "B. 是否承认无产阶级专政在过渡时期的必要性", "C. 平均分配", "D. 暴力革命"], answer: 1, explanation: "无政府主义者反对一切国家和权威，而马克思主义者主张建立无产阶级专政。" },
+        { type: "single", text: "新文化运动初期批判儒家思想的根本意图是", options: ["A. 否定所有传统", "B. 引进马克思主义", "C. 批判作为封建专制制度思想基础的纲常名教", "D. 文学革命"], answer: 2, explanation: "只有摧毁封建思想根基，民主共和才能稳固。" },
+        { type: "single", text: "五四运动前的新文化运动最主要功绩是", options: ["A. 动摇了封建思想统治地位，形成思想解放潮流", "B. 传播马克思主义", "C. 促成中共成立", "D. 找到正确道路"], answer: 0, explanation: "它开启了中国近现代史上的一次重大的思想启蒙。" },
+        { type: "single", text: "五四运动直接目标实现，说明了", options: ["A. 北洋政府顺应民意", "B. 工人阶级作为独立政治力量登上舞台显示了威力", "C. 帝国主义政策转变", "D. 学生先锋作用"], answer: 1, explanation: "工人阶级的加入是运动取得最后胜利的关键力量。" },
+        { type: "single", text: "五四运动后期，运动中心和形式的变化是", options: ["A. 从北京到上海，从学生到工商业者", "B. 从上海到北京", "C. 从北京到广州", "D. 从城市到农村"], answer: 0, explanation: "中心由北京转往上海，力量重心由学生转往工人。" },
+        { type: "single", text: "中国早期马克思主义思想运动的特点不包括", options: ["A. 重视理论原则", "B. 强调知识分子与群众结合", "C. 倾向于和平改良", "D. 注意从中国实际出发"], answer: 2, explanation: "早期马克思主义者主张的是彻底的革命而非和平改良。" },
+
+        // 21-30
+        { type: "single", text: "李大钊反对胡适观点的实质在于主张", options: ["A. 具体问题更重要", "B. 解决中国社会问题必须依靠马克思主义的根本革命", "C. 理论探讨更有价值", "D. 改良更优先"], answer: 1, explanation: "这是关于“根本解决”还是“零星修补”的路线之争。" },
+        { type: "single", text: "早期组织成立后的中心任务是", options: ["A. 到工人中开展宣传和组织", "B. 论战", "C. 建立地方组织", "D. 筹备一大"], answer: 0, explanation: "马克思主义必须与工人运动相结合。" },
+        { type: "single", text: "中共一大确定的党成立后的中心任务是", options: ["A. 农民运动", "B. 组织工人阶级，领导工人运动", "C. 统一战线", "D. 军事斗争"], answer: 1, explanation: "早期党被定位为工人的政党。" },
+        { type: "single", text: "巴黎和会中国外交失败的深层背景是", options: ["A. 官员无能", "B. 帝国主义强权政治和中国的弱国地位", "C. 日本侵略", "D. 民族觉醒"], answer: 1, explanation: "“弱国无外交”是失败的本质原因。" },
+        { type: "single", text: "与辛亥革命相比，五四运动的特点在于", options: ["A. 无产阶级登上舞台", "B. 群众基础广泛", "C. 反帝反封建更彻底", "D. 以上全是"], answer: 3, explanation: "五四运动是一场彻底的不妥协的反帝反封建运动。" },
+        { type: "single", text: "新文化运动向欢迎社会主义转变的主要推动因素是", options: ["A. 辛亥失败教训", "B. 军阀统治黑暗", "C. 俄国十月革命的影响和五四运动的推动", "D. 民族资本主义发展"], answer: 2, explanation: "十月革命给中国送来了马克思列宁主义。" },
+        { type: "single", text: "早期马克思主义者的主要类型不包括", options: ["A. 新文化运动领袖", "B. 五四左翼骨干", "C. 原同盟会会员", "D. 北洋政府官僚"], answer: 3, explanation: "北洋官僚通常是革命的对象。" },
+        { type: "single", text: "1920年，中国第一个共产党早期组织成立于", options: ["A. 北京", "B. 上海", "C. 长沙", "D. 广州"], answer: 1, explanation: "陈独秀在上海建立了中国第一个共产党组织。" },
+        { type: "single", text: "中共一大决定首先集中精力", options: ["A. 农民运动", "B. 学生运动", "C. 工人运动", "D. 军事斗争"], answer: 2, explanation: "这是由党的阶级性质决定的初期重心。" },
+        { type: "single", text: "五四后期，工人阶级迫使北洋政府让步的根本原因是", options: ["A. 人数众多", "B. 坚定的革命性和强大的组织纪律性", "C. 学生配合", "D. 政府内部裂痕"], answer: 1, explanation: "无产阶级是中国社会最先进、最革命的力量。" },
+
+        // 31-42
+        { type: "single", text: "陈独秀在新文化运动初期被誉为“明星”，其核心主张是", options: ["A. 提倡民主与科学", "B. 白话文", "C. 马克思主义", "D. 无产阶级革命"], answer: 0, explanation: "陈独秀是新文化运动的旗手，最早高举民主科学大旗。" },
+        { type: "single", text: "“十月革命一声炮响，送来了马列主义”主要强调", options: ["A. 唯一来源", "B. 成功实践使中国先进分子看到了新希望", "C. 著作来自俄国", "D. 共产国际帮助"], answer: 1, explanation: "十月革命证明了马克思主义能够成功解决落后国家的命运问题。" },
+        { type: "single", text: "知识分子在结合过程中起的主要作用是", options: ["A. 领导经济斗争", "B. 充当二者结合的“桥梁”", "C. 提供经费", "D. 代替工人"], answer: 1, explanation: "知识分子负责传播理论，武装工人的头脑。" },
+        { type: "single", text: "中共一大党纲的核心内容是", options: ["A. 国共合作", "B. 以革命军队推翻资产阶级，采用无产阶级专政以消灭阶级", "C. 土地革命", "D. 组织农民"], answer: 1, explanation: "这体现了党对革命前途的初步设定。" },
+        { type: "single", text: "区分新、旧民主主义革命的根本标志是", options: ["A. 指导思想", "B. 领导阶级", "C. 前途", "D. 对象"], answer: 1, explanation: "由无产阶级领导的革命属于新民主主义革命。" },
+        { type: "single", text: "中共成立的“必然性”不包括", options: ["A. 思想基础", "B. 阶级基础", "C. 共产国际的直接命令是决定性因素", "D. 实践基础（五四）"], answer: 2, explanation: "外部因素虽重要，但中国自身的社会条件成熟才是根本。" },
+        { type: "single", text: "五四运动对中国社会发展方向产生的根本影响是", options: ["A. 拒绝签字", "B. 促进了马克思主义在中国的传播及其与工人运动的结合", "C. 打击军阀", "D. 干部准备"], answer: 1, explanation: "这是中国转向社会主义道路的关键一步。" },
+        { type: "single", text: "中共成立后的“新”主要指", options: ["A. 马克思主义指导", "B. 民主革命纲领", "C. 以共产主义为目标、工人阶级为基础", "D. 以上全是"], answer: 3, explanation: "这是中国历史上前所未有的新型革命政党。" },
+        { type: "single", text: "一战后，对中国民族工业起到促进作用的是", options: ["A. 清政府放宽限制", "B. 辛亥革命", "C. 帝国主义暂时放松了对中国的经济侵略", "D. 群众斗争"], answer: 2, explanation: "西方列强忙于一战，给中国民族工业带来了“黄金时代”。" },
+        { type: "single", text: "五四运动标志着新民主主义革命开端，主因是", options: ["A. 十月革命后", "B. 外争国权口号", "C. 无产阶级开始作为独立政治力量登上舞台", "D. 学生发起"], answer: 2, explanation: "领导力量的变化决定了革命性质的变化。" },
+        { type: "single", text: "陈独秀被誉为“总司令”，是因为他", options: ["A. 游行示威", "B. 创办《新青年》，发起新文化运动", "C. 最早宣传马主义", "D. 创始人"], answer: 1, explanation: "他在思想发动上起到了决定性作用。" },
+        { type: "single", text: "早期论战的意义在于", options: ["A. 肃清错误思想", "B. 扩大了马克思主义的思想阵地，推动了传播", "C. 绝对统治", "D. 国共合作基础"], answer: 1, explanation: "马克思主义是在不断的辩论和斗争中赢得影响力的。" },
+
+        // 多选题 1-10
+        { type: "multiple", text: "新文化运动前期呈现的局限性体现在", options: ["A. 民主的形式化", "B. 科学范围狭窄", "C. 绝对肯定或否定的偏向", "D. 局限于知识分子", "E. 儒学与孔教混淆"], answer: [0, 1, 2, 3, 4], explanation: "新文化运动虽伟大，但存在脱离群众和思想偏激等问题。" },
+        { type: "multiple", text: "五四运动的复杂性和多层次性体现在", options: ["A. 爱国/思想解放结合", "B. 外交/反帝反封建主题", "C. 参与主体扩展", "D. 革命转折点", "E. 长远影响"], answer: [0, 1, 2, 3, 4], explanation: "五四运动是一场全方位的影响深远的运动。" },
+        { type: "multiple", text: "马克思主义最终被中国先进分子选择是因为", options: ["A. 提供了科学的世界观", "B. 苏俄放弃不平等条约", "C. 阶级基础", "D. 改良主义失败", "E. 传统契合点"], answer: [0, 1, 2, 3, 4], explanation: "马克思主义符合中国救亡图存的迫切需求。" },
+        { type: "multiple", text: "中共早期组织的活动重点包括", options: ["A. 思想论战", "B. 工人宣传组织", "C. 探讨理论应用", "D. 严格遵循指示（误）", "E. 培养后备力量"], answer: [0, 1, 2, 4], explanation: "D选项错误，虽然受国际影响，但早期已开始有自主探索。" },
+        { type: "multiple", text: "中共一大的局限性包括", options: ["A. 确立最高目标", "B. 未认识到农民和武装斗争重要性", "C. 策略局限（断绝一切联系）", "D. 组织纪律严明", "E. 纲领待具体化"], answer: [1, 2, 4], explanation: "A和D是优点而非局限。局限性在于未区分民主革命阶段任务。" },
+        { type: "multiple", text: "陈独秀的思想演变轨迹包括", options: ["A. 文化启蒙转向政治革命", "B. 民主主义转向马克思主义", "C. 不谈政治转向投身斗争", "D. 建立权威但也埋下家长制隐患", "E. 始终反对合作（误）"], answer: [0, 1, 2, 3], explanation: "陈独秀后来是促成国共合作的关键人物，E错误。" },
+        { type: "multiple", text: "五四后知识分子的去向包括", options: ["A. 马克思主义革命", "B. 自由主义改良", "C. 回归书斋", "D. 基尔特社会主义", "E. 无政府主义"], answer: [0, 1, 2, 3, 4], explanation: "反映了当时思想界的多元与剧变。" },
+        { type: "multiple", text: "“问题与主义”之争的影响在于", options: ["A. 社会改造道路之争", "B. 阵营分裂", "C. 注重理论联系实际", "D. 扩大马主义影响", "E. 彻底解决分歧（误）"], answer: [0, 1, 2, 3], explanation: "E选项太绝对，分歧并未通过论战彻底消除。" },
+        { type: "multiple", text: "中共成立的“必然性”体现包括", options: ["A. 思想基础", "B. 阶级基础", "C. 干部基础", "D. 外部条件", "E. 此前失败的教训"], answer: [0, 1, 2, 3, 4], explanation: "中共的诞生是近代中国社会矛盾发展的必然结果。" },
+        { type: "multiple", text: "中共成立使中国革命面貌“焕然一新”的内涵包括", options: ["A. 新领导力量", "B. 新指导思想", "C. 新革命纲领", "D. 新革命方法", "E. 新国际背景"], answer: [0, 1, 2, 3, 4], explanation: "这五点共同构成了“焕然一新”的实质内容。" }
+    ];
+
+    const sections = [
+        { start: 0, end: 10, title: "第一部分：单项选择题 (1-10)" },
+        { start: 10, end: 20, title: "第二部分：单项选择题 (11-20)" },
+        { start: 20, end: 30, title: "第三部分：单项选择题 (21-30)" },
+        { start: 30, end: 42, title: "第四部分：单项选择题 (31-42)" },
+        { start: 42, end: 52, title: "第五部分：多项选择题 (1-10)" }
+    ];
+
+    let userAnswers = new Array(questions.length).fill(null);
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const quizContainer = document.getElementById('quiz-sections');
+        sections.forEach((sec, sIdx) => {
+            const secDiv = document.createElement('div');
+            secDiv.className = 'section-container';
+            secDiv.innerHTML = `<h2 class="section-title">${sec.title}</h2><div id="sec-qs-${sIdx}"></div>`;
+
+            const btnDiv = document.createElement('div');
+            btnDiv.className = 'section-buttons';
+            btnDiv.innerHTML = `
+                <button class="section-btn reset-section-btn" onclick="resetSec(${sIdx})">重置本节</button>
+                <button class="section-btn submit-section-btn" onclick="submitSec(${sIdx})">提交并查看解析</button>
+            `;
+            secDiv.appendChild(btnDiv);
+            quizContainer.appendChild(secDiv);
+
+            const qsDiv = secDiv.querySelector(`#sec-qs-${sIdx}`);
+            for (let i = sec.start; i < sec.end; i++) {
+                qsDiv.appendChild(createQElement(questions[i], i));
+            }
+        });
+    });
+
+    function createQElement(q, i) {
+        const div = document.createElement('div');
+        div.className = 'question-item';
+        div.id = `q-item-${i}`;
+        div.innerHTML = `
+            <div class="question-header">
+                <span class="question-number">第${q.type==='multiple' ? i-41 : i+1}题</span>
+                <span class="question-type ${q.type==='single'?'single-choice':'multiple-choice'}">${q.type==='single'?'单选':'多选'}</span>
+            </div>
+            <div class="question-text">${q.text}</div>
+            <div class="options-container">
+                ${q.options.map((opt, oIdx) => `
+                    <div class="option" onclick="toggleOpt(${i}, ${oIdx})">
+                        <input type="${q.type==='single'?'radio':'checkbox'}" name="q${i}" id="q${i}o${oIdx}">
+                        <label>${opt}</label>
+                    </div>
+                `).join('')}
+            </div>
+            <div class="feedback" id="fb-${i}"></div>
+        `;
+        return div;
+    }
+
+    function toggleOpt(qIdx, oIdx) {
+        const q = questions[qIdx];
+        const item = document.getElementById(`q-item-${qIdx}`);
+        const checkbox = document.getElementById(`q${qIdx}o${oIdx}`);
+
+        if (q.type === 'single') {
+            userAnswers[qIdx] = oIdx;
+            item.querySelectorAll('.option').forEach(o => o.classList.remove('selected'));
+            item.querySelectorAll('input').forEach(input => input.checked = false);
+            checkbox.checked = true;
+        } else {
+            // 多选题：初始化数组并确保勾选状态同步
+            if (!Array.isArray(userAnswers[qIdx])) userAnswers[qIdx] = [];
+
+            const pos = userAnswers[qIdx].indexOf(oIdx);
+            if (pos > -1) {
+                userAnswers[qIdx].splice(pos, 1);
+                checkbox.checked = false;
+            } else {
+                userAnswers[qIdx].push(oIdx);
+                checkbox.checked = true;
+            }
+        }
+        item.querySelectorAll('.option')[oIdx].classList.toggle('selected');
+    }
+
+    function submitSec(sIdx) {
+        const sec = sections[sIdx];
+        let correctCount = 0;
+        let totalCount = sec.end - sec.start;
+
+        for (let i = sec.start; i < sec.end; i++) {
+            const q = questions[i];
+            let isCorrect = false;
+            const uAns = userAnswers[i];
+
+            if (q.type === 'single') {
+                isCorrect = uAns === q.answer;
+            } else {
+                // 稳健的比对逻辑：确保用户选的项和答案项完全匹配
+                const safeUserAns = Array.isArray(uAns) ? uAns : [];
+                isCorrect = safeUserAns.length === q.answer.length &&
+                    safeUserAns.every(val => q.answer.includes(val)) &&
+                    q.answer.every(val => safeUserAns.includes(val));
+            }
+
+            if (isCorrect) correctCount++;
+
+            const fb = document.getElementById(`fb-${i}`);
+            const item = document.getElementById(`q-item-${i}`);
+            item.className = `question-item ${isCorrect ? 'correct' : 'incorrect'}`;
+            fb.style.display = 'block';
+            fb.className = `feedback ${isCorrect ? 'correct' : 'incorrect'}`;
+
+            // 格式化解析显示
+            const answerText = q.type === 'single'
+                ? q.options[q.answer]
+                : q.answer.sort((a,b)=>a-b).map(idx => String.fromCharCode(65 + idx)).join('');
+
+            fb.innerHTML = `
+                <div style="font-weight:bold">${isCorrect ? '✅ 正确' : '❌ 错误'}</div>
+                <div class="correct-answer">正确答案：${answerText}</div>
+                <div class="explanation"><strong>解析：</strong>${q.explanation}</div>
+            `;
+        }
+
+        alert(`本节练习完成！\n正确：${correctCount} 道\n错误：${totalCount - correctCount} 道\n得分率：${((correctCount/totalCount)*100).toFixed(1)}%`);
+    }
+
+    function resetSec(sIdx) {
+        const sec = sections[sIdx];
+        for (let i = sec.start; i < sec.end; i++) {
+            userAnswers[i] = null;
+            const item = document.getElementById(`q-item-${i}`);
+            item.className = 'question-item';
+            item.querySelectorAll('.option').forEach(o => o.classList.remove('selected'));
+            item.querySelectorAll('input').forEach(input => input.checked = false);
+            document.getElementById(`fb-${i}`).style.display = 'none';
+        }
+    }
+</script>
+</body>
+</html>

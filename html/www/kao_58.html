@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>使用Vue技术实现数据响应式处理</title>
+    <script src="/public_libs/vue.3.0.js"></script>
+</head>
+要求如下：<br>
+定义div，id为form_1。在div中定义input输入框<br>
+定义姓名输入框，id与name都为name,v-model绑定变量name<br>
+定义年龄输入框，id与name都为age,v-model绑定变量age<br>
+定义性别输入框，男性选择项的id为male,name为gender,value为1,v-model绑定变量gender<br>
+定义性别输入框，女性选择项的id为female,name为gender,value为2,v-model绑定变量gender<br>
+定义选课输入框，选择项的id与value分别为[javascript,springboot,html5],name为course,v-model绑定变量course<br>
+定义籍贯输入框，id与name为hometown,选择项的value分别为[bj,cd,cq],v-model绑定变量hometown<br>
+vue的对象名为app1。(注意使用var定义此对象)<br>
+库地址："/public_libs/vue.3.0.js"<br>
+注：本题采用CDN方式引入vue，非CLI模式。<br>
+<body>
+<div id="form_1">
+    <div>
+        姓名:
+        <input type="text" id="name" name="name" v-model="name">
+    </div>
+    <div>
+        年龄:
+        <input type="text" id="age" name="age" v-model="age">
+    </div>
+    <div>
+        性别:
+        <input type="radio" id="male" name="gender" value="1" v-model="gender">
+        <label for="male">男</label>
+        <input type="radio" id="female" name="gender" value="2" v-model="gender">
+        <label for="female">女</label>
+    </div>
+    <div>
+        选课:
+        <input type="checkbox" id="javascript" name="course" value="javascript" v-model="course">
+        <label for="javascript">javascript</label>
+        <input type="checkbox" id="springboot" name="course" value="springboot" v-model="course">
+        <label for="springboot">spring boot</label>
+        <input type="checkbox" id="html5" name="course" value="html5" v-model="course">
+        <label for="html5">HTML5</label>
+    </div>
+    <div>
+        籍贯:
+        <select id="hometown" name="hometown" v-model="hometown">
+            <option value="bj">北京</option>
+            <option value="cd">成都</option>
+            <option value="cq">重庆</option>
+        </select>
+    </div>
+</div>
+
+<script>
+    var app1 = Vue.createApp({
+        data(){
+            return {
+                name:"罗老师",
+                age:"45",
+                gender:"1",
+                course:["javascript","springboot"],
+                hometown:"cd"
+            }
+        }
+    }).mount('#form_1')
+</script>
+</body>
+</html>

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+姓名输入框的id与name属性值都为name。<br>
+性别按钮的name属性值为gender，id男为male女为female。<br>
+实现函数 welcome，调用此函数后，实现如图所示的欢迎功能<br>
+其中男性为'先生'，女性为'女士'<br>
+显示欢迎信息的div的id为div_1<br>
+此题请勿采用addEventListener或是oninput等方式来填充数据。<br>
+<form method="post" action="">
+    姓名：<input type="text" id="name" name="name" value=""><br>
+    性别：<input type="radio" id="male" name="gender" value="1">男
+    <input type="radio" id="female" name="gender" value="2">女
+    <div id="div_1"></div>
+</form>
+<script>
+    function welcome() {
+        let objMale = document.getElementById("male");
+        let objFemale = document.getElementById("female");
+        let objName = document.getElementById("name");
+        let title = "";
+
+        if (objMale.checked) {
+            title = "先生";
+        } else if (objFemale.checked) {
+            title = "女士";
+        }
+
+        if (objName.value && title) {
+            document.getElementById("div_1").innerText = "欢迎" + objName.value + title;
+        }
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>中国近现代史纲要 - 第六章</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif; }
+    body { background-color: #fcf4f2; color: #333; line-height: 1.6; padding: 20px; }
+    .container { max-width: 1400px; margin: 0 auto; }
+    header { text-align: center; padding: 30px; background: linear-gradient(135deg, #b30000 0%, #ff4d4d 100%); color: white; border-radius: 15px; box-shadow: 0 8px 20px rgba(179, 0, 0, 0.3); margin-bottom: 30px; }
+    h1 { font-size: 2.4rem; margin-bottom: 10px; text-shadow: 2px 2px 4px rgba(0,0,0,0.2); }
+    .subtitle { font-size: 1.2rem; opacity: 0.95; font-weight: 300; }
+    .section-container { background: white; border-radius: 15px; padding: 35px; box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05); margin-bottom: 35px; border-left: 6px solid #b30000; }
+    .section-title { font-size: 1.5rem; margin-bottom: 25px; color: #b30000; display: flex; align-items: center; gap: 10px; border-bottom: 2px solid #f0f0f0; padding-bottom: 15px; }
+    .question-item { border: 1px solid #eee; border-radius: 12px; padding: 25px; margin-bottom: 25px; background-color: #fff; transition: transform 0.2s; }
+    .question-item:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
+    .question-item.correct { border-color: #4CAF50; background-color: #f8fff8; }
+    .question-item.incorrect { border-color: #f44336; background-color: #fff8f8; }
+    .question-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; }
+    .question-number { font-size: 1.2rem; font-weight: 700; color: #b30000; }
+    .question-type { padding: 4px 12px; border-radius: 20px; font-size: 0.85rem; font-weight: 600; }
+    .single-choice { background-color: #ffebee; color: #c62828; }
+    .multiple-choice { background-color: #e3f2fd; color: #1565c0; }
+    .question-text { font-size: 1.1rem; margin-bottom: 20px; font-weight: 500; color: #2c3e50; }
+    .option { margin-bottom: 12px; padding: 15px 20px; border: 1px solid #e0e0e0; border-radius: 10px; cursor: pointer; transition: 0.2s; display: flex; align-items: flex-start; gap: 15px; }
+    .option:hover { background-color: #fdf2f2; border-color: #ffcdd2; }
+    .option.selected { border-color: #b30000; background-color: #fff5f5; }
+    .option input { margin-top: 5px; cursor: pointer; }
+    .feedback { padding: 20px; border-radius: 10px; margin-top: 20px; display: none; line-height: 1.8; }
+    .feedback.correct { background-color: #e8f5e9; color: #2e7d32; border-left: 5px solid #4CAF50; }
+    .feedback.incorrect { background-color: #ffebee; color: #c62828; border-left: 5px solid #f44336; }
+    .ans-label { font-weight: bold; font-size: 1.1rem; margin-bottom: 8px; display: block; }
+    .exp-text { font-size: 1rem; border-top: 1px dashed #ccc; margin-top: 10px; padding-top: 10px; color: #444; }
+    .btn-group { display: flex; gap: 15px; margin-top: 25px; }
+    .btn { padding: 12px 30px; border: none; border-radius: 8px; font-size: 1rem; font-weight: 600; cursor: pointer; transition: 0.3s; }
+    .btn-submit { background-color: #b30000; color: white; }
+    .btn-submit:hover { background-color: #8b0000; }
+    .btn-reset { background-color: #78909c; color: white; }
+
+    /* 导航栏 */
+    .chapter-nav { display: flex; justify-content: space-between; margin-top: 50px; padding: 30px 0; border-top: 2px solid #eee; }
+    .nav-link { text-decoration: none; display: flex; align-items: center; gap: 12px; padding: 15px 35px; border-radius: 12px; font-weight: bold; transition: 0.3s; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+    .prev-chapter { background-color: #546e7a; color: white; }
+    .next-chapter { background-color: #b30000; color: white; }
+    .nav-link:hover { transform: translateY(-3px); box-shadow: 0 6px 15px rgba(0,0,0,0.2); opacity: 0.9; }
+
+    footer { text-align: center; padding: 40px 0; color: #888; font-size: 0.9rem; }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <header>
+    <h1>第六章 中华民族的抗日战争</h1>
+    <p class="subtitle">坚定不移的中流砥柱 · 伟大的民族复兴转折点</p>
+  </header>
+
+  <div id="quiz-content"></div>
+
+  <div class="chapter-nav">
+    <a href="第五章.html" class="nav-link prev-chapter">
+      <i class="fas fa-chevron-left"></i> 上一章：第五章
+    </a>
+    <a href="第七章.html" class="nav-link next-chapter">
+      下一章：第七章 <i class="fas fa-chevron-right"></i>
+    </a>
+  </div>
+
+  <footer>
+    <p>&copy; 中国近现代史纲要 数字化学习平台</p>
+  </footer>
+</div>
+
+<script>
+  const questions = [
+    // 单选题 1-40
+    { q: "1. 近年来，学界和社会普遍强调抗日战争历时“十四年”而非“八年”，这一表述变化的深层历史意图在于", a: 1, type: "single", opts: ["A. 突出中国共产党在抗战中的领导作用", "B. 强调九一八事变后中国局部抗战的史实与民族抗争的完整性", "C. 纠正国民党在抗战初期的不抵抗政策", "D. 统一国内外对中国抗战起点的不同认识"], exp: "九一八事变是中国抗日战争的起点，十四年抗战完整体现了中国从局部抗战到全民族抗战的过程。" },
+    { q: "2. 1935年，中国共产党发表《八一宣言》，其核心号召是", a: 1, type: "single", opts: ["A. “武装保卫苏联”", "B. “停止内战，一致抗日”", "C. “打倒蒋介石，解放全中国”", "D. “巩固统一战线，坚持长期抗战”"], exp: "《八一宣言》主张停止内战，组织国防政府和抗日联军。" },
+    { q: "3. 西安事变的和平解决，对中国时局的直接影响是", a: 2, type: "single", opts: ["A. 标志着抗日民族统一战线的正式形成", "B. 促使国民党政府立即对日宣战", "C. 基本结束了十年内战，为国共合作抗战奠定了基础", "D. 确立了中国共产党在统一战线中的领导权"], exp: "西安事变的和平解决成为时局转换的枢纽，十年内战局面基本结束。" },
+    { q: "4. 全民族抗战爆发的标志是", a: 2, type: "single", opts: ["A. 九一八事变", "B. 一·二八事变", "C. 七七事变（卢沟桥事变）", "D. 八一三事变"], exp: "1937年7月7日卢沟桥事变标志着日本全面侵华和中国全民族抗战的开始。" },
+    { q: "5. 1937年9月，八路军取得的（ ），是全民族抗战以来中国军队的第一次重大胜利，粉碎了日军“不可战胜”的神话", a: 0, type: "single", opts: ["A. 平型关大捷", "B. 台儿庄战役", "C. 百团大战", "D. 万家岭大捷"], exp: "平型关大捷是全民族抗战以来中国军队的第一次重大胜利。" },
+    { q: "6. 毛泽东在《论持久战》中科学预见的抗日战争三个发展阶段是", a: 0, type: "single", opts: ["A. 战略防御、战略相持、战略反攻", "B. 战略退却、战略僵持、战略进攻", "C. 局部抵抗、全面抗战、全面反攻", "D. 诱敌深入、持久作战、大反攻"], exp: "毛泽东系统阐述了持久战的战略总方针及三个发展阶段。" },
+    { q: "7. 抗战初期，国民党正面战场组织的规模最大、时间最长、歼敌最多的一次战役是", a: 3, type: "single", opts: ["A. 淞沪会战", "B. 太原会战", "C. 徐州会战", "D. 武汉会战"], exp: "武汉会战是抗战初期规模最大的战役，之后抗战进入战略相持阶段。" },
+    { q: "8. 抗日战争进入战略相持阶段后，日本对华侵略方针的变化是", a: 2, type: "single", opts: ["A. 停止对国民党正面战场的进攻，全力对付共产党领导的敌后战场", "B. 对国民党政府以军事打击为主，政治诱降为辅", "C. 对国民党政府以政治诱降为主，军事打击为辅", "D. 同时加强对国共两党的军事压力"], exp: "进入相持阶段后，日本逐渐将军事重点转向打击敌后战场。" },
+    { q: "9. 为振奋全国人民的抗战信心，批判“亡国论”和“速胜论”，毛泽东系统阐述抗日战争是持久战的著作是", a: 2, type: "single", opts: ["A. 《〈共产党人〉发刊词》", "B. 《新民主主义论》", "C. 《论持久战》", "D. 《抗日游击战争的战略问题》"], exp: "《论持久战》科学地预见了战争的发展进程。" },
+    { q: "10. 毛泽东发表《论持久战》，其最重要的现实意义在于", a: 2, type: "single", opts: ["A. 系统总结了抗日战争的基本经验", "B. 为抗日战争的胜利提供了具体的作战方案", "C. 科学揭示了抗日战争的发展规律，统一了全党全国的抗战指导思想", "D. 标志着毛泽东思想的成熟"], exp: "它统一了抗战的思想，指明了胜利的方向。" },
+    { q: "11. 1938年，国民党军队在正面战场取得台儿庄大捷，其最重要的影响是", a: 1, type: "single", opts: ["A. 扭转了抗日战争的整体态势", "B. 是抗战以来中国正面战场取得的最大一次胜利", "C. 标志着抗日战争进入相持阶段", "D. 彻底粉碎了日军的速战速决计划"], exp: "台儿庄战役是李宗仁指挥的，是正面战场的重大胜利。" },
+    { q: "12. 日本在沦陷区推行“以战养战”政策的经济掠夺核心是", a: 3, type: "single", opts: ["A. 发行伪币，扰乱金融", "B. 掠夺矿业、钢铁资源和战略物资", "C. 强占土地，掠夺农产品", "D. 控制和垄断占领区的工矿业、金融和交通"], exp: "其目的是掠夺资源以支撑侵略战争。" },
+    { q: "13. 中国共产党在抗日战争中发挥“中流砥柱”作用，最本质的体现是", a: 0, type: "single", opts: ["A. 开辟和领导的敌后战场逐渐成为抗日战争的主战场", "B. 倡导并始终坚持抗日民族统一战线", "C. 提出了全面抗战路线和持久战的战略总方针", "D. 领导和推动了全国抗日救亡运动的高涨"], exp: "敌后战场和人民武装是抗击日军的核心力量。" },
+    { q: "14. 1940年八路军在华北发动的（ ），沉重打击了日军的“囚笼政策”", a: 1, type: "single", opts: ["A. 平型关战役", "B. 百团大战", "C. 黄土岭战役", "D. 神头岭伏击战"], exp: "彭德怀指挥的百团大战是敌后战场的主动进攻。" },
+    { q: "15. 抗日战争时期，中国共产党在抗日根据地政权建设上实行“三三制”原则，其直接目的是", a: 0, type: "single", opts: ["A. 巩固和扩大抗日民族统一战线", "B. 推行基层民主选举", "C. 削弱地主阶级的权力", "D. 实践苏联的政权模式"], exp: "“三三制”团结了各抗日阶层和中间力量。" },
+    { q: "16. 中国共产党在延安开展的整风运动，其核心内容是", a: 0, type: "single", opts: ["A. 反对主观主义以整顿学风，反对宗派主义以整顿党风，反对党八股以整顿文风", "B. 反对官僚主义、命令主义和贪污浪费", "C. 清算王明的“左”倾教条主义错误", "D. 进行普通的马克思主义理论教育"], exp: "整风运动是一次普遍的马克思主义思想教育运动。" },
+    { q: "17. 照相馆作为“抵抗策源地”这一象征，最深刻地揭示了", a: 1, type: "single", opts: ["A. 在敌我力量悬殊的沦陷区，中共领导的地下斗争是主要的抵抗形式", "B. 中国人民的抵抗是全方位的，既包括军事斗争，也包括文化与记忆的抗争", "C. 南京大屠杀期间，普通的中国民众并未进行有效的抵抗", "D. 艺术创作是打击敌人的最有力武器"], exp: "体现了抗日战争是全民抗战和文化抗战。" },
+    { q: "18. 抗战时期，中国共产党在根据地实行（ ），极大地调动了农民的积极性", a: 1, type: "single", opts: ["A. 土地革命政策", "B. 减租减息政策", "C. 土地国有化政策", "D. 农业合作化政策"], exp: "这是抗战时期党在农村的核心经济政策。" },
+    { q: "19. 中国共产党在抗日民族统一战线中，对中间势力采取的策略是", a: 2, type: "single", opts: ["A. 孤立", "B. 打击", "C. 争取", "D. 依赖"], exp: "中间势力包括民族资产阶级、开明绅士和地方实力派。" },
+    { q: "20. 抗日战争时期，国民党顽固派发动（ ），严重破坏了统一战线", a: 2, type: "single", opts: ["A. 四一二政变", "B. 马日事变", "C. 皖南事变", "D. 晋西事变"], exp: "皖南事变是国民党第二次反共高潮的顶点。" },
+    { q: "21. 中国共产党在抗日根据地开展大生产运动的口号是", a: 0, type: "single", opts: ["A. “自己动手，丰衣足食”", "B. “发展经济，保障供给”", "C. “耕者有其田”", "D. “精兵简政”"], exp: "为了克服日军包围和国民党封锁带来的经济困难。" },
+    { q: "22. 抗日战争时期，中国共产党的土地政策是", a: 2, type: "single", opts: ["A. 没收地主阶级土地", "B. 土地国有化", "C. 减租减息", "D. 消灭富农经济"], exp: "变没收土地为减租减息，以争取地主抗日。" },
+    { q: "23. 中国共产党在抗日民族统一战线中，同国民党顽固派斗争的原则是", a: 0, type: "single", opts: ["A. 有理、有利、有节", "B. 针锋相对，寸土必争", "C. 团结-批评-团结", "D. 又联合又斗争"], exp: "斗争是为了维护团结。" },
+    { q: "24. 毛泽东提出“马克思主义中国化”命题的著作是", a: 3, type: "single", opts: ["A. 《〈共产党人〉发刊词》", "B. 《新民主主义论》", "C. 《中国革命和中国共产党》", "D. 《论新阶段》"], exp: "在六届六中全会上首次明确提出此命题。" },
+    { q: "25. 中国成为联合国安理会常任理事国主要与（ ）有关", a: 1, type: "single", opts: ["A. 中国是联合国的创始会员国", "B. 中国在抗日战争中为世界反法西斯战争做出巨大贡献", "C. 二战后国际力量对比的变化", "D. 美国等西方国家的支持"], exp: "中国抗战牵制了日军主力，地位得到国际公认。" },
+    { q: "26. 抗日战争胜利后，中国国际地位提高的具体表现是", a: 1, type: "single", opts: ["A. 收回了所有被列强强占的租界", "B. 成为联合国安理会常任理事国", "C. 废除了所有不平等条约", "D. 参与了战后对日本的全面占领"], exp: "这标志着中国由受侵略国转向大国地位。" },
+    { q: "27. 抗日战争伟大意义在于", a: 1, type: "single", opts: ["A. 彻底完成了反帝反封建的任务", "B. 为新民主主义革命的胜利奠定了坚实基础", "C. 标志着中国社会主义革命的开始", "D. 使中国走上了资本主义发展道路"], exp: "抗战胜利是民族觉醒和力量积累的过程。" },
+    { q: "28. 中国人民抗日战争胜利的决定性因素是", a: 2, type: "single", opts: ["A. 苏联出兵中国东北", "B. 美国向日本投掷原子弹", "C. 以爱国主义为核心的民族精神", "D. 中国共产党的中流砥柱作用"], exp: "民族觉醒和全民族抗战是胜利的根源。" },
+    { q: "29. 中国抗日战争在世界反法西斯战争中的地位是", a: 0, type: "single", opts: ["A. 世界反法西斯战争的东方主战场", "B. 世界反法西斯战争的重要辅助战场", "C. 世界反法西斯战争的后方基地", "D. 世界反法西斯战争的策源地"], exp: "中国抗战时间最长，牵制并消灭了大量日军。" },
+    { q: "30. 日本被迫将台湾交还给中国的国际法律依据是", a: 0, type: "single", opts: ["A. 《开罗宣言》", "B. 《波茨坦公告》", "C. 《雅尔塔协定》", "D. 《联合国家宣言》"], exp: "《开罗宣言》明确规定日本窃取的中国领土应归还。" },
+    { q: "31. 中国共产党在抗日战争时期实行的路线是", a: 1, type: "single", opts: ["A. 无产阶级革命路线", "B. 全面抗战路线", "C. 土地革命路线", "D. 城市中心路线"], exp: "全面抗战路线即人民战争路线。" },
+    { q: "32. 抗日战争胜利的伟大历史意义包括"+"\n"+"①反抗外来侵略第一次完全胜利"+"\n" + "②大大提高了国际地位"+"\n"+ "③转折点"+"\n"+"④世界反法西斯贡献", a: 3, type: "single", opts: ["A:①", "B:①②", "C:①②③", "D:①②③④"], exp: "选D，①②③④全选。" },
+    { q: "33. 抗日战争胜利后，中国社会的主要矛盾转变为", a: 2, type: "single", opts: ["A. 中华民族与日本帝国主义的矛盾", "B. 农民阶级与地主阶级的矛盾", "C. 中国人民与美国支持的国民党反动派的矛盾", "D. 无产阶级与资产阶级的矛盾"], exp: "战后阶级矛盾上升为主要矛盾。" },
+    { q: "34. 抗日战争为民主革命胜利奠定了基础，主要是因为", a: 1, type: "single", opts: ["A. 取得了近代以来第一次胜利", "B. 中国共产党领导的人民革命力量在战争中发展壮大", "C. 蒋介石集团遭削弱", "D. 社会各界失望"], exp: "中共领导的军队、政权和思想得到了大发展。" },
+    { q: "35. 重温全民族抗战的历史，其最重要的现实启示是", a: 1, type: "single", opts: ["A. 必须坚持中国共产党的领导", "B. 弘扬以爱国主义为核心的伟大民族精神", "C. 必须建设强大的国防力量", "D. 民族团结是力量源泉"], exp: "民族精神是团结奋斗、走向复兴的旗帜。" },
+    { q: "36. “中国的抗日战争，其胜利的意义必须放在战后秩序下理解”，核心逻辑是", a: 1, type: "single", opts: ["A. 主导了公告起草", "B. 成为奠定战后和平秩序、对日处分的合法来源之一", "C. 牵制了日军主力", "D. 独立终结了侵略"], exp: "中国以战胜国身份确立了东亚秩序的合法性。" },
+    { q: "37. 抗战精神的核心内涵是", a: 0, type: "single", opts: ["A. 爱国主义与民族气节", "B. 社会主义核心价值观", "C. 全球治理与国际合作", "D. 改革开放与创新精神"], exp: "爱国主义是民族复兴的精神支柱。" },
+    { q: "38. 铭记这一伟大胜利，其核心时代价值在于", a: 1, type: "single", opts: ["A. 获得更多话语权", "B. 坚决捍卫二战成果与秩序，防止军国主义复活", "C. 对日本进行道德施压", "D. 证明制度优越性"], exp: "这是捍卫世界和平的重要基石。" },
+    { q: "39. 针对日本右翼“侵略定义未定”论调，最有力反驳是", a: 1, type: "single", opts: ["A. 日本已付赔款", "B. 东京审判、波茨坦公告等国际法判决具有无可争辩的效力", "C. 各国叙事不同", "D. 中国唯一权威"], exp: "国际法依据是不容否定的定论。" },
+    { q: "40. 抗日战争的伟大胜利重新确立了中国的大国地位。启示是", a: 0, type: "single", opts: ["A. 坚持和平发展，坚决维护主权、安全和利益", "B. 承担更多国际责任", "C. 依靠自身发展", "D. 与发达国家结盟"], exp: "综合国力和民族尊严需通过自强与和平发展维护。" },
+
+    // 多选题 1-10
+    { q: "1. 抗日民族统一战线得以初步形成的标志性事件和条件包括", a: [0, 1, 2, 3], type: "multiple", opts: ["A. 国民党五届三中全会同意谈判", "B. 共产党发表《八一宣言》", "C. 瓦窑堡会议确定方针", "D. 西安事变的和平解决", "E. 正式对日宣战"], exp: "正式对日宣战是在七七事变之后。" },
+    { q: "2. 毛泽东在《论持久战》中所阐述的依据基于", a: [0, 1, 2, 4], type: "multiple", opts: ["A. 四个基本特点", "B. 三个阶段预见", "C. 兵民是胜利之本", "D. 苏联介入是关键", "E. 伟力根源于民众"], exp: "毛泽东强调的是人民战争，而非单纯依赖外部苏联介入。" },
+    { q: "3. 中共在统一战线中采取的策略总方针和原则包括", a: [0, 1, 2, 3], type: "multiple", opts: ["A. 发展进步、争取中间、孤立顽固", "B. 以斗争求团结", "C. 有理、有利、有节", "D. 保持独立自主性", "E. 一切服从统一战线"], exp: "王明曾主张“一切经过/服从统一战线”，这是右倾投降主义，被党中央否定。" },
+    { q: "4. 抗日战争进入战略相持阶段后，日本侵华政策调整表现有", a: [0, 1, 2, 3], type: "multiple", opts: ["A. 停止大规模进攻", "B. 政治诱降为主", "C. 兵力对付敌后战场", "D. “以战养战”", "E. 寻求早日结束战争"], exp: "日本虽然企图诱降，但其根本目标仍是吞并中国。" },
+    { q: "5. 巩固根据地、争取民心的关键政策有", a: [0, 1, 2, 3, 4], type: "multiple", opts: ["A. “三三制”原则", "B. 减租减息", "C. 大生产运动", "D. 整风运动", "E. 精兵简政"], exp: "这些政策全面提升了抗日民主根据地的凝聚力和生命力。" },
+    { q: "6. 中国共产党在抗日战争中发挥的“中流砥柱”作用体现为", a: [0, 1, 2, 3], type: "multiple", opts: ["A. 倡导和坚持统一战线", "B. 持久战战略总方针", "C. 敌后战场成为主战场", "D. 新中国的模型建设", "E. 独立承担全部作战"], exp: "中国抗战是全民族的，正面战场也承担了大量日军，故E不准确。" },
+    { q: "7. 中国人民抗日战争胜利的伟大历史意义包括", a: [0, 1, 2, 3], type: "multiple", opts: ["A. 近代以来第一次完全胜利", "B. 重新确立大国地位", "C. 民族复兴光明前景", "D. 对世界反法西斯贡献", "E. 建立了新中国"], exp: "建立新中国是1949年的成果，不是抗战胜利直接标志。" },
+    { q: "8. 关于两个战场（正面与敌后）关系表述正确的是", a: [0, 1, 2], type: "multiple", opts: ["A. 防御阶段正面是主战场", "B. 相持阶段敌后逐渐为主战场", "C. 相互依存配合", "D. 国民党从未动摇", "E. 共产党从未参与正面"], exp: "国民党在后期消极抗战、积极反共；共产党军队参与过太原会战等早期正面行动。" },
+    { q: "9. 国民党正面战场的作用和局限表现在", a: [0, 1, 2, 3, 4], type: "multiple", opts: ["A. 组织大规模会战", "B. 早期承担较大压力", "C. 后期趋于消极", "D. 片面抗战路线", "E. 英勇抵抗与溃败现象并存"], exp: "正面战场在防御阶段具有重要意义，但受阶级立场限制未能彻底发动民众。" },
+    { q: "10. 抗日战争胜利的主要原因在于", a: [0, 1, 2, 3], type: "multiple", opts: ["A. 民族精神支撑", "B. 中共中流砥柱", "C. 全民族英勇抗争", "D. 国际同情和支持", "E. 国民党政府坚强领导"], exp: "国民党政府在后期存在消极抗战、指挥失误等严重问题，不能称之为全过程的“坚强领导”。" }
+  ];
+
+  const sections = [
+    { title: "第一节：单项选择题 (1-20)", start: 0, end: 20 },
+    { title: "第二节：单项选择题 (21-40)", start: 20, end: 40 },
+    { title: "第三节：多项选择题 (1-10)", start: 40, end: 50 }
+  ];
+
+  let userAnswers = new Array(questions.length).fill(null);
+
+  function init() {
+    const container = document.getElementById('quiz-content');
+    sections.forEach((sec, sIdx) => {
+      const secDiv = document.createElement('div');
+      secDiv.className = 'section-container';
+      secDiv.innerHTML = `<h2 class="section-title"><i class="fas fa-flag"></i> ${sec.title}</h2><div id="sec-${sIdx}"></div>`;
+
+      const btnDiv = document.createElement('div');
+      btnDiv.className = 'btn-group';
+      btnDiv.innerHTML = `
+                <button class="btn btn-reset" onclick="resetSec(${sIdx})">清空此节</button>
+                <button class="btn btn-submit" onclick="submitSec(${sIdx})">提交此节校对</button>
+            `;
+      secDiv.appendChild(btnDiv);
+      container.appendChild(secDiv);
+
+      const qBox = secDiv.querySelector(`#sec-${sIdx}`);
+      for (let i = sec.start; i < sec.end; i++) {
+        qBox.appendChild(renderQuestion(i));
+      }
+    });
+  }
+
+  function renderQuestion(idx) {
+    const q = questions[idx];
+    const div = document.createElement('div');
+    div.className = 'question-item';
+    div.id = `q-item-${idx}`;
+
+    div.innerHTML = `
+            <div class="question-header">
+                <span class="question-number">No.${idx < 40 ? idx + 1 : idx - 39}</span>
+                <span class="question-type ${q.type}-choice">${q.type === 'single' ? '单选题' : '多选题'}</span>
+            </div>
+            <div class="question-text">${q.q}</div>
+            <div class="options-box">
+                ${q.opts.map((o, oi) => `
+                    <div class="option" onclick="handleSel(${idx}, ${oi})">
+                        <input type="${q.type === 'single' ? 'radio' : 'checkbox'}" name="q${idx}" id="q${idx}o${oi}">
+                        <label>${o}</label>
+                    </div>
+                `).join('')}
+            </div>
+            <div class="feedback" id="fb-${idx}"></div>
+        `;
+    return div;
+  }
+
+  function handleSel(qi, oi) {
+    const q = questions[qi];
+    const container = document.getElementById(`q-item-${qi}`);
+    const inputs = container.querySelectorAll('input');
+    const opts = container.querySelectorAll('.option');
+
+    if (q.type === 'single') {
+      userAnswers[qi] = oi;
+      opts.forEach(o => o.classList.remove('selected'));
+      opts[oi].classList.add('selected');
+      inputs[oi].checked = true;
+    } else {
+      if (!userAnswers[qi]) userAnswers[qi] = [];
+      const pos = userAnswers[qi].indexOf(oi);
+      if (pos > -1) {
+        userAnswers[qi].splice(pos, 1);
+        opts[oi].classList.remove('selected');
+        inputs[oi].checked = false;
+      } else {
+        userAnswers[qi].push(oi);
+        opts[oi].classList.add('selected');
+        inputs[oi].checked = true;
+      }
+    }
+  }
+
+  function submitSec(sIdx) {
+    const sec = sections[sIdx];
+    let score = 0;
+    for (let i = sec.start; i < sec.end; i++) {
+      const q = questions[i];
+      const uAns = userAnswers[i];
+      let isOk = false;
+
+      if (q.type === 'single') {
+        isOk = (uAns === q.a);
+      } else {
+        if (uAns && Array.isArray(uAns)) {
+          isOk = (uAns.length === q.a.length && uAns.every(v => q.a.includes(v)));
+        }
+      }
+
+      if (isOk) score++;
+      const fb = document.getElementById(`fb-${i}`);
+      const item = document.getElementById(`q-item-${i}`);
+
+      item.className = `question-item ${isOk ? 'correct' : 'incorrect'}`;
+      fb.style.display = 'block';
+      fb.className = `feedback ${isOk ? 'correct' : 'incorrect'}`;
+
+      const correctStr = q.type === 'single' ?
+              q.opts[q.a] :
+              q.a.map(aIdx => String.fromCharCode(65 + aIdx)).join(', ');
+
+      fb.innerHTML = `
+                <span class="ans-label">${isOk ? '✔ 回答正确' : '✘ 回答错误'}</span>
+                <div>正确答案是：<strong>${correctStr}</strong></div>
+                <div class="exp-text"><strong>解析：</strong>${q.exp}</div>
+            `;
+    }
+    alert(`校对完毕！本节得分：${score} / ${sec.end - sec.start}`);
+  }
+
+  function resetSec(sIdx) {
+    const sec = sections[sIdx];
+    for (let i = sec.start; i < sec.end; i++) {
+      userAnswers[i] = null;
+      const item = document.getElementById(`q-item-${i}`);
+      item.className = 'question-item';
+      item.querySelectorAll('.option').forEach(o => o.classList.remove('selected'));
+      item.querySelectorAll('input').forEach(input => input.checked = false);
+      document.getElementById(`fb-${i}`).style.display = 'none';
+    }
+  }
+
+  window.onload = init;
+</script>
+
+</body>
+</html>

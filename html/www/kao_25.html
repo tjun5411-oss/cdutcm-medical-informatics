@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DOM 编程示例</title>
+</head>
+DOM编程,样式如下<br>
+要求如下：<br>
+定义函数appendDiv()动态生成div<br>
+div的id为div_1,定位方式为绝对定位，在110，110位置处<br>
+高与宽都是100px。边框为solid,2个像素，红色。<br>
+此题在提交时，请把自行测试时调用appendDiv()的代码行注释掉或是删除<br>
+<body>
+<script>
+    function appendDiv() {
+        const newDiv = document.createElement('div');
+        newDiv.id = 'div_1';
+        newDiv.style.position = 'absolute';
+        newDiv.style.left = '110px';
+        newDiv.style.top = '110px';
+        newDiv.style.width = '100px';
+        newDiv.style.height = '100px';
+        newDiv.style.border = '2px solid red';
+        document.body.appendChild(newDiv);
+    }
+</script>
+</body>
+</html>

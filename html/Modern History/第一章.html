@@ -1,0 +1,1036 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>中国近现代史纲要 - 第一章</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* 保持你原始的所有 CSS 样式不变 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
+        }
+
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            padding: 20px;
+            background: linear-gradient(135deg, #0066cc 0%, #0088ff 100%);
+            color: white;
+            border-radius: 12px;
+            box-shadow: 0 6px 15px rgba(0, 102, 204, 0.2);
+            margin-bottom: 25px;
+        }
+
+        h1 {
+            font-size: 2.4rem;
+            margin-bottom: 10px;
+            letter-spacing: 1px;
+        }
+
+        .subtitle {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .section-container {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            margin-bottom: 30px;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            margin-bottom: 25px;
+            color: #0066cc;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #eee;
+        }
+
+        .question-item {
+            border: 1px solid #eaeaea;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .question-item.correct {
+            border-color: #4CAF50;
+            background-color: #f9fff9;
+        }
+
+        .question-item.incorrect {
+            border-color: #f44336;
+            background-color: #fff9f9;
+        }
+
+        .question-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .question-number {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #0066cc;
+        }
+
+        .question-type {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 15px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .single-choice {
+            background-color: #e6f2ff;
+            color: #0066cc;
+        }
+
+        .multiple-choice {
+            background-color: #f0e6ff;
+            color: #6600cc;
+        }
+
+        .question-text {
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .options-container {
+            margin: 15px 0;
+        }
+
+        .option {
+            margin-bottom: 10px;
+            padding: 12px 15px;
+            border: 1px solid #eaeaea;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+        }
+
+        .option:hover {
+            border-color: #b3d9ff;
+            background-color: #f0f8ff;
+        }
+
+        .option.selected {
+            border-color: #66b3ff;
+            background-color: #e6f2ff;
+        }
+
+        .option input {
+            margin-right: 10px;
+            cursor: pointer;
+        }
+
+        .feedback {
+            padding: 15px;
+            border-radius: 6px;
+            margin-top: 15px;
+            font-size: 0.95rem;
+            display: none;
+        }
+
+        .feedback.correct {
+            background-color: #e6ffe6;
+            border-left: 4px solid #4CAF50;
+            display: block;
+        }
+
+        .feedback.incorrect {
+            background-color: #ffe6e6;
+            border-left: 4px solid #f44336;
+            display: block;
+        }
+
+        .feedback-title {
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .correct-answer-text {
+            margin-top: 10px;
+            padding: 8px;
+            background-color: white;
+            border-radius: 4px;
+            border: 1px dashed #ccc;
+            font-weight: 600;
+        }
+
+        .explanation {
+            margin-top: 15px;
+            padding: 12px;
+            background-color: #f9f9f9;
+            border-radius: 6px;
+            border-left: 3px solid #66b3ff;
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        .section-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .section-btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .reset-section-btn {
+            background-color: #cc6600;
+            color: white;
+        }
+
+        .submit-section-btn {
+            background-color: #0066cc;
+            color: white;
+        }
+
+        .chapter-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+        }
+
+        .chapter-btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 6px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .prev-chapter-btn {
+            background-color: #666;
+            color: white;
+        }
+
+        .next-chapter-btn {
+            background-color: #0066cc;
+            color: white;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 20px;
+            color: #777;
+            font-size: 0.9rem;
+            margin-top: 40px;
+            border-top: 1px solid #eee;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <header>
+        <h1>中国近现代史纲要 - 第一章</h1>
+        <p class="subtitle">共45题 | 每10题一组 | 每题附带详细解析</p>
+    </header>
+
+    <div id="sections-wrapper"></div>
+
+    <div class="chapter-navigation">
+        <button class="chapter-btn prev-chapter-btn" onclick="window.location.href='导论.html'">
+            <i class="fas fa-arrow-left"></i> 上一章
+        </button>
+
+        <button class="chapter-btn next-chapter-btn" onclick="goToNextChapter()">
+            下一章 <i class="fas fa-arrow-right"></i>
+        </button>
+    </div>
+
+    <div class="footer">
+        <p>中国近现代史纲要 - 第一章 &copy; 2025</p>
+    </div>
+</div>
+
+<script>
+    // 在 script 标签内的 init 函数或其他函数附近添加：
+
+    function goToNextChapter() {
+        // 跳转到同级目录下的 第二章.html
+        window.location.href = '第二章.html';
+    }
+
+    // 如果你也需要“上一章”跳转，可以类似添加：
+    function goToPrevChapter() {
+        window.location.href = '导论.html'; // 或者是对应的文件名
+    }
+
+    const questions = [
+        // ==================== 第一部分：单项选择题 (1-20) ====================
+        {
+            type: "single",
+            text: "鸦片战争前，中英贸易中中国长期处于出超地位的根本原因是",
+            options: [
+                "A. 英国对中国茶叶、生丝等商品需求旺盛",
+                "B. 清政府实行闭关锁国的对外贸易政策",
+                "C. 中国自给自足的自然经济结构占统治地位",
+                "D. 英国工业品不符合中国消费者的习惯"
+            ],
+            answer: 2,
+            knowledge: "鸦片战争前的中国经济结构",
+            explanation: "鸦片战争前，中国自给自足的自然经济结构占统治地位，对外国商品需求不大，而中国的茶叶、生丝等在英国却很受欢迎，导致中国长期处于贸易顺差地位。"
+        },
+        {
+            type: "single",
+            text: "英国发动鸦片战争最深刻的动因是",
+            options: [
+                "A. 维护其罪恶的鸦片贸易",
+                "B. 扭转对华贸易逆差，打开中国市场",
+                "C. 报复林则徐的虎门销烟",
+                "D. 传播西方的基督教文明"
+            ],
+            answer: 1,
+            knowledge: "鸦片战争的根本原因",
+            explanation: "英国发动鸦片战争最深刻的动因是扭转对华贸易逆差，打开中国市场。鸦片贸易只是实现这一目的的手段之一。"
+        },
+        {
+            type: "single",
+            text: "中国近代史上第一个不平等条约是《南京条约》，其中最能反映英国发动战争本质意图的条款是",
+            options: [
+                "A. 割让香港岛",
+                "B. 赔款2100万银元",
+                "C. 开放五处通商口岸",
+                "D. 协定关税"
+            ],
+            answer: 3,
+            knowledge: "《南京条约》的关键条款",
+            explanation: "协定关税最能反映英国发动战争打开中国市场的本质意图，因为这一条款使中国丧失了关税自主权，有利于英国商品在中国倾销。"
+        },
+        {
+            type: "single",
+            text: "鸦片战争后，中国社会最主要的矛盾是",
+            options: [
+                "A. 地主阶级与农民阶级的矛盾",
+                "B. 封建主义与人民大众的矛盾",
+                "C. 帝国主义与中华民族的矛盾",
+                "D. 资产阶级与无产阶级的矛盾"
+            ],
+            answer: 2,
+            knowledge: "近代中国社会主要矛盾",
+            explanation: "鸦片战争后，帝国主义与中华民族的矛盾成为中国社会最主要的矛盾，贯穿整个中国近代史。"
+        },
+        {
+            type: "single",
+            text: "第二次鸦片战争期间，侵占中国领土最多的国家是",
+            options: [
+                "A. 英国",
+                "B. 法国",
+                "C. 俄国",
+                "D. 美国"
+            ],
+            answer: 2,
+            knowledge: "第二次鸦片战争与领土丧失",
+            explanation: "第二次鸦片战争期间，俄国通过《瑷珲条约》、《北京条约》等不平等条约，侵占了中国150多万平方公里的领土，是侵占中国领土最多的国家。"
+        },
+        {
+            type: "single",
+            text: "马克思在《鸦片贸易史》中评论道：'……这真是任何诗人想也不敢想的一种奇异的对联式悲歌'他评价的是",
+            options: [
+                "A. 鸦片战争的进程与结果",
+                "B. 清政府'防民甚于防寇'的方针",
+                "C. 《天津条约》和《北京条约》的签订",
+                "D. 太平天国运动与第二次鸦片战争在时间上的重叠"
+            ],
+            answer: 3,
+            knowledge: "马克思对近代中国的评论",
+            explanation: "马克思评论的是太平天国运动与第二次鸦片战争在时间上的重叠，这一历史巧合构成了'奇异的对联式悲歌'。"
+        },
+        {
+            type: "single",
+            text: "近代中国'睁眼看世界第一人'林则徐主持编译的著作是",
+            options: [
+                "A. 《海国图志》",
+                "B. 《四洲志》",
+                "C. 《瀛寰志略》",
+                "D. 《康輶纪行》"
+            ],
+            answer: 1,
+            knowledge: "林则徐与开眼看世界",
+            explanation: "林则徐主持编译了《四洲志》，介绍了世界各国的历史、地理、政治等情况，被誉为'睁眼看世界第一人'。"
+        },
+        {
+            type: "single",
+            text: "魏源在《海国图志》中提出的思想是",
+            options: [
+                "A. '师夷长技以制夷'",
+                "B. '物竞天择，适者生存'",
+                "C. '中学为体，西学为用'",
+                "D. '振兴中华'"
+            ],
+            answer: 0,
+            knowledge: "魏源的《海国图志》",
+            explanation: "魏源在《海国图志》中提出了'师夷长技以制夷'的思想，主张学习西方的先进技术来抵御西方的侵略。"
+        },
+        {
+            type: "single",
+            text: "中国工人阶级最早出现于",
+            options: [
+                "A. 19世纪四五十年代的外国在华企业中",
+                "B. 19世纪六十年代的洋务企业中",
+                "C. 19世纪七十年代的民族资本企业中",
+                "D. 第一次世界大战期间"
+            ],
+            answer: 0,
+            knowledge: "中国工人阶级的产生",
+            explanation: "中国工人阶级最早出现于19世纪四五十年代的外国在华企业中，早于中国的民族资产阶级。"
+        },
+        {
+            type: "single",
+            text: "近代中国半殖民地半封建社会的起点是",
+            options: [
+                "A. 第一次鸦片战争和《南京条约》的签订",
+                "B. 第二次鸦片战争和《天津条约》《北京条约》的签订",
+                "C. 甲午战争和《马关条约》的签订",
+                "D. 八国联军侵华和《辛丑条约》的签订"
+            ],
+            answer: 0,
+            knowledge: "半殖民地半封建社会的开端",
+            explanation: "第一次鸦片战争和《南京条约》的签订是中国半殖民地半封建社会的起点，中国开始丧失独立自主的地位。"
+        },
+        {
+            type: "single",
+            text: "资本-帝国主义列强对近代中国进行经济侵略的方式，由商品输出为主向资本输出为主转变的标志性条约是",
+            options: [
+                "A. 《南京条约》",
+                "B. 《北京条约》",
+                "C. 《马关条约》",
+                "D. 《辛丑条约》"
+            ],
+            answer: 2,
+            knowledge: "帝国主义对华经济侵略方式的变化",
+            explanation: "《马关条约》允许外国在华投资设厂，标志着列强对华经济侵略方式由商品输出为主向资本输出为主转变。"
+        },
+        {
+            type: "single",
+            text: "近代中国人民第一次大规模的反侵略武装斗争是",
+            options: [
+                "A. 三元里人民的抗英斗争",
+                "B. 太平天国运动",
+                "C. 义和团运动",
+                "D. 辛亥革命"
+            ],
+            answer: 0,
+            knowledge: "早期反侵略斗争",
+            explanation: "1841年三元里人民的抗英斗争是近代中国人民第一次大规模的反侵略武装斗争。"
+        },
+        {
+            type: "single",
+            text: "19世纪70至80年代，帝国主义列强蚕食中国边疆地区，其中侵入新疆并建立伪政权的是",
+            options: [
+                "A. 浩罕汗国的阿古柏",
+                "B. 俄国",
+                "C. 英国",
+                "D. 日本"
+            ],
+            answer: 0,
+            knowledge: "19世纪边疆危机",
+            explanation: "19世纪70年代，浩罕汗国军官阿古柏侵入新疆，建立'哲德沙尔汗国'，得到英、俄两国的支持。"
+        },
+        {
+            type: "single",
+            text: "在近代中国，提出'振兴中华'口号的是",
+            options: [
+                "A. 林则徐",
+                "B. 魏源",
+                "C. 孙中山",
+                "D. 周恩来"
+            ],
+            answer: 2,
+            knowledge: "'振兴中华'口号的提出",
+            explanation: "1894年，孙中山在兴中会成立时提出了'振兴中华'的口号，成为近代中华民族复兴的强音。"
+        },
+        {
+            type: "single",
+            text: "鸦片战争后，中国社会发生的根本性变化是",
+            options: [
+                "A. 中国的白银大量外流，出现财政危机",
+                "B. 独立的中国逐步变成半殖民地的中国，封建的中国逐步变成半封建的中国",
+                "C. 自然经济完全解体，商品经济全面发展",
+                "D. 主要矛盾由地主阶级与农民阶级的矛盾转变为资产阶级与无产阶级的矛盾"
+            ],
+            answer: 1,
+            knowledge: "鸦片战争对中国社会的根本影响",
+            explanation: "鸦片战争后，中国社会性质发生了根本变化：独立的中国逐步变成半殖民地的中国，封建的中国逐步变成半封建的中国。"
+        },
+        {
+            type: "single",
+            text: "第二次鸦片战争中，'既是帮凶，又单独作案'的国家是",
+            options: [
+                "A. 俄国",
+                "B. 美国",
+                "C. 法国",
+                "D. 德国"
+            ],
+            answer: 0,
+            knowledge: "俄国在第二次鸦片战争中的角色",
+            explanation: "俄国在第二次鸦片战争中扮演了双重角色：一方面以调停者身份帮助英法，另一方面趁火打劫，单独与清政府签订不平等条约，割占大片中国领土。"
+        },
+        {
+            type: "single",
+            text: "太平天国运动与以往农民战争相比，新的时代特点是",
+            options: [
+                "A. 建立了与清王朝对峙的政权",
+                "B. 提出了反映农民土地要求的纲领",
+                "C. 肩负起反封建反侵略的双重使命",
+                "D. 遭到了中外反动势力的联合绞杀"
+            ],
+            answer: 2,
+            knowledge: "太平天国运动的新特点",
+            explanation: "太平天国运动发生在半殖民地半封建社会初期，与以往农民战争相比，它的新特点是肩负起反封建反侵略的双重使命。"
+        },
+        {
+            type: "single",
+            text: "《天朝田亩制度》和《资政新篇》的共同之处在于",
+            options: [
+                "A. 都主张发展资本主义",
+                "B. 都反映了农民阶级的迫切愿望",
+                "C. 都具有反封建的进步性",
+                "D. 都符合当时中国的社会实际"
+            ],
+            answer: 2,
+            knowledge: "太平天国的两个纲领比较",
+            explanation: "《天朝田亩制度》和《资政新篇》都具有反封建的进步性，前者反对封建土地所有制，后者主张学习西方资本主义制度。"
+        },
+        {
+            type: "single",
+            text: "近代中国海关管理权长期被外国人把持，担任中国海关总税务司时间最长的英国人是",
+            options: [
+                "A. 赫德",
+                "B. 李泰国",
+                "C. 璞鼎查",
+                "D. 巴夏礼"
+            ],
+            answer: 0,
+            knowledge: "近代中国海关",
+            explanation: "英国人赫德担任中国海关总税务司长达48年（1863-1911），控制了中国海关管理权，对晚清政治、经济、外交产生了重要影响。"
+        },
+        {
+            type: "single",
+            text: "帝国主义列强不能灭亡和瓜分中国的最根本原因是",
+            options: [
+                "A. 帝国主义列强之间的矛盾和互相制约",
+                "B. 清朝政府的顽强抵抗",
+                "C. 中华民族进行的不屈不挠的反侵略斗争",
+                "D. 中国地域广阔，人口众多"
+            ],
+            answer: 2,
+            knowledge: "中国未被瓜分的原因",
+            explanation: "帝国主义列强不能灭亡和瓜分中国的最根本原因是中华民族进行的不屈不挠的反侵略斗争，显示了中国人民反抗外来侵略的坚强意志。"
+        },
+
+        // ==================== 第二部分：单项选择题 (21-40) ====================
+        {
+            type: "single",
+            text: "第二次鸦片战争期间，清政府与英法两国交涉的一个核心焦点，从'公使驻京'转变为全力阻止'夷人牵挽龙舟'，这一变化典型地反映了",
+            options: [
+                "A. 清政府外交策略的灵活转变",
+                "B. 民族矛盾已取代阶级矛盾成为最主要矛盾",
+                "C. 清廷统治者的'天朝上国'观念远甚于对国家主权的珍视",
+                "D. 英法两国放弃了原有的侵略要求"
+            ],
+            answer: 2,
+            knowledge: "清政府的传统观念",
+            explanation: "这一变化典型地反映了清廷统治者的'天朝上国'观念根深蒂固，更在意维护传统礼仪秩序，而非国家主权和利益。"
+        },
+        {
+            type: "single",
+            text: "与《天朝田亩制度》相比，《资政新篇》最本质的不同在于它",
+            options: [
+                "A. 反映了太平天国政权的农民阶级属性",
+                "B. 主张在中国发展资本主义生产方式",
+                "C. 得到了广大军民的支持并得以全面推行",
+                "D. 反对清王朝的封建统治"
+            ],
+            answer: 1,
+            knowledge: "《资政新篇》的性质",
+            explanation: "《资政新篇》最本质的不同在于它主张在中国发展资本主义生产方式，这是中国近代第一个比较系统的发展资本主义的方案。"
+        },
+        {
+            type: "single",
+            text: "马克思曾评价俄国在第二次鸦片战争中'不花费一文钱，不出动一兵一卒，而能比任何一个参战国得到更多的好处'其主要依据是",
+            options: [
+                "A. 俄国调停战争有功，获得了清政府的酬谢",
+                "B. 俄国通过武力威胁，直接强占了东北大片领土",
+                "C. 俄国通过《瑷珲条约》、《北京条约》等，割占中国150多万平方公里领土",
+                "D. 俄国获得了与英法同等的在华通商特权"
+            ],
+            answer: 2,
+            knowledge: "俄国在第二次鸦片战争中的获利",
+            explanation: "马克思的评价主要依据是俄国通过《瑷珲条约》、《北京条约》等不平等条约，割占了中国150多万平方公里的领土，是最大的获利者。"
+        },
+        {
+            type: "single",
+            text: "洋务派兴办近代军事工业和民用工业的根本目的是",
+            options: [
+                "A. 发展中国民族资本主义",
+                "B. 实现'师夷长技以制夷'的理想",
+                "C. 维护清朝的封建统治",
+                "D. 与外国企业争夺中国市场"
+            ],
+            answer: 2,
+            knowledge: "洋务运动的根本目的",
+            explanation: "洋务派兴办近代工业的根本目的是维护清朝的封建统治，'自强'、'求富'都是为此服务的手段。"
+        },
+        {
+            type: "single",
+            text: "19世纪60年代，清政府之所以能暂时出现'中外和好'的'同治中兴'局面，其关键原因在于",
+            options: [
+                "A. 清政府已彻底放弃'天朝上国'观念",
+                "B. 西方列强暂时满足了既得利益",
+                "C. 中外反动势力开始公开勾结，共同镇压中国人民的反抗（如太平天国）",
+                "D. 中国民族资本主义的发展壮大了国力"
+            ],
+            answer: 2,
+            knowledge: "同治中兴的原因",
+            explanation: "中外反动势力开始公开勾结，共同镇压中国人民的反抗（如太平天国），是'同治中兴'局面出现的关键原因。"
+        },
+        {
+            type: "single",
+            text: "中国近代海关总税务司英国人赫德曾对清政府产生过重要影响。他对中国内政的深度介入，最准确地反映了",
+            options: [
+                "A. 清政府的腐败无能",
+                "B. 帝国主义对中国财政经济命脉的控制",
+                "C. 中外合作共治的友好局面",
+                "D. 中国海关管理的现代化"
+            ],
+            answer: 1,
+            knowledge: "赫德与近代中国海关",
+            explanation: "赫德对中国内政的深度介入，最准确地反映了帝国主义对中国财政经济命脉的控制，是半殖民地社会的重要特征。"
+        },
+        {
+            type: "single",
+            text: "甲午战争惨败后，严复译介《天演论》，提出'物竞天择，适者生存'的进化论思想，其直接目的在于",
+            options: [
+                "A. 为资产阶级革命提供理论依据",
+                "B. 论证维新变法的紧迫性和合理性",
+                "C. 宣传科学，反对封建迷信",
+                "D. 介绍西方的生物学知识"
+            ],
+            answer: 1,
+            knowledge: "严复与《天演论》",
+            explanation: "严复译介《天演论》，提出'物竞天择，适者生存'的进化论思想，其直接目的在于论证维新变法的紧迫性和合理性，警示国人中国正处于危亡之际，必须变法图强。"
+        },
+        {
+            type: "single",
+            text: "近代中国某条约规定：'永禁或设、或入与诸国仇敌之会，违者皆斩'这一条款最能说明",
+            options: [
+                "A. 清政府已完全沦为帝国主义统治中国的工具",
+                "B. 中国人民的反帝斗争被彻底镇压",
+                "C. 清政府开始成为'洋人的朝廷'",
+                "D. 中国的外交事务必须征得列强同意"
+            ],
+            answer: 0,
+            knowledge: "《辛丑条约》与清政府性质",
+            explanation: "这一条款出自《辛丑条约》，最能说明清政府已完全沦为帝国主义统治中国的工具，成为'洋人的朝廷'。"
+        },
+        {
+            type: "single",
+            text: "在近代中国，较早提出'商战'思想，主张以商业发展来抵抗外国经济侵略的早期维新派代表人物是",
+            options: [
+                "A. 郑观应",
+                "B. 王韬",
+                "C. 薛福成",
+                "D. 马建忠"
+            ],
+            answer: 0,
+            knowledge: "早期维新思想",
+            explanation: "郑观应在《盛世危言》中较早提出'商战'思想，主张以商业发展来抵抗外国经济侵略，发展民族资本主义。"
+        },
+        {
+            type: "single",
+            text: "太平天国运动由盛转衰的转折点是",
+            options: [
+                "A. 北伐的失败",
+                "B. 天京事变",
+                "C. 安庆失陷",
+                "D. 洪秀全病逝"
+            ],
+            answer: 1,
+            knowledge: "太平天国运动的转折",
+            explanation: "1856年的天京事变是太平天国运动由盛转衰的转折点，领导集团内部的自相残杀严重削弱了太平天国的力量。"
+        },
+        {
+            type: "single",
+            text: "洋务运动时期，清政府创办的规模最大的军事工业是",
+            options: [
+                "A. 江南制造总局",
+                "B. 福州船政局",
+                "C. 天津机器局",
+                "D. 湖北枪炮厂"
+            ],
+            answer: 0,
+            knowledge: "洋务军事工业",
+            explanation: "江南制造总局是洋务运动时期清政府创办的规模最大的军事工业，由曾国藩、李鸿章在上海创办。"
+        },
+        {
+            type: "single",
+            text: "中国民族资产阶级在政治上具有两面性的根本原因是",
+            options: [
+                "A. 其产生于中国半殖民地半封建的社会形态",
+                "B. 其企业资金少、规模小、技术力量薄弱",
+                "C. 其大部分由官僚、地主和商人转化而来",
+                "D. 外国资本主义和本国封建主义的压迫"
+            ],
+            answer: 0,
+            knowledge: "民族资产阶级的两面性",
+            explanation: "中国民族资产阶级在政治上具有两面性（革命性和妥协性）的根本原因是其产生于中国半殖民地半封建的社会形态，经济上既受帝国主义和封建主义的压迫，又与它们有着千丝万缕的联系。"
+        },
+        {
+            type: "single",
+            text: "19世纪70年代，清政府决定出兵收复新疆。其主要战略考量，除了捍卫领土主权外，还在于",
+            options: [
+                "A. 打击阿古柏政权，维护中亚地区和平",
+                "B. 防止英、俄势力借机进一步渗透，造成'螳螂捕蝉，黄雀在后'的危局",
+                "C. 为左宗棠等湘淮系集团争取军功",
+                "D. 打通与俄国的陆路贸易通道"
+            ],
+            answer: 1,
+            knowledge: "清政府收复新疆的战略考量",
+            explanation: "清政府决定出兵收复新疆的主要战略考量，除了捍卫领土主权外，还在于防止英、俄势力借机进一步渗透新疆，造成'螳螂捕蝉，黄雀在后'的危局，威胁清王朝的统治。"
+        },
+        {
+            type: "single",
+            text: "近代中国第一个系统介绍西方资产阶级社会政治学说的启蒙思想家是",
+            options: [
+                "A. 严复",
+                "B. 梁启超",
+                "C. 康有为",
+                "D. 谭嗣同"
+            ],
+            answer: 0,
+            knowledge: "近代思想启蒙",
+            explanation: "严复是近代中国第一个系统介绍西方资产阶级社会政治学说的启蒙思想家，他翻译了《天演论》、《原富》、《法意》等著作。"
+        },
+        {
+            type: "single",
+            text: "《马关条约》中，规定允许外国在华投资设厂的条款，对中国的直接影响是",
+            options: [
+                "A. 极大地促进了中国民族资本主义的发展",
+                "B. 使列强对华经济侵略由商品输出为主转变为资本输出为主",
+                "C. 标志着中国完全沦为半殖民地半封建社会",
+                "D. 使中国自给自足的自然经济彻底解体"
+            ],
+            answer: 1,
+            knowledge: "《马关条约》的影响",
+            explanation: "《马关条约》允许外国在华投资设厂，使列强对华经济侵略由商品输出为主转变为资本输出为主，严重阻碍了中国民族资本主义的发展。"
+        },
+        {
+            type: "single",
+            text: "清政府在台湾正式建立行省是在",
+            options: [
+                "A. 第一次鸦片战争后",
+                "B. 第二次鸦片战争后",
+                "C. 中法战争后",
+                "D. 甲午战争后"
+            ],
+            answer: 2,
+            knowledge: "台湾建省",
+            explanation: "1885年，中法战争结束后，清政府认识到台湾战略地位的重要性，决定在台湾正式建立行省，刘铭传为首任台湾巡抚。"
+        },
+        {
+            type: "single",
+            text: "'戊戌六君子'之一的谭嗣同在就义前疾呼：'有心杀贼，无力回天'这里的'贼'主要是指",
+            options: [
+                "A. 帝国主义列强",
+                "B. 以慈禧太后为首的封建顽固势力",
+                "C. 出卖变法的袁世凯",
+                "D. 阻挠变法的封建官僚"
+            ],
+            answer: 1,
+            knowledge: "戊戌变法",
+            explanation: "谭嗣同所说的'贼'主要是指以慈禧太后为首的封建顽固势力，他们发动戊戌政变，镇压了维新变法运动。"
+        },
+        {
+            type: "single",
+            text: "义和团运动提出'扶清灭洋'的口号，这反映出在民族危机空前加剧的背景下",
+            options: [
+                "A. 农民阶级对中外反动势力的联合性有了科学认识",
+                "B. 清政府与农民阶级的矛盾得到了根本缓和",
+                "C. 帝国主义与中华民族的矛盾成为最主要的矛盾",
+                "D. 农民阶级已经成为反帝反封建的民主革命的领导力量"
+            ],
+            answer: 2,
+            knowledge: "义和团运动的性质",
+            explanation: "'扶清灭洋'的口号反映出在民族危机空前加剧的背景下，帝国主义与中华民族的矛盾成为最主要的矛盾，但农民阶级对中外反动势力的本质认识不清。"
+        },
+        {
+            type: "single",
+            text: "孙中山在《兴中会章程》中指出：'方今强邻环列，虎视鹰瞵……蚕食鲸吞，已效尤于接踵；瓜分豆剖，实堪虑于目前'这段话表明他成立兴中会的直接目的是",
+            options: [
+                "A. 发展资本主义经济",
+                "B. 推翻清朝封建统治",
+                "C. 挽救中华民族的危亡",
+                "D. 建立资产阶级共和国"
+            ],
+            answer: 2,
+            knowledge: "兴中会的成立目的",
+            explanation: "这段话表明孙中山成立兴中会的直接目的是挽救中华民族的危亡，反对帝国主义瓜分中国。"
+        },
+        {
+            type: "single",
+            text: "从历史发展的角度看，洋务运动失败的根本原因在于",
+            options: [
+                "A. 其领导者和参与者是封建官僚",
+                "B. 其企业采用封建衙门式的管理",
+                "C. 其只引进西方技术而不变革封建制度",
+                "D. 遭到顽固派的强烈反对"
+            ],
+            answer: 2,
+            knowledge: "洋务运动失败的根本原因",
+            explanation: "洋务运动失败的根本原因在于其只引进西方技术而不变革封建制度，即'中体西用'的局限性，不能解决中国面临的根本问题。"
+        },
+
+        // ==================== 第三部分：多项选择题 (41-45) ====================
+        {
+            type: "multiple",
+            text: "关于鸦片战争后中国社会性质的变化，下列表述中准确的有",
+            options: [
+                "A. 中国不再是一个完全独立的主权国家，但保持了形式上的独立",
+                "B. 封建社会的根基——地主阶级对农民的剥削依然存在，并同买办资本、高利贷资本相结合",
+                "C. 民族资本主义在经济中占据主导地位，成为主要的经济形式",
+                "D. 中国的经济、政治和文化发展表现出极大的不平衡性",
+                "E. 帝国主义不但操纵了中国的财政和经济命脉，并且逐步控制了中国的政治中枢"
+            ],
+            answer: [0, 1, 3, 4],
+            knowledge: "半殖民地半封建社会的特征",
+            explanation: "C选项错误，鸦片战争后，民族资本主义并未在经济中占据主导地位，自然经济和外国资本主义经济仍占主导。其他选项均为中国半殖民地半封建社会的特征。"
+        },
+        {
+            type: "multiple",
+            text: "下列对《天朝田亩制度》和《资政新篇》的比较中，正确的有",
+            options: [
+                "A. 两者都反映了农民阶级反对封建土地所有制的强烈愿望",
+                "B. 前者是太平天国前期革命性的体现，后者是太平天国后期改革内政、建设国家的新方案",
+                "C. 前者主张绝对平均分配土地，后者主张发展资本主义工商业",
+                "D. 两者都因当时严峻的战争环境而未能付诸实施",
+                "E. 前者具有空想性，后者缺乏实施的阶级基础和社会条件"
+            ],
+            answer: [1, 2, 3, 4],
+            knowledge: "太平天国两个纲领的比较",
+            explanation: "A选项错误，《资政新篇》并未反映农民阶级反对封建土地所有制的愿望，而是主张发展资本主义。其他选项均正确。"
+        },
+        {
+            type: "multiple",
+            text: "资本-帝国主义列强对近代中国进行军事侵略、政治控制、经济掠夺和文化渗透，其最终目的是",
+            options: [
+                "A. 将中国变为其独立的殖民地",
+                "B. 推动中国社会的现代化转型",
+                "C. 维持中国的半独立状态，以便于长期掠夺和统治",
+                "D. 阻碍和压制中国民族资本主义的发展",
+                "E. 与中国封建势力结成同盟，共同剥削中国人民"
+            ],
+            answer: [2, 3, 4],
+            knowledge: "帝国主义侵华的最终目的",
+            explanation: "帝国主义侵华的最终目的是维持中国的半独立状态以便于长期掠夺和统治，阻碍和压制中国民族资本主义的发展，与中国封建势力结成同盟共同剥削中国人民。A选项错误，列强倾向于维持中国的半殖民地状态而非完全殖民地；B选项明显错误。"
+        },
+        {
+            type: "multiple",
+            text: "19世纪70至80年代，中国陷入严重的'边疆危机'，其主要表现包括",
+            options: [
+                "A. 英国从印度侵入西藏，并武装入侵云南",
+                "B. 法国侵犯广西，并发动中法战争，将越南变为其殖民地",
+                "C. 俄国伙同阿古柏势力，侵占新疆伊犁地区",
+                "D. 日本吞并琉球，并出兵侵犯台湾",
+                "E. 德国强租胶州湾，将山东划为其势力范围"
+            ],
+            answer: [0, 1, 2, 3],
+            knowledge: "19世纪边疆危机",
+            explanation: "E选项所述为19世纪90年代后期（1897年）的事件，不属于70-80年代的'边疆危机'。其他选项均为19世纪70-80年代中国边疆危机的表现。"
+        },
+        {
+            type: "multiple",
+            text: "关于近代中国人民反抗外来侵略的斗争，下列叙述正确的有",
+            options: [
+                "A. 三元里抗英斗争是中国人民第一次大规模的反侵略武装斗争",
+                "B. 义和团运动粉碎了帝国主义列强瓜分和灭亡中国的图谋",
+                "C. 鸦片战争期间，清军将领关天培、海龄、陈化成等英勇战死",
+                "D. 林则徐、魏源等提出了'师夷长技以制夷'的主张，是反侵略斗争在思想领域的体现",
+                "E. 所有反侵略战争失败的根本原因在于中国经济和技术的落后"
+            ],
+            answer: [0, 1, 2, 3],
+            knowledge: "近代反侵略斗争",
+            explanation: "E选项错误，近代中国反侵略战争失败的根本原因是社会制度的腐败，经济技术的落后是重要原因但非根本原因。其他选项均正确。"
+        }
+    ];
+
+    // 分页逻辑：每10题一组
+    const itemsPerPage = 10;
+    const totalSections = Math.ceil(questions.length / itemsPerPage);
+
+    function init() {
+        const wrapper = document.getElementById('sections-wrapper');
+
+        for (let s = 0; s < totalSections; s++) {
+            const start = s * itemsPerPage;
+            const end = Math.min(start + itemsPerPage, questions.length);
+
+            // 创建容器
+            const sectionContainer = document.createElement('div');
+            sectionContainer.className = 'section-container';
+
+            // 标题
+            const title = document.createElement('h2');
+            title.className = 'section-title';
+            title.textContent = `第 ${s + 1} 部分：题目 (${start + 1}-${end})`;
+            sectionContainer.appendChild(title);
+
+            // 题目列表
+            const qList = document.createElement('div');
+            qList.id = `q-list-${s}`;
+
+            for (let i = start; i < end; i++) {
+                qList.appendChild(createQuestionElement(questions[i], i));
+            }
+            sectionContainer.appendChild(qList);
+
+            // 按钮组
+            const btnGroup = document.createElement('div');
+            btnGroup.className = 'section-buttons';
+            btnGroup.innerHTML = `
+                <button class="section-btn reset-section-btn" onclick="resetGroup(${s}, ${start}, ${end})">重置本组</button>
+                <button class="section-btn submit-section-btn" onclick="submitGroup(${s}, ${start}, ${end})">提交本组答案</button>
+            `;
+            sectionContainer.appendChild(btnGroup);
+
+            wrapper.appendChild(sectionContainer);
+        }
+    }
+
+    function createQuestionElement(q, index) {
+        const div = document.createElement('div');
+        div.className = 'question-item';
+        div.id = `q-item-${index}`;
+
+        const optionsHtml = q.options.map((opt, optIdx) => `
+            <label class="option" id="label-${index}-${optIdx}">
+                <input type="${q.type === 'single' ? 'radio' : 'checkbox'}" name="q-${index}" value="${optIdx}">
+                ${opt}
+            </label>
+        `).join('');
+
+        div.innerHTML = `
+            <div class="question-header">
+                <div class="question-number">第${index + 1}题</div>
+                <span class="question-type ${q.type === 'single' ? 'single-choice' : 'multiple-choice'}">
+                    ${q.type === 'single' ? '单选题' : '多选题'}
+                </span>
+            </div>
+            <div class="question-text">${q.text}</div>
+            <div class="options-container">${optionsHtml}</div>
+            <div class="feedback" id="feedback-${index}"></div>
+        `;
+
+        // 绑定点击样式
+        div.querySelectorAll('input').forEach(input => {
+            input.addEventListener('change', function() {
+                if(q.type === 'single') {
+                    div.querySelectorAll('.option').forEach(el => el.classList.remove('selected'));
+                }
+                if(this.checked) this.parentElement.classList.add('selected');
+                else this.parentElement.classList.remove('selected');
+            });
+        });
+
+        return div;
+    }
+
+    window.submitGroup = function(sectionIdx, start, end) {
+        let correctCount = 0; // 新增：用于统计正确题数
+        let totalCount = end - start; // 新增：本组总题数
+
+        for (let i = start; i < end; i++) {
+            const q = questions[i];
+            const item = document.getElementById(`q-item-${i}`);
+            const feedback = document.getElementById(`feedback-${i}`);
+            const inputs = document.getElementsByName(`q-${i}`);
+
+            let selected = [];
+            inputs.forEach((input, idx) => { if(input.checked) selected.push(idx); });
+
+            let isCorrect = false;
+            if(q.type === 'single') {
+                isCorrect = selected.length === 1 && selected[0] == q.answer;
+            } else {
+                isCorrect = JSON.stringify(selected.sort()) === JSON.stringify(q.answer.sort());
+            }
+
+            // 新增：如果正确，计数器加1
+            if (isCorrect) correctCount++;
+
+            // 更新样式
+            item.classList.remove('correct', 'incorrect');
+            item.classList.add(isCorrect ? 'correct' : 'incorrect');
+
+            // 显示反馈
+            feedback.className = `feedback ${isCorrect ? 'correct' : 'incorrect'}`;
+            const correctText = Array.isArray(q.answer)
+                ? q.answer.map(a => String.fromCharCode(65 + a)).join(', ')
+                : String.fromCharCode(65 + q.answer);
+
+            feedback.innerHTML = `
+                <div class="feedback-title">${isCorrect ? '回答正确' : '回答错误'}</div>
+                <div class="correct-answer-text">正确答案：${correctText}</div>
+                <div class="explanation"><strong>解析：</strong>${q.explanation}</div>
+            `;
+        }
+
+        // 新增：弹出统计提示
+        alert(`本部分练习已完成！\n\n共计：${totalCount} 题\n正确：${correctCount} 题\n错误：${totalCount - correctCount} 题`);
+    };
+
+    window.resetGroup = function(sectionIdx, start, end) {
+        for (let i = start; i < end; i++) {
+            const item = document.getElementById(`q-item-${i}`);
+            item.classList.remove('correct', 'incorrect');
+            const inputs = document.getElementsByName(`q-${i}`);
+            inputs.forEach(input => {
+                input.checked = false;
+                input.parentElement.classList.remove('selected');
+            });
+            document.getElementById(`feedback-${i}`).className = 'feedback';
+        }
+    };
+
+    document.addEventListener('DOMContentLoaded', init);
+</script>
+</body>
+</html>

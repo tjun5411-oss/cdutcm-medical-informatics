@@ -1,0 +1,2012 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>网络规划知识刷题系统 - 完整扩展版</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
+        }
+
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+
+        header {
+            text-align: center;
+            padding: 20px;
+            background: linear-gradient(135deg, #1a6dcc 0%, #0c4a8f 100%);
+            color: white;
+            border-radius: 12px;
+            box-shadow: 0 6px 15px rgba(0, 90, 200, 0.2);
+        }
+
+        h1 {
+            font-size: 2.4rem;
+            margin-bottom: 10px;
+            letter-spacing: 1px;
+        }
+
+        .subtitle {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .main-content {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 25px;
+        }
+
+        .questions-section {
+            flex: 3;
+            min-width: 300px;
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            max-height: 85vh;
+            overflow-y: auto;
+        }
+
+        .stats-section {
+            flex: 1;
+            min-width: 250px;
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            max-height: 85vh;
+            overflow-y: auto;
+        }
+
+        .questions-container {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+
+        .question-item {
+            border: 2px solid #eaeaea;
+            border-radius: 10px;
+            padding: 20px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .question-item:hover {
+            border-color: #b3d1ff;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        .question-item.correct {
+            border-color: #4CAF50;
+            background-color: #f9fff9;
+        }
+
+        .question-item.incorrect {
+            border-color: #f44336;
+            background-color: #fff9f9;
+        }
+
+        .question-item.answered {
+            border-color: #4d94ff;
+        }
+
+        .question-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .question-number {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #1a6dcc;
+        }
+
+        .question-type {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 15px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .single-choice {
+            background-color: #e6f2ff;
+            color: #0066cc;
+        }
+
+        .true-false {
+            background-color: #fff0e6;
+            color: #cc6600;
+        }
+
+        .fill-blank {
+            background-color: #e6ffe6;
+            color: #009933;
+        }
+
+        .question-text {
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .knowledge-tag {
+            display: inline-block;
+            background-color: #f0f0f0;
+            color: #666;
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            margin-bottom: 15px;
+        }
+
+        .options-container {
+            margin-bottom: 15px;
+        }
+
+        .option {
+            margin-bottom: 10px;
+            padding: 12px;
+            border: 1px solid #eaeaea;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .option:hover {
+            border-color: #b3d1ff;
+            background-color: #f5f9ff;
+        }
+
+        .option.selected {
+            border-color: #4d94ff;
+            background-color: #e6f0ff;
+        }
+
+        .option.correct-answer {
+            border-color: #4CAF50;
+            background-color: #e6ffe6;
+        }
+
+        .option.incorrect-answer {
+            border-color: #f44336;
+            background-color: #ffe6e6;
+        }
+
+        .option input {
+            margin-right: 10px;
+        }
+
+        .fill-input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+
+        .fill-input:focus {
+            border-color: #4d94ff;
+            outline: none;
+        }
+
+        .fill-input.correct {
+            border-color: #4CAF50;
+            background-color: #f9fff9;
+        }
+
+        .fill-input.incorrect {
+            border-color: #f44336;
+            background-color: #fff9f9;
+        }
+
+        .true-false-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 10px;
+        }
+
+        .true-btn, .false-btn {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .true-btn {
+            background-color: #e6ffe6;
+            color: #009933;
+            border: 1px solid #b3e6b3;
+        }
+
+        .true-btn:hover {
+            background-color: #ccffcc;
+        }
+
+        .true-btn.selected {
+            background-color: #4CAF50;
+            color: white;
+            border-color: #4CAF50;
+        }
+
+        .false-btn {
+            background-color: #ffe6e6;
+            color: #cc0000;
+            border: 1px solid #ffb3b3;
+        }
+
+        .false-btn:hover {
+            background-color: #ffcccc;
+        }
+
+        .false-btn.selected {
+            background-color: #f44336;
+            color: white;
+            border-color: #f44336;
+        }
+
+        .feedback {
+            padding: 15px;
+            border-radius: 6px;
+            margin-top: 15px;
+            font-size: 0.95rem;
+            display: none;
+        }
+
+        .feedback.correct {
+            background-color: #e6ffe6;
+            border-left: 4px solid #4CAF50;
+        }
+
+        .feedback.incorrect {
+            background-color: #ffe6e6;
+            border-left: 4px solid #f44336;
+        }
+
+        .feedback-title {
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .correct-answer {
+            margin-top: 10px;
+            padding: 8px;
+            background-color: white;
+            border-radius: 4px;
+            border: 1px dashed #ccc;
+            font-weight: 600;
+        }
+
+        .explanation {
+            margin-top: 15px;
+            padding: 12px;
+            background-color: #f9f9f9;
+            border-radius: 6px;
+            border-left: 3px solid #4d94ff;
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        .pagination-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 2px solid #f0f0f0;
+            gap: 15px;
+        }
+
+        .page-btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            background-color: #f0f0f0;
+            color: #333;
+        }
+
+        .page-btn:hover {
+            background-color: #e0e0e0;
+        }
+
+        .page-btn.active {
+            background-color: #0066cc;
+            color: white;
+        }
+
+        .nav-btn {
+            padding: 10px 25px;
+            border: none;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .prev-btn {
+            background-color: #666;
+            color: white;
+        }
+
+        .prev-btn:hover {
+            background-color: #555;
+        }
+
+        .submit-btn {
+            background-color: #0066cc;
+            color: white;
+        }
+
+        .submit-btn:hover {
+            background-color: #0052a3;
+        }
+
+        .next-btn {
+            background-color: #009933;
+            color: white;
+        }
+
+        .next-btn:hover {
+            background-color: #007a29;
+        }
+
+        .reset-btn {
+            background-color: #cc3300;
+            color: white;
+        }
+
+        .reset-btn:hover {
+            background-color: #b32b00;
+        }
+
+        .reset-all-btn {
+            background-color: #9933cc;
+            color: white;
+        }
+
+        .reset-all-btn:hover {
+            background-color: #8822bb;
+        }
+
+        .action-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+            gap: 15px;
+        }
+
+        .action-btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .reset-options {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .stats-title {
+            font-size: 1.4rem;
+            margin-bottom: 20px;
+            color: #1a6dcc;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .progress-container {
+            margin-bottom: 25px;
+        }
+
+        .progress-bar {
+            height: 12px;
+            background-color: #e0e0e0;
+            border-radius: 6px;
+            overflow: hidden;
+            margin-bottom: 8px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(to right, #4CAF50, #8BC34A);
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+
+        .progress-text {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.95rem;
+            color: #666;
+        }
+
+        .stats-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .stats-label {
+            color: #666;
+        }
+
+        .stats-value {
+            font-weight: 600;
+        }
+
+        .knowledge-progress {
+            margin-top: 20px;
+        }
+
+        .knowledge-item {
+            margin-bottom: 10px;
+        }
+
+        .knowledge-name {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+            font-size: 0.9rem;
+        }
+
+        .knowledge-bar {
+            height: 8px;
+            background-color: #e0e0e0;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .knowledge-fill {
+            height: 100%;
+            background-color: #4d94ff;
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+
+        .page-stats {
+            background-color: #f9f9f9;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+            border-left: 4px solid #4d94ff;
+        }
+
+        .page-stats-title {
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #1a6dcc;
+        }
+
+        .page-stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .page-stats-item {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 20px;
+            color: #777;
+            font-size: 0.9rem;
+            margin-top: 20px;
+        }
+
+        @media (max-width: 1024px) {
+            .main-content {
+                flex-direction: column;
+            }
+
+            .questions-section, .stats-section {
+                width: 100%;
+                max-height: none;
+            }
+
+            h1 {
+                font-size: 1.8rem;
+            }
+
+            .action-buttons {
+                flex-wrap: wrap;
+            }
+
+            .action-btn {
+                flex: 1;
+                min-width: 120px;
+            }
+
+            .reset-options {
+                flex-direction: column;
+            }
+        }
+
+        /* 滚动条样式 */
+        .questions-section::-webkit-scrollbar,
+        .stats-section::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .questions-section::-webkit-scrollbar-track,
+        .stats-section::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 4px;
+        }
+
+        .questions-section::-webkit-scrollbar-thumb,
+        .stats-section::-webkit-scrollbar-thumb {
+            background: #c1c1c1;
+            border-radius: 4px;
+        }
+
+        .questions-section::-webkit-scrollbar-thumb:hover,
+        .stats-section::-webkit-scrollbar-thumb:hover {
+            background: #a8a8a8;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <header>
+        <h1>网络规划知识刷题系统 - 完整扩展版</h1>
+        <p class="subtitle">新增OSPF、TCP/IP、路由协议等高级网络知识 | 每页10题 | 分页重置功能 | 每题附带详细解析</p>
+    </header>
+
+    <div class="main-content">
+        <section class="questions-section">
+            <div class="questions-container" id="questions-container">
+                <!-- 题目将在这里动态生成 -->
+            </div>
+
+            <div class="pagination-container">
+                <!-- 分页按钮将在这里动态生成 -->
+            </div>
+
+            <div class="action-buttons">
+                <button class="action-btn prev-btn" onclick="prevPage()">上一页</button>
+                <button class="action-btn submit-btn" onclick="submitPage()">提交本页答案</button>
+                <button class="action-btn next-btn" onclick="nextPage()">下一页</button>
+            </div>
+
+            <div class="reset-options">
+                <button class="action-btn reset-btn" onclick="resetCurrentPage()">重置本页</button>
+                <button class="action-btn reset-all-btn" onclick="resetAllPages()">重置全部</button>
+            </div>
+        </section>
+
+        <section class="stats-section">
+            <h3 class="stats-title">答题统计</h3>
+
+            <div class="progress-container">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progress-fill"></div>
+                </div>
+                <div class="progress-text">
+                    <span>进度</span>
+                    <span id="progress-text">0/0</span>
+                </div>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stats-item">
+                    <span class="stats-label">总题数:</span>
+                    <span class="stats-value" id="total-questions">0</span>
+                </div>
+                <div class="stats-item">
+                    <span class="stats-label">已回答:</span>
+                    <span class="stats-value" id="answered-questions">0</span>
+                </div>
+                <div class="stats-item">
+                    <span class="stats-label">正确题数:</span>
+                    <span class="stats-value" id="correct-questions">0</span>
+                </div>
+                <div class="stats-item">
+                    <span class="stats-label">正确率:</span>
+                    <span class="stats-value" id="accuracy-rate">0%</span>
+                </div>
+                <div class="stats-item">
+                    <span class="stats-label">当前页:</span>
+                    <span class="stats-value" id="current-page">1/1</span>
+                </div>
+                <div class="stats-item">
+                    <span class="stats-label">得分:</span>
+                    <span class="stats-value" id="score">0</span>
+                </div>
+            </div>
+
+            <div class="page-stats" id="page-stats">
+                <div class="page-stats-title">本页统计</div>
+                <div class="page-stats-grid">
+                    <div class="page-stats-item">
+                        <span>本页题数:</span>
+                        <span id="page-total">0</span>
+                    </div>
+                    <div class="page-stats-item">
+                        <span>本页已答:</span>
+                        <span id="page-answered">0</span>
+                    </div>
+                    <div class="page-stats-item">
+                        <span>本页正确:</span>
+                        <span id="page-correct">0</span>
+                    </div>
+                    <div class="page-stats-item">
+                        <span>本页得分:</span>
+                        <span id="page-score">0</span>
+                    </div>
+                </div>
+            </div>
+
+            <h3 class="stats-title" style="margin-top: 30px;">知识点掌握情况</h3>
+            <div class="knowledge-progress" id="knowledge-progress">
+                <!-- 知识点掌握情况动态生成 -->
+            </div>
+
+            <h3 class="stats-title" style="margin-top: 30px;">题型分布</h3>
+            <div class="stats-grid">
+                <div class="stats-item">
+                    <span class="stats-label">单选题:</span>
+                    <span class="stats-value" id="single-count">0</span>
+                </div>
+                <div class="stats-item">
+                    <span class="stats-label">判断题:</span>
+                    <span class="stats-value" id="truefalse-count">0</span>
+                </div>
+                <div class="stats-item">
+                    <span class="stats-label">填空题:</span>
+                    <span class="stats-value" id="fill-count">0</span>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <div class="footer">
+        <p>网络规划知识刷题系统 - 完整扩展版 &copy; 2025 | 基于《网络规划终极(TJ)》和《网络规划(WJW)》文档</p>
+        <p style="font-size: 0.8rem; margin-top: 5px;">题目总数: 80题 | 每页10题 | 知识点: 20个 | 题型: 3种 | 每题附带详细解析</p>
+    </div>
+</div>
+
+<script>
+    // 完整题库 - 覆盖所有知识点（原45题 + 新增25题 = 70题）
+    const questions = [
+        // ==================== 原题目（45题）====================
+        // ==================== 网络生命周期与设计过程 ====================
+        {
+            type: "single",
+            text: "网络生命周期（PDIOO）中的'D'代表什么？",
+            options: ["设计 (Design)", "部署 (Deployment)", "调试 (Debug)", "发展 (Development)"],
+            answer: 0,
+            knowledge: "网络生命周期",
+            explanation: "PDIOO是网络生命周期的五个阶段：规划（Planning）、设计（Design）、实施（Implementation）、运营（Operation）和优化（Optimization）。其中'D'代表设计阶段，这是网络规划过程中的关键步骤，包括逻辑设计和物理设计。"
+        },
+        {
+            type: "fill",
+            text: "网络生命周期（PDIOO）包括规划、设计、实现、运行、优化和____。",
+            answer: "退役",
+            knowledge: "网络生命周期",
+            explanation: "完整的网络生命周期（PDIOO）包括：规划（Planning）、设计（Design）、实施（Implementation）、运营（Operation）、优化（Optimization）和退役（Retirement）。退役阶段是指网络设备或系统达到使用寿命终点时的处理过程。"
+        },
+        {
+            type: "single",
+            text: "网络设计过程中，需求分析之后应该进行什么？",
+            options: ["逻辑网络设计", "物理网络设计", "部署网络", "调试验收"],
+            answer: 0,
+            knowledge: "网络设计过程",
+            explanation: "网络设计过程通常包括以下步骤：1.需求分析；2.逻辑网络设计（包括拓扑结构、IP地址规划等）；3.物理网络设计（包括设备选型、布线等）；4.实施部署；5.测试验收。所以需求分析之后应该是逻辑网络设计。"
+        },
+        {
+            type: "truefalse",
+            text: "网络设计过程中，物理网络设计应该在逻辑网络设计之前进行。",
+            answer: false,
+            knowledge: "网络设计过程",
+            explanation: "这个说法是错误的。正确的网络设计流程应该是：先进行逻辑网络设计（确定拓扑结构、IP地址规划、路由策略等），然后基于逻辑设计进行物理网络设计（选择具体设备、确定布线方案等）。逻辑设计是物理设计的基础。"
+        },
+        {
+            type: "single",
+            text: "网络设计过程的最后一步是什么？",
+            options: ["需求分析", "逻辑网络设计", "物理网络设计", "调试验收"],
+            answer: 3,
+            knowledge: "网络设计过程",
+            explanation: "网络设计过程的最后一步是调试验收。在完成物理网络设计并实施部署后，需要对网络进行全面的测试和调试，确保所有功能正常，性能达到设计要求，然后进行验收交付。"
+        },
+
+        // ==================== 层次化模型与拓扑结构 ====================
+        {
+            type: "single",
+            text: "下列哪项不属于层次化网络模型的三个层次？",
+            options: ["核心层", "汇聚层", "接入层", "分布层"],
+            answer: 3,
+            knowledge: "层次化模型",
+            explanation: "标准的层次化网络模型包含三个层次：核心层（Core Layer）、汇聚层（Distribution Layer）和接入层（Access Layer）。分布层是汇聚层的另一种说法，但选项中的'分布层'并不是标准的三层模型术语，所以此题选择'分布层'。"
+        },
+        {
+            type: "fill",
+            text: "层次化网络模型中的三个层次是：核心层、汇聚层和____层。",
+            answer: "接入",
+            knowledge: "层次化模型",
+            explanation: "层次化网络模型的三个层次是：核心层（负责高速数据转发）、汇聚层（负责策略实施和路由聚合）和接入层（负责用户设备接入网络）。这种分层设计提高了网络的扩展性、可靠性和可管理性。"
+        },
+        {
+            type: "single",
+            text: "下列哪种拓扑结构在局域网中最常用？",
+            options: ["星型", "环形", "总线型", "树形"],
+            answer: 0,
+            knowledge: "拓扑结构",
+            explanation: "在局域网中，星型拓扑是最常用的结构。它以交换机或集线器为中心，所有设备都连接到中心节点。星型拓扑易于安装、维护和故障排查，且单点故障不会影响整个网络。"
+        },
+        {
+            type: "truefalse",
+            text: "树形拓扑结构结合了星型和总线型拓扑的特点。",
+            answer: true,
+            knowledge: "拓扑结构",
+            explanation: "这个说法是正确的。树形拓扑结构是星型拓扑的扩展，多个星型网络通过总线连接在一起。它结合了星型拓扑易于管理的特点和总线型拓扑便于扩展的特点，常用于大型网络。"
+        },
+
+        // ==================== 逻辑网络设计 ====================
+        {
+            type: "single",
+            text: "逻辑网络设计不包括以下哪项内容？",
+            options: ["拓扑结构设计", "IP地址规划", "设备型号选择", "网络安全机制"],
+            answer: 2,
+            knowledge: "逻辑网络设计",
+            explanation: "逻辑网络设计主要关注网络的功能和结构，包括：拓扑结构设计、IP地址规划、路由协议选择、网络安全策略等。设备型号选择属于物理网络设计的范畴，因此不包括在逻辑网络设计中。"
+        },
+        {
+            type: "fill",
+            text: "逻辑网络设计中的IP地址规划包括IP地址分配和____。",
+            answer: "子网划分",
+            knowledge: "逻辑网络设计",
+            explanation: "逻辑网络设计中的IP地址规划包括两个主要方面：1.IP地址分配（为网络中的设备分配IP地址）；2.子网划分（将网络划分为多个子网，提高地址利用率和网络性能）。子网划分是IP地址规划的核心内容。"
+        },
+        {
+            type: "truefalse",
+            text: "逻辑网络设计中需要选择交换策略和路由协议。",
+            answer: true,
+            knowledge: "逻辑网络设计",
+            explanation: "这个说法是正确的。逻辑网络设计需要确定网络中的交换策略（如VLAN划分、生成树协议等）和路由协议（如OSPF、RIP、EIGRP等）。这些选择直接影响网络的性能、可靠性和可管理性。"
+        },
+
+        // ==================== 物理网络设计 ====================
+        {
+            type: "single",
+            text: "物理网络设计不包括以下哪项内容？",
+            options: ["局域网技术选择", "网络设备选择", "传输介质选择", "路由协议选择"],
+            answer: 3,
+            knowledge: "物理网络设计",
+            explanation: "物理网络设计关注网络的具体实现，包括：局域网技术选择（如以太网标准）、网络设备选择（交换机、路由器型号）、传输介质选择（双绞线、光纤等）和设备布局。路由协议选择属于逻辑网络设计的范畴。"
+        },
+        {
+            type: "fill",
+            text: "物理网络设计需要考虑网络设备型号、信息点数量和具体____。",
+            answer: "地理位置",
+            knowledge: "物理网络设计",
+            explanation: "物理网络设计需要考虑多个实际因素，包括：网络设备的具体型号和规格、信息点（网络接口）的数量和位置、设备的具体地理位置（机房位置、布线路径等）。这些因素决定了网络的实际部署方案。"
+        },
+        {
+            type: "truefalse",
+            text: "综合布线方案是物理网络设计的一部分。",
+            answer: true,
+            knowledge: "物理网络设计",
+            explanation: "这个说法是正确的。综合布线系统（PDS）是物理网络设计的重要组成部分，它规定了网络设备的连接方式、线缆类型、布线路径和接口标准等，确保网络的物理连接规范可靠。"
+        },
+
+        // ==================== 局域网技术 ====================
+        {
+            type: "single",
+            text: "局域网的标准制定机构是？",
+            options: ["ISO", "IEEE", "IETF", "ANSI"],
+            answer: 1,
+            knowledge: "局域网标准",
+            explanation: "局域网（LAN）的标准主要由IEEE（电气和电子工程师协会）制定，特别是IEEE 802委员会。例如，IEEE 802.3是以太网标准，IEEE 802.11是无线局域网标准。"
+        },
+        {
+            type: "fill",
+            text: "局域网参考模型IEEE 802包含了LLC和____子层。",
+            answer: "MAC",
+            knowledge: "局域网参考模型",
+            explanation: "IEEE 802标准将数据链路层分为两个子层：逻辑链路控制（LLC）子层和媒体访问控制（MAC）子层。LLC子层提供逻辑链路控制，MAC子层控制对物理介质的访问。"
+        },
+        {
+            type: "single",
+            text: "IEEE 802.2标准规定了什么？",
+            options: ["CSMA/CD", "LLC协议", "无线局域网", "虚拟局域网"],
+            answer: 1,
+            knowledge: "局域网标准",
+            explanation: "IEEE 802.2标准规定了逻辑链路控制（LLC）协议。LLC子层位于MAC子层之上，为网络层提供统一的接口，隐藏不同MAC子层的差异。"
+        },
+        {
+            type: "truefalse",
+            text: "IEEE 802.3标准规定了CSMA/CD访问方法。",
+            answer: true,
+            knowledge: "局域网标准",
+            explanation: "这个说法是正确的。IEEE 802.3标准规定了采用CSMA/CD（载波监听多路访问/冲突检测）访问方法的以太网。CSMA/CD是传统以太网解决介质访问冲突的机制。"
+        },
+
+        // ==================== 以太网技术 ====================
+        {
+            type: "single",
+            text: "以太网采用什么介质访问控制协议？",
+            options: ["Token Ring", "CSMA/CD", "FDDI", "ATM"],
+            answer: 1,
+            knowledge: "以太网技术",
+            explanation: "传统以太网采用CSMA/CD（载波监听多路访问/冲突检测）作为介质访问控制协议。现代全双工以太网交换机已不再需要CSMA/CD，但协议本身仍然是以太网标准的一部分。"
+        },
+        {
+            type: "fill",
+            text: "以太网命名规则100Base-TX中，100表示速率，Base表示基带传输，TX表示____。",
+            answer: "双绞线",
+            knowledge: "以太网技术",
+            explanation: "在以太网命名规则中：100表示速率为100Mbps，Base表示基带传输（使用整个带宽传输数字信号），TX表示使用双绞线作为传输介质。类似的，FX表示光纤，T4表示4对双绞线。"
+        },
+        {
+            type: "truefalse",
+            text: "所有计算机网络都使用Base信号传输方式。",
+            answer: false,
+            knowledge: "以太网技术",
+            explanation: "这个说法是错误的。Base表示基带传输，但并非所有网络都使用基带传输。例如，早期的10Broad36使用宽带传输。此外，许多现代网络技术如光纤通道、InfiniBand等也不使用Base信号传输方式。"
+        },
+
+        // ==================== 交换机与VLAN ====================
+        {
+            type: "single",
+            text: "交换机的MAC地址表是如何建立的？",
+            options: ["基于目的MAC学习", "基于源MAC学习", "手动配置", "随机生成"],
+            answer: 1,
+            knowledge: "交换机功能",
+            explanation: "交换机通过检查数据帧的源MAC地址来学习MAC地址。当交换机收到一个数据帧时，它会将源MAC地址和接收端口记录在MAC地址表中。这样，当下次有发往该MAC地址的数据帧时，交换机就知道应该从哪个端口转发。"
+        },
+        {
+            type: "fill",
+            text: "交换机基于源MAC学习，基于____MAC转发。",
+            answer: "目的",
+            knowledge: "交换机功能",
+            explanation: "交换机的工作方式是：基于源MAC地址学习（记录发送设备的MAC地址和端口对应关系），基于目的MAC地址转发（查找目的MAC地址对应的端口并转发数据帧）。如果目的MAC地址不在表中，则向所有端口广播（泛洪）。"
+        },
+        {
+            type: "truefalse",
+            text: "生成树协议（STP）采用IEEE 802.1d标准。",
+            answer: true,
+            knowledge: "生成树协议",
+            explanation: "这个说法是正确的。生成树协议（STP）的最初标准是IEEE 802.1d，后来有改进版本如快速生成树协议（RSTP，IEEE 802.1w）和多生成树协议（MSTP，IEEE 802.1s）。STP用于防止网络中的环路。"
+        },
+        {
+            type: "single",
+            text: "关于VLAN的描述，下列哪项是正确的？",
+            options: ["每个VLAN都是一个冲突域", "VLAN不能跨越多个交换机", "每个VLAN都是一个广播域", "VLAN不能提高网络安全性"],
+            answer: 2,
+            knowledge: "虚拟局域网",
+            explanation: "每个VLAN都是一个独立的广播域，VLAN内的广播流量不会传播到其他VLAN。VLAN可以跨越多个交换机（通过Trunk链路），VLAN可以提高网络安全性（隔离不同部门的流量），每个VLAN是一个广播域而不是冲突域。"
+        },
+        {
+            type: "fill",
+            text: "VLAN干线协议通常使用____协议。",
+            answer: "802.1Q",
+            knowledge: "干线协议",
+            explanation: "VLAN干线（Trunk）协议通常使用IEEE 802.1Q标准，它在以太网帧头中添加4字节的标签，包含VLAN ID信息，允许多个VLAN通过同一条物理链路传输。另一种不常用的协议是ISL（Cisco专有）。"
+        },
+
+        // ==================== 网络传输介质 ====================
+        {
+            type: "single",
+            text: "下列哪种不是常见的有线传输介质？",
+            options: ["双绞线", "同轴电缆", "光纤", "无线电波"],
+            answer: 3,
+            knowledge: "网络传输介质",
+            explanation: "无线电波属于无线传输介质，不属于有线传输介质。常见的有线传输介质包括：双绞线（UTP/STP）、同轴电缆和光纤（单模/多模）。"
+        },
+        {
+            type: "truefalse",
+            text: "UTP是非屏蔽双绞线，STP是屏蔽双绞线。",
+            answer: true,
+            knowledge: "网络传输介质",
+            explanation: "这个说法是正确的。UTP（Unshielded Twisted Pair）是非屏蔽双绞线，价格便宜，安装简单。STP（Shielded Twisted Pair）是屏蔽双绞线，有额外的屏蔽层，抗干扰能力更强，但价格更高，安装更复杂。"
+        },
+        {
+            type: "single",
+            text: "双绞线两端使用什么接头？",
+            options: ["RJ-11", "RJ-45", "BNC", "AUI"],
+            answer: 1,
+            knowledge: "网络传输介质",
+            explanation: "计算机网络中使用的双绞线通常两端使用RJ-45接头（8针8线）。RJ-11是电话线接头（4针或6针），BNC用于同轴电缆，AUI是早期以太网使用的15针接口。"
+        },
+        {
+            type: "fill",
+            text: "T568A和T568B是双绞线的____标准。",
+            answer: "线序",
+            knowledge: "网络传输介质",
+            explanation: "T568A和T568B是双绞线的两种线序标准，规定了8根导线在RJ-45接头中的排列顺序。两种标准只是颜色顺序不同，功能上完全兼容。在实际应用中，通常要求同一网络中统一使用一种标准。"
+        },
+        {
+            type: "single",
+            text: "关于光纤的描述，下列哪项是正确的？",
+            options: ["单模光纤使用反射原理", "多模光纤使用折射原理", "单模光纤传输距离更远", "多模光纤成本更低但传输距离更远"],
+            answer: 2,
+            knowledge: "网络传输介质",
+            explanation: "单模光纤纤芯直径小（约8-10μm），只允许一种模式的光传播，传输距离更远（可达几十公里），但成本较高。多模光纤纤芯直径大（50-62.5μm），允许多种模式的光传播，传输距离较短（几百米到2公里），但成本较低。"
+        },
+
+        // ==================== 综合布线 ====================
+        {
+            type: "single",
+            text: "综合布线系统中，工作区子系统连接什么？",
+            options: ["工作区到弱电井", "各楼层到弱电井", "垂直于水平", "不同楼栋之间"],
+            answer: 0,
+            knowledge: "综合布线",
+            explanation: "工作区子系统是综合布线系统的最末端，连接用户设备（计算机、电话等）到信息插座。它包括了从信息插座到终端设备的连接线缆、适配器等。"
+        },
+        {
+            type: "fill",
+            text: "综合布线系统中，____子系统设计各楼层到弱电井的连接。",
+            answer: "水平布线",
+            knowledge: "综合布线",
+            explanation: "水平布线子系统负责连接工作区的信息插座到楼层配线架（弱电井）。它通常采用双绞线或光纤，是综合布线系统中工程量最大的部分。"
+        },
+        {
+            type: "single",
+            text: "综合布线系统中，设备间子系统的主要作用是什么？",
+            options: ["连接工作区", "连接不同楼层", "接入服务器", "连接不同楼栋"],
+            answer: 2,
+            knowledge: "综合布线",
+            explanation: "设备间子系统是安装网络核心设备（如服务器、核心交换机、路由器等）的区域。它提供设备安装空间、电源、环境控制等条件，是网络的管理中心。"
+        },
+
+        // ==================== IP地址 ====================
+        {
+            type: "single",
+            text: "IPv6地址的长度是多少位？",
+            options: ["32位", "64位", "128位", "256位"],
+            answer: 2,
+            knowledge: "IP地址",
+            explanation: "IPv6地址长度为128位，是IPv4（32位）的4倍，提供了巨大的地址空间（约3.4×10^38个地址），解决了IPv4地址枯竭的问题。IPv6采用十六进制表示，每16位为一组，共8组。"
+        },
+        {
+            type: "truefalse",
+            text: "127.0.0.0/8是环回地址，用于测试本机协议是否安装成功。",
+            answer: true,
+            knowledge: "IP地址",
+            explanation: "这个说法是正确的。127.0.0.0/8是环回地址块，常用于测试本机的网络协议栈。最常见的环回地址是127.0.0.1，发送到该地址的数据不会被发送到网络上，而是由本机接收处理。"
+        },
+        {
+            type: "fill",
+            text: "IPv6地址使用冒号十六进制表示法，可以用____表示多个连续为0的段。",
+            answer: "::",
+            knowledge: "IP地址",
+            explanation: "IPv6地址表示法中，可以使用双冒号'::'来压缩连续为0的段，但只能使用一次。例如，2001:0db8:0000:0000:0000:0000:1428:57ab可以压缩为2001:db8::1428:57ab。"
+        },
+        {
+            type: "single",
+            text: "下列哪项不是IPv6迁移技术？",
+            options: ["双栈协议", "隧道协议", "网络地址转换", "DHCPv6"],
+            answer: 3,
+            knowledge: "IP地址",
+            explanation: "DHCPv6是IPv6的动态主机配置协议，用于自动分配IPv6地址，不是迁移技术。IPv4向IPv6迁移的主要技术包括：双栈（设备同时支持IPv4和IPv6）、隧道（将IPv6数据包封装在IPv4中传输）和协议转换（如NAT64）。"
+        },
+
+        // ==================== DNS与Web服务器 ====================
+        {
+            type: "single",
+            text: "DNS域名系统中，顶级域名的下一级是什么？",
+            options: ["根域名", "二级域名", "三级域名", "主机名"],
+            answer: 1,
+            knowledge: "DNS域名系统",
+            explanation: "DNS域名系统的层次结构从高到低为：根域名（.）→ 顶级域名（如.com、.org）→ 二级域名（如example.com中的example）→ 三级域名（如www.example.com中的www）→ 主机名。"
+        },
+        {
+            type: "truefalse",
+            text: "DNS解析方法包括迭代和递归两种。",
+            answer: true,
+            knowledge: "DNS域名系统",
+            explanation: "这个说法是正确的。DNS解析有两种主要方式：递归查询（客户端要求DNS服务器必须返回最终结果）和迭代查询（DNS服务器返回下一个应查询的服务器地址，客户端继续查询）。实际应用中通常结合使用。"
+        },
+        {
+            type: "single",
+            text: "HTTP协议默认使用哪个端口？",
+            options: ["21", "25", "80", "110"],
+            answer: 2,
+            knowledge: "Web服务器",
+            explanation: "HTTP协议默认使用80端口。HTTPS（安全的HTTP）默认使用443端口。其他常见端口：FTP控制端口21，SMTP端口25，POP3端口110。"
+        },
+        {
+            type: "fill",
+            text: "Web服务器的核心技术包括HTTP协议和____语言。",
+            answer: "HTML",
+            knowledge: "Web服务器",
+            explanation: "Web服务器的核心技术包括HTTP协议（超文本传输协议）和HTML语言（超文本标记语言）。HTTP负责客户端和服务器之间的通信，HTML用于定义网页的结构和内容。"
+        },
+
+        // ==================== FTP服务器 ====================
+        {
+            type: "single",
+            text: "FTP服务器使用哪个端口进行控制连接？",
+            options: ["20", "21", "25", "80"],
+            answer: 1,
+            knowledge: "FTP服务器",
+            explanation: "FTP使用两个TCP连接：控制连接（端口21）用于发送命令和接收响应，数据连接（端口20用于主动模式）用于传输文件数据。被动模式下，数据连接使用随机端口。"
+        },
+        {
+            type: "truefalse",
+            text: "FTP使用20端口传输数据，21端口进行控制。",
+            answer: true,
+            knowledge: "FTP服务器",
+            explanation: "这个说法是正确的。FTP使用两个独立的TCP连接：控制连接（端口21）用于传输命令和响应，数据连接（端口20，仅在主动模式下）用于传输文件数据。被动模式下，数据连接使用随机端口。"
+        },
+        {
+            type: "fill",
+            text: "常见的FTP服务器软件有IIS和____。",
+            answer: "Serv-U",
+            knowledge: "FTP服务器",
+            explanation: "常见的FTP服务器软件包括：Windows自带的IIS（Internet Information Services）、专业的Serv-U、FileZilla Server、vsftpd（Linux常用）等。不同的软件有不同的特点和适用场景。"
+        },
+
+        // ==================== 邮件系统 ====================
+        {
+            type: "single",
+            text: "SMTP协议用于什么功能？",
+            options: ["发送邮件", "接收邮件", "文件传输", "网页浏览"],
+            answer: 0,
+            knowledge: "邮件系统",
+            explanation: "SMTP（简单邮件传输协议）用于发送邮件。邮件客户端使用SMTP将邮件发送到邮件服务器，邮件服务器之间也使用SMTP转发邮件。接收邮件通常使用POP3或IMAP协议。"
+        },
+        {
+            type: "fill",
+            text: "SMTP协议使用____端口发送邮件。",
+            answer: "25",
+            knowledge: "邮件系统",
+            explanation: "SMTP协议默认使用25端口发送邮件。加密的SMTP（SMTPS）通常使用465端口。其他邮件协议端口：POP3使用110端口，IMAP使用143端口，加密版本分别使用995和993端口。"
+        },
+        {
+            type: "truefalse",
+            text: "IMAP协议用于接收邮件，SMTP协议用于发送邮件。",
+            answer: true,
+            knowledge: "邮件系统",
+            explanation: "这个说法是正确的。电子邮件系统通常使用SMTP发送邮件，使用POP3或IMAP接收邮件。IMAP比POP3更先进，允许在服务器上管理邮件，支持多设备同步。"
+        },
+
+        // ==================== DHCP服务器 ====================
+        {
+            type: "single",
+            text: "DHCP服务器的主要功能是什么？",
+            options: ["域名解析", "自动分配IP地址", "文件传输", "邮件发送"],
+            answer: 1,
+            knowledge: "DHCP服务器",
+            explanation: "DHCP（动态主机配置协议）服务器的主要功能是自动为网络中的设备分配IP地址、子网掩码、默认网关、DNS服务器等网络配置参数，简化网络管理，避免IP地址冲突。"
+        },
+        {
+            type: "fill",
+            text: "新主机通过____方式向DHCP服务器请求IP地址。",
+            answer: "广播",
+            knowledge: "DHCP服务器",
+            explanation: "新主机通过广播方式发送DHCP Discover报文来发现DHCP服务器。DHCP工作过程包括四个步骤：Discover（发现）、Offer（提供）、Request（请求）、Acknowledge（确认），称为DORA过程。"
+        },
+
+        // ==================== SNMP协议 ====================
+        {
+            type: "single",
+            text: "SNMP是什么协议的简称？",
+            options: ["简单网络管理协议", "简单邮件传输协议", "简单文件传输协议", "简单域名系统协议"],
+            answer: 0,
+            knowledge: "SNMP协议",
+            explanation: "SNMP是简单网络管理协议（Simple Network Management Protocol）的简称，用于网络设备的管理和监控。它允许网络管理员收集设备信息、配置设备参数、监控网络性能等。"
+        },
+        {
+            type: "truefalse",
+            text: "SNMP是最简单的网络管理协议。",
+            answer: true,
+            knowledge: "SNMP协议",
+            explanation: "这个说法是正确的。SNMP设计简单，易于实现，是目前最广泛使用的网络管理协议。它基于管理器-代理模型，使用UDP端口161（代理）和162（陷阱）。SNMPv3增加了安全性支持。"
+        },
+
+        // ==================== 新增题目（25题）====================
+        // ==================== 网络层次化模型详细功能 ====================
+        {
+            type: "single",
+            text: "在层次化网络模型中，接入层的主要功能是什么？",
+            options: ["提供高速网络主干", "用户接入网络的地方", "路由选择和路由汇总", "连接不同网络"],
+            answer: 1,
+            knowledge: "层次化模型",
+            explanation: "接入层是用户设备（计算机、打印机、IP电话等）接入网络的入口点。主要功能包括：用户接入、访问控制、VLAN划分、广播域隔离等。接入层通常使用二层交换机。"
+        },
+        {
+            type: "single",
+            text: "分布层在层次化网络模型中承担什么角色？",
+            options: ["用户接入", "高速数据交换", "核心层和接入层的接口", "连接互联网"],
+            answer: 2,
+            knowledge: "层次化模型",
+            explanation: "分布层（汇聚层）是核心层和接入层之间的接口，主要功能包括：路由聚合、广播域控制、安全策略实施、QoS标记、VLAN间路由等。分布层通常使用三层交换机。"
+        },
+        {
+            type: "fill",
+            text: "核心层的主要功能是提供____网络主干。",
+            answer: "高速",
+            knowledge: "层次化模型",
+            explanation: "核心层的主要功能是提供高速的网络主干，实现不同区域之间的高速数据交换。核心层设计强调高可靠性、高吞吐量和低延迟，通常使用高性能路由器或三层交换机，不实施复杂的策略。"
+        },
+
+        // ==================== 生成树协议详细步骤 ====================
+        {
+            type: "single",
+            text: "STP协议中，根桥选举的依据是什么？",
+            options: ["端口数量", "BPDU中的BID，优先级和MAC地址小的为根桥", "设备品牌", "设备位置"],
+            answer: 1,
+            knowledge: "生成树协议",
+            explanation: "STP通过比较桥ID（BID）来选举根桥。BID由桥优先级（2字节）和MAC地址（6字节）组成。优先级小的为根桥，如果优先级相同，则MAC地址小的为根桥。默认优先级为32768。"
+        },
+        {
+            type: "truefalse",
+            text: "STP协议中，BID由优先级和MAC地址组成，优先级和MAC小的为根桥。",
+            answer: true,
+            knowledge: "生成树协议",
+            explanation: "这个说法是正确的。桥ID（BID）包括2字节的桥优先级和6字节的MAC地址。选举根桥时，先比较优先级，数值小的优先；如果优先级相同，则比较MAC地址，数值小的优先。管理员可以通过调整优先级来控制根桥选举。"
+        },
+        {
+            type: "single",
+            text: "在STP协议中，如何选举根端口？",
+            options: ["随机选择", "选择端口号最小的", "选择到根桥路径成本最小的端口", "选择连接设备最多的端口"],
+            answer: 2,
+            knowledge: "生成树协议",
+            explanation: "每个非根桥需要选举一个根端口，即到根桥路径成本最小的端口。路径成本根据链路带宽计算，带宽越高，成本越低。如果路径成本相同，则比较上游桥ID、上游端口ID等。"
+        },
+        {
+            type: "fill",
+            text: "STP端口状态转换的顺序是：阻塞 -> ____ -> 学习 -> 转发。",
+            answer: "侦听",
+            knowledge: "生成树协议",
+            explanation: "STP端口状态转换顺序为：阻塞（Blocking，20秒）→ 侦听（Listening，15秒）→ 学习（Learning，15秒）→ 转发（Forwarding）。侦听状态确定拓扑，学习状态构建MAC表，转发状态正常转发数据。总收敛时间约30-50秒。"
+        },
+
+        // ==================== VLAN与私网地址 ====================
+        {
+            type: "single",
+            text: "本征VLAN默认是哪个VLAN？",
+            options: ["VLAN 0", "VLAN 1", "VLAN 100", "VLAN 4096"],
+            answer: 1,
+            knowledge: "虚拟局域网",
+            explanation: "本征VLAN（Native VLAN）默认是VLAN 1。在Trunk链路上，本征VLAN的流量不添加802.1Q标签。所有交换机端口默认属于VLAN 1，但出于安全考虑，通常会将本征VLAN更改为其他VLAN。"
+        },
+        {
+            type: "truefalse",
+            text: "私网地址10.0.0.0-10.255.255.255属于A类地址段。",
+            answer: true,
+            knowledge: "IP地址",
+            explanation: "这个说法是正确的。私有IP地址有三个范围：1. 10.0.0.0-10.255.255.255（A类，一个A类网络）；2. 172.16.0.0-172.31.255.255（B类，16个B类网络）；3. 192.168.0.0-192.168.255.255（C类，256个C类网络）。这些地址在互联网上不可路由。"
+        },
+        {
+            type: "single",
+            text: "下列哪个地址段不是私有IP地址范围？",
+            options: ["10.0.0.0-10.255.255.255", "172.16.0.0-172.31.255.255", "192.168.0.0-192.168.255.255", "169.254.0.0-169.254.255.255"],
+            answer: 3,
+            knowledge: "IP地址",
+            explanation: "169.254.0.0-169.254.255.255是APIPA（自动私有IP地址）范围，当DHCP客户端无法获取IP地址时自动分配，但不是标准的私有地址范围。标准私有地址是10.0.0.0/8、172.16.0.0/12和192.168.0.0/16。"
+        },
+        {
+            type: "truefalse",
+            text: "NAT需要定义出入站接口。",
+            answer: true,
+            knowledge: "网络地址转换",
+            explanation: "这个说法是正确的。配置NAT（网络地址转换）时，需要明确定义内部接口（Inside，连接私有网络）和外部接口（Outside，连接公共网络）。NAT根据数据包的方向（入站或出站）应用不同的转换规则。"
+        },
+
+        // ==================== 服务器技术扩展 ====================
+        {
+            type: "single",
+            text: "在Linux系统中，主流的Web服务器软件是什么？",
+            options: ["IIS", "Apache", "Nginx", "Tomcat"],
+            answer: 1,
+            knowledge: "Web服务器",
+            explanation: "在Linux系统中，Apache是最传统和广泛使用的Web服务器软件。Nginx是近年来流行的轻量级高性能Web服务器。IIS是Windows系统的Web服务器，Tomcat是Java应用服务器。"
+        },
+        {
+            type: "truefalse",
+            text: "FTP服务器采用客户端/服务器（C/S）模式。",
+            answer: true,
+            knowledge: "FTP服务器",
+            explanation: "这个说法是正确的。FTP采用典型的客户端/服务器模式。客户端发起连接请求，服务器响应并提供服务。FTP支持两种传输模式：主动模式（服务器主动连接客户端）和被动模式（客户端连接服务器）。"
+        },
+
+        // ==================== 邮件协议扩展 ====================
+        {
+            type: "single",
+            text: "IMAP协议用于接收邮件，默认使用哪个端口？",
+            options: ["25", "110", "143", "993"],
+            answer: 2,
+            knowledge: "邮件系统",
+            explanation: "IMAP协议默认使用143端口。加密的IMAP（IMAPS）使用993端口。与POP3不同，IMAP允许用户在服务器上管理邮件，支持文件夹同步、邮件搜索等高级功能，适合多设备访问。"
+        },
+        {
+            type: "single",
+            text: "POP3协议用于接收邮件，默认使用哪个端口？",
+            options: ["25", "110", "143", "993"],
+            answer: 1,
+            knowledge: "邮件系统",
+            explanation: "POP3协议默认使用110端口。加密的POP3（POP3S）使用995端口。POP3是较简单的邮件接收协议，通常将邮件下载到本地并从服务器删除，适合单设备访问。"
+        },
+
+        // ==================== 路由协议 ====================
+        {
+            type: "single",
+            text: "下列哪种协议属于内部网关协议（IGP）？",
+            options: ["BGP", "RIP", "EGP", "IS-IS"],
+            answer: 1,
+            knowledge: "路由协议",
+            explanation: "RIP是内部网关协议（IGP），用于在自治系统内部交换路由信息。BGP是外部网关协议（EGP），用于不同自治系统之间。IS-IS也是IGP，但题目中未列出完整名称。EGP是早期的外部网关协议，已基本被BGP取代。"
+        },
+        {
+            type: "truefalse",
+            text: "RIP协议是距离矢量协议，使用跳数作为度量值。",
+            answer: true,
+            knowledge: "路由协议",
+            explanation: "这个说法是正确的。RIP（路由信息协议）是距离矢量路由协议，使用跳数作为度量值。每经过一个路由器跳数加1，最大跳数为15，16表示不可达。RIP有RIPv1（有类）和RIPv2（无类）两个版本。"
+        },
+        {
+            type: "single",
+            text: "RIP协议的最大跳数限制是多少？",
+            options: ["10", "15", "20", "无限"],
+            answer: 1,
+            knowledge: "路由协议",
+            explanation: "RIP协议的最大跳数限制是15跳，16跳表示不可达。这个限制是为了防止计数到无穷大的问题，但也限制了RIP网络的规模。超过15跳的目的地被认为不可达。"
+        },
+        {
+            type: "single",
+            text: "OSPF协议使用什么作为度量值？",
+            options: ["跳数", "带宽", "延迟", "可靠性"],
+            answer: 1,
+            knowledge: "路由协议",
+            explanation: "OSPF使用带宽作为度量值（成本）。计算公式为：成本=参考带宽/接口带宽，默认参考带宽为100Mbps。因此，带宽越高，成本越低。管理员也可以手动配置接口成本。"
+        },
+        {
+            type: "truefalse",
+            text: "OSPF协议支持负载均衡。",
+            answer: true,
+            knowledge: "路由协议",
+            explanation: "这个说法是正确的。OSPF支持等价多路径（ECMP）负载均衡，当到达同一目的地的多条路径成本相同时，OSPF可以将流量分配到这些路径上，提高链路利用率。最大支持路径数因厂商而异，通常为4或8条。"
+        },
+        {
+            type: "single",
+            text: "OSPF协议维护几张表？",
+            options: ["1张", "2张", "3张", "4张"],
+            answer: 2,
+            knowledge: "路由协议",
+            explanation: "OSPF维护三张表：邻居表（跟踪相邻路由器）、拓扑表（链路状态数据库，存储网络拓扑信息）和路由表（通过SPF算法计算出的最佳路径）。这三张表共同支持OSPF的路由决策过程。"
+        },
+        {
+            type: "fill",
+            text: "OSPF的五种报文分组包括：HELLO、数据库描述、链路状态请求、链路状态更新和____。",
+            answer: "链路状态确认",
+            knowledge: "路由协议",
+            explanation: "OSPF使用五种报文类型：1. HELLO（建立和维护邻居关系）；2. 数据库描述（DD，交换LSA头信息）；3. 链路状态请求（LSR，请求完整的LSA）；4. 链路状态更新（LSU，发送LSA）；5. 链路状态确认（LSAck，确认收到LSA）。"
+        },
+        {
+            type: "single",
+            text: "OSPF的HELLO报文使用什么组播地址发送？",
+            options: ["224.0.0.1", "224.0.0.5", "224.0.0.6", "224.0.0.9"],
+            answer: 1,
+            knowledge: "路由协议",
+            explanation: "OSPF的HELLO报文使用组播地址224.0.0.5发送给所有OSPF路由器。DR/BDR使用224.0.0.6与DRother通信。224.0.0.1是所有主机组播地址，224.0.0.9是RIPv2组播地址。"
+        },
+
+        // ==================== 传输层协议 ====================
+        {
+            type: "single",
+            text: "UDP协议的特点是什么？",
+            options: ["面向连接、可靠", "无连接、不可靠", "面向连接、不可靠", "无连接、可靠"],
+            answer: 1,
+            knowledge: "传输层协议",
+            explanation: "UDP（用户数据报协议）是无连接、不可靠的传输层协议。它不建立连接，直接发送数据，不保证数据到达、不保证顺序、不提供拥塞控制。UDP开销小、延迟低，适用于实时应用如视频、语音。"
+        },
+        {
+            type: "truefalse",
+            text: "TCP协议提供可靠交付、面向连接的服务。",
+            answer: true,
+            knowledge: "传输层协议",
+            explanation: "这个说法是正确的。TCP（传输控制协议）是面向连接的、可靠的传输层协议。它通过三次握手建立连接，通过确认机制、重传机制、流量控制和拥塞控制确保数据可靠、有序地传输。"
+        },
+        {
+            type: "single",
+            text: "TCP协议使用什么机制进行流量控制？",
+            options: ["拥塞避免", "滑动窗口", "快速重传", "慢启动"],
+            answer: 1,
+            knowledge: "传输层协议",
+            explanation: "TCP使用滑动窗口机制进行流量控制。接收方通过窗口字段告知发送方自己可接收的数据量，发送方根据此调整发送速率，避免接收方缓冲区溢出。拥塞控制则使用慢启动、拥塞避免、快速重传等机制。"
+        },
+        {
+            type: "single",
+            text: "TCP三次握手中，第二次握手发送的标志位是什么？",
+            options: ["SYN", "ACK", "SYN+ACK", "FIN"],
+            answer: 2,
+            knowledge: "传输层协议",
+            explanation: "TCP三次握手：1.客户端发送SYN；2.服务器回复SYN+ACK；3.客户端发送ACK。第二次握手同时设置SYN和ACK标志位，SYN表示同步序列号，ACK表示确认收到客户端的SYN。"
+        }
+    ];
+
+    // 应用状态
+    const QUESTIONS_PER_PAGE = 10;
+    let currentPage = 0;
+    let totalPages = 0;
+    let userAnswers = new Array(questions.length).fill(null);
+    let questionStatus = new Array(questions.length).fill(null); // null=未答, true=正确, false=错误
+    let score = 0;
+    let answeredCount = 0;
+    let correctCount = 0;
+
+    // 知识点统计
+    let knowledgeStats = {};
+
+    // 初始化
+    document.addEventListener('DOMContentLoaded', function() {
+        initKnowledgeStats();
+        calculateTotalPages();
+        loadPage();
+        updateStats();
+    });
+
+    // 初始化知识点统计
+    function initKnowledgeStats() {
+        // 初始化知识点统计对象
+        const allKnowledge = [...new Set(questions.map(q => q.knowledge))];
+        knowledgeStats = {};
+        allKnowledge.forEach(knowledge => {
+            knowledgeStats[knowledge] = { total: 0, correct: 0 };
+        });
+
+        // 统计每个知识点的题目数量
+        questions.forEach((question, index) => {
+            if (knowledgeStats[question.knowledge]) {
+                knowledgeStats[question.knowledge].total++;
+            }
+        });
+    }
+
+    // 计算总页数
+    function calculateTotalPages() {
+        totalPages = Math.ceil(questions.length / QUESTIONS_PER_PAGE);
+    }
+
+    // 加载当前页的题目
+    function loadPage() {
+        const questionsContainer = document.getElementById('questions-container');
+        questionsContainer.innerHTML = '';
+
+        // 计算当前页的题目范围
+        const startIndex = currentPage * QUESTIONS_PER_PAGE;
+        const endIndex = Math.min(startIndex + QUESTIONS_PER_PAGE, questions.length);
+
+        // 生成当前页的题目
+        for (let i = startIndex; i < endIndex; i++) {
+            const question = questions[i];
+            const questionElement = createQuestionElement(question, i);
+            questionsContainer.appendChild(questionElement);
+        }
+
+        // 生成分页按钮
+        createPagination();
+
+        // 更新当前页显示
+        document.getElementById('current-page').textContent = `${currentPage + 1}/${totalPages}`;
+
+        // 更新本页统计
+        updatePageStats();
+    }
+
+    // 创建题目元素
+    function createQuestionElement(question, index) {
+        const questionElement = document.createElement('div');
+        questionElement.className = 'question-item';
+        questionElement.dataset.index = index;
+
+        // 根据答题状态设置样式
+        if (questionStatus[index] === true) {
+            questionElement.classList.add('correct');
+        } else if (questionStatus[index] === false) {
+            questionElement.classList.add('incorrect');
+        } else if (userAnswers[index] !== null) {
+            questionElement.classList.add('answered');
+        }
+
+        // 题目头部
+        const questionHeader = document.createElement('div');
+        questionHeader.className = 'question-header';
+
+        const questionNumber = document.createElement('div');
+        questionNumber.className = 'question-number';
+        questionNumber.textContent = `题目 #${index + 1}`;
+
+        const questionType = document.createElement('span');
+        questionType.className = `question-type ${question.type === 'single' ? 'single-choice' : question.type === 'truefalse' ? 'true-false' : 'fill-blank'}`;
+        questionType.textContent = question.type === 'single' ? '单选题' : question.type === 'truefalse' ? '判断题' : '填空题';
+
+        questionHeader.appendChild(questionNumber);
+        questionHeader.appendChild(questionType);
+
+        // 题目内容
+        const questionText = document.createElement('div');
+        questionText.className = 'question-text';
+        questionText.textContent = question.text;
+
+        // 知识点标签
+        const knowledgeTag = document.createElement('div');
+        knowledgeTag.className = 'knowledge-tag';
+        knowledgeTag.textContent = question.knowledge;
+
+        // 题目选项/输入区域
+        let questionContent;
+        if (question.type === 'single') {
+            questionContent = createSingleChoiceContent(question, index);
+        } else if (question.type === 'truefalse') {
+            questionContent = createTrueFalseContent(question, index);
+        } else {
+            questionContent = createFillBlankContent(question, index);
+        }
+
+        // 反馈区域
+        const feedbackElement = document.createElement('div');
+        feedbackElement.className = 'feedback';
+        feedbackElement.id = `feedback-${index}`;
+
+        // 组装题目元素
+        questionElement.appendChild(questionHeader);
+        questionElement.appendChild(questionText);
+        questionElement.appendChild(knowledgeTag);
+        questionElement.appendChild(questionContent);
+        questionElement.appendChild(feedbackElement);
+
+        return questionElement;
+    }
+
+    // 创建单选题内容
+    function createSingleChoiceContent(question, index) {
+        const container = document.createElement('div');
+        container.className = 'options-container';
+
+        question.options.forEach((option, optionIndex) => {
+            const optionElement = document.createElement('div');
+            optionElement.className = 'option';
+            if (userAnswers[index] === optionIndex) {
+                optionElement.classList.add('selected');
+
+                // 如果已经提交过答案，显示正确答案和错误答案的样式
+                if (questionStatus[index] !== null) {
+                    if (optionIndex === question.answer) {
+                        optionElement.classList.add('correct-answer');
+                    } else if (userAnswers[index] === optionIndex && optionIndex !== question.answer) {
+                        optionElement.classList.add('incorrect-answer');
+                    }
+                }
+            }
+            optionElement.dataset.optionIndex = optionIndex;
+            optionElement.onclick = () => selectOption(index, optionIndex);
+
+            const input = document.createElement('input');
+            input.type = 'radio';
+            input.name = `question-${index}`;
+            input.id = `question-${index}-option-${optionIndex}`;
+            input.checked = (userAnswers[index] === optionIndex);
+
+            const label = document.createElement('label');
+            label.htmlFor = `question-${index}-option-${optionIndex}`;
+            label.textContent = option;
+
+            optionElement.appendChild(input);
+            optionElement.appendChild(label);
+            container.appendChild(optionElement);
+        });
+
+        return container;
+    }
+
+    // 创建判断题内容
+    function createTrueFalseContent(question, index) {
+        const container = document.createElement('div');
+        container.className = 'true-false-buttons';
+
+        const trueBtn = document.createElement('button');
+        trueBtn.className = 'true-btn';
+        trueBtn.textContent = '正确';
+        if (userAnswers[index] === true) {
+            trueBtn.classList.add('selected');
+        }
+        trueBtn.onclick = () => selectTrueFalse(index, true);
+
+        const falseBtn = document.createElement('button');
+        falseBtn.className = 'false-btn';
+        falseBtn.textContent = '错误';
+        if (userAnswers[index] === false) {
+            falseBtn.classList.add('selected');
+        }
+        falseBtn.onclick = () => selectTrueFalse(index, false);
+
+        container.appendChild(trueBtn);
+        container.appendChild(falseBtn);
+        return container;
+    }
+
+    // 创建填空题内容
+    function createFillBlankContent(question, index) {
+        const container = document.createElement('div');
+
+        const input = document.createElement('input');
+        input.type = 'text';
+        input.className = 'fill-input';
+        input.id = `fill-input-${index}`;
+        input.placeholder = '请输入答案...';
+
+        // 如果已经回答过，显示答案
+        if (userAnswers[index] !== null) {
+            input.value = userAnswers[index];
+
+            // 如果已经提交过答案，显示正确/错误样式
+            if (questionStatus[index] !== null) {
+                const isCorrect = userAnswers[index].toLowerCase() === question.answer.toLowerCase();
+                input.classList.add(isCorrect ? 'correct' : 'incorrect');
+            }
+        }
+
+        input.oninput = () => {
+            userAnswers[index] = input.value.trim();
+            // 更新答题状态显示
+            const questionElement = document.querySelector(`.question-item[data-index="${index}"]`);
+            if (questionElement && input.value.trim() !== '') {
+                questionElement.classList.add('answered');
+                questionElement.classList.remove('correct', 'incorrect');
+            } else if (questionElement && input.value.trim() === '') {
+                questionElement.classList.remove('answered');
+            }
+            // 更新本页统计
+            updatePageStats();
+        };
+
+        container.appendChild(input);
+        return container;
+    }
+
+    // 选择单选题选项
+    function selectOption(questionIndex, optionIndex) {
+        userAnswers[questionIndex] = optionIndex;
+
+        // 更新选项显示
+        const questionElement = document.querySelector(`.question-item[data-index="${questionIndex}"]`);
+        const options = questionElement.querySelectorAll('.option');
+
+        options.forEach(option => {
+            option.classList.remove('selected');
+            const input = option.querySelector('input');
+            if (input) input.checked = false;
+        });
+
+        // 设置选中的选项
+        const selectedOption = questionElement.querySelector(`.option[data-option-index="${optionIndex}"]`);
+        if (selectedOption) {
+            selectedOption.classList.add('selected');
+            const input = selectedOption.querySelector('input');
+            if (input) input.checked = true;
+        }
+
+        // 更新答题状态显示
+        questionElement.classList.add('answered');
+        questionElement.classList.remove('correct', 'incorrect');
+
+        // 更新本页统计
+        updatePageStats();
+    }
+
+    // 选择判断题答案
+    function selectTrueFalse(questionIndex, answer) {
+        userAnswers[questionIndex] = answer;
+
+        // 更新按钮显示
+        const questionElement = document.querySelector(`.question-item[data-index="${questionIndex}"]`);
+        const trueBtn = questionElement.querySelector('.true-btn');
+        const falseBtn = questionElement.querySelector('.false-btn');
+
+        trueBtn.classList.remove('selected');
+        falseBtn.classList.remove('selected');
+
+        if (answer) {
+            trueBtn.classList.add('selected');
+        } else {
+            falseBtn.classList.add('selected');
+        }
+
+        // 更新答题状态显示
+        questionElement.classList.add('answered');
+        questionElement.classList.remove('correct', 'incorrect');
+
+        // 更新本页统计
+        updatePageStats();
+    }
+
+    // 创建分页按钮
+    function createPagination() {
+        const paginationContainer = document.querySelector('.pagination-container');
+        paginationContainer.innerHTML = '';
+
+        // 添加上一页按钮
+        const prevButton = document.createElement('button');
+        prevButton.className = 'page-btn';
+        prevButton.textContent = '«';
+        prevButton.onclick = prevPage;
+        paginationContainer.appendChild(prevButton);
+
+        // 添加页码按钮
+        for (let i = 0; i < totalPages; i++) {
+            const pageButton = document.createElement('button');
+            pageButton.className = 'page-btn';
+            if (i === currentPage) {
+                pageButton.classList.add('active');
+            }
+            pageButton.textContent = i + 1;
+            pageButton.onclick = () => goToPage(i);
+            paginationContainer.appendChild(pageButton);
+        }
+
+        // 添加下一页按钮
+        const nextButton = document.createElement('button');
+        nextButton.className = 'page-btn';
+        nextButton.textContent = '»';
+        nextButton.onclick = nextPage;
+        paginationContainer.appendChild(nextButton);
+    }
+
+    // 提交当前页答案
+    function submitPage() {
+        const startIndex = currentPage * QUESTIONS_PER_PAGE;
+        const endIndex = Math.min(startIndex + QUESTIONS_PER_PAGE, questions.length);
+
+        let hasUnanswered = false;
+        let unansweredIndices = [];
+
+        // 检查本页所有题目是否已答
+        for (let i = startIndex; i < endIndex; i++) {
+            if (userAnswers[i] === null || userAnswers[i] === '') {
+                hasUnanswered = true;
+                unansweredIndices.push(i + 1); // 题目编号是从1开始的
+            }
+        }
+
+        if (hasUnanswered) {
+            alert(`本页还有未完成的题目：第 ${unansweredIndices.join(', ')} 题，请先完成所有题目再提交！`);
+            return;
+        }
+
+        // 提交本页答案
+        let pageCorrectCount = 0;
+        let pageScore = 0;
+
+        for (let i = startIndex; i < endIndex; i++) {
+            // 如果已经提交过，跳过
+            if (questionStatus[i] !== null) continue;
+
+            const question = questions[i];
+            let isCorrect = false;
+
+            if (question.type === 'single') {
+                isCorrect = (userAnswers[i] === question.answer);
+            } else if (question.type === 'truefalse') {
+                isCorrect = (userAnswers[i] === question.answer);
+            } else {
+                isCorrect = (userAnswers[i].toLowerCase() === question.answer.toLowerCase());
+            }
+
+            // 更新答题状态
+            questionStatus[i] = isCorrect;
+
+            // 更新统计
+            answeredCount++;
+            if (isCorrect) {
+                correctCount++;
+                pageCorrectCount++;
+                score += 10;
+                pageScore += 10;
+
+                // 更新知识点统计
+                if (knowledgeStats[question.knowledge]) {
+                    knowledgeStats[question.knowledge].correct++;
+                }
+            }
+
+            // 显示反馈
+            showFeedback(i, isCorrect, question);
+
+            // 更新题目样式
+            const questionElement = document.querySelector(`.question-item[data-index="${i}"]`);
+            if (questionElement) {
+                questionElement.classList.remove('answered');
+                questionElement.classList.add(isCorrect ? 'correct' : 'incorrect');
+            }
+        }
+
+        // 更新统计信息
+        updateStats();
+
+        // 显示本页答题结果
+        const pageQuestionCount = endIndex - startIndex;
+        alert(`本页答题完成！\n正确: ${pageCorrectCount}题\n错误: ${pageQuestionCount - pageCorrectCount}题\n得分: ${pageScore}分`);
+    }
+
+    // 显示反馈
+    function showFeedback(questionIndex, isCorrect, question) {
+        const feedbackElement = document.getElementById(`feedback-${questionIndex}`);
+        if (!feedbackElement) return;
+
+        feedbackElement.className = `feedback ${isCorrect ? 'correct' : 'incorrect'}`;
+        feedbackElement.style.display = 'block';
+
+        let feedbackHTML = '';
+        if (isCorrect) {
+            feedbackHTML = '<div class="feedback-title">回答正确！</div><div>恭喜你，答案正确。</div>';
+        } else {
+            feedbackHTML = '<div class="feedback-title">回答错误！</div><div>你的答案不正确。</div>';
+
+            // 显示正确答案
+            let correctAnswerText = '';
+            if (question.type === 'single') {
+                correctAnswerText = question.options[question.answer];
+            } else if (question.type === 'truefalse') {
+                correctAnswerText = question.answer ? '正确' : '错误';
+            } else {
+                correctAnswerText = question.answer;
+            }
+
+            feedbackHTML += `<div class="correct-answer">正确答案：${correctAnswerText}</div>`;
+        }
+
+        // 添加解析
+        if (question.explanation) {
+            feedbackHTML += `<div class="explanation">解析：${question.explanation}</div>`;
+        }
+
+        feedbackElement.innerHTML = feedbackHTML;
+    }
+
+    // 上一页
+    function prevPage() {
+        if (currentPage > 0) {
+            currentPage--;
+            loadPage();
+            updateStats();
+        }
+    }
+
+    // 下一页
+    function nextPage() {
+        if (currentPage < totalPages - 1) {
+            currentPage++;
+            loadPage();
+            updateStats();
+        } else {
+            // 如果是最后一页，显示完成信息
+            const unansweredCount = questionStatus.filter(status => status === null).length;
+            if (unansweredCount === 0) {
+                alert(`恭喜！你已经完成了所有题目！\n\n总分: ${score}\n正确率: ${Math.round(correctCount/answeredCount*100)}%\n已回答: ${answeredCount}/${questions.length}`);
+            } else {
+                alert('还有未完成的题目，请返回完成所有题目！');
+            }
+        }
+    }
+
+    // 跳转到指定页
+    function goToPage(page) {
+        currentPage = page;
+        loadPage();
+        updateStats();
+    }
+
+    // 重置当前页
+    function resetCurrentPage() {
+        if (confirm(`确定要重置第${currentPage + 1}页的答题内容吗？本页的答题进度将被清除。`)) {
+            const startIndex = currentPage * QUESTIONS_PER_PAGE;
+            const endIndex = Math.min(startIndex + QUESTIONS_PER_PAGE, questions.length);
+
+            // 备份当前页的答题状态，以便重新计算统计
+            let pageAnsweredBefore = 0;
+            let pageCorrectBefore = 0;
+
+            for (let i = startIndex; i < endIndex; i++) {
+                // 记录重置前的答题状态
+                if (questionStatus[i] !== null) {
+                    pageAnsweredBefore++;
+                    if (questionStatus[i] === true) {
+                        pageCorrectBefore++;
+                    }
+                }
+
+                // 重置当前页的答题数据
+                userAnswers[i] = null;
+                questionStatus[i] = null;
+            }
+
+            // 重新计算全局统计
+            recalculateGlobalStats();
+
+            // 重新加载当前页
+            loadPage();
+
+            alert(`第${currentPage + 1}页已重置！\n清除答题记录：${pageAnsweredBefore}题`);
+        }
+    }
+
+    // 重置全部页面
+    function resetAllPages() {
+        if (confirm("确定要重置所有页面的答题内容吗？所有答题进度将被清除。")) {
+            // 重置所有答题数据
+            userAnswers = new Array(questions.length).fill(null);
+            questionStatus = new Array(questions.length).fill(null);
+            score = 0;
+            answeredCount = 0;
+            correctCount = 0;
+
+            // 重置知识点统计
+            initKnowledgeStats();
+
+            // 重新加载当前页
+            loadPage();
+            updateStats();
+
+            alert("所有页面已重置！所有答题记录已清除。");
+        }
+    }
+
+    // 重新计算全局统计（用于重置当前页后）
+    function recalculateGlobalStats() {
+        score = 0;
+        answeredCount = 0;
+        correctCount = 0;
+
+        // 重置知识点统计
+        Object.keys(knowledgeStats).forEach(knowledge => {
+            knowledgeStats[knowledge].correct = 0;
+        });
+
+        // 重新计算所有已答题目的统计
+        for (let i = 0; i < questions.length; i++) {
+            if (questionStatus[i] !== null) {
+                answeredCount++;
+                if (questionStatus[i] === true) {
+                    correctCount++;
+                    score += 10;
+
+                    // 更新知识点统计
+                    if (knowledgeStats[questions[i].knowledge]) {
+                        knowledgeStats[questions[i].knowledge].correct++;
+                    }
+                }
+            }
+        }
+    }
+
+    // 更新统计信息
+    function updateStats() {
+        // 更新进度条
+        const progressPercent = (answeredCount / questions.length) * 100;
+        document.getElementById('progress-fill').style.width = `${progressPercent}%`;
+        document.getElementById('progress-text').textContent = `${answeredCount}/${questions.length}`;
+
+        // 更新统计数据
+        document.getElementById('total-questions').textContent = questions.length;
+        document.getElementById('answered-questions').textContent = answeredCount;
+        document.getElementById('correct-questions').textContent = correctCount;
+
+        const accuracy = answeredCount > 0 ? Math.round(correctCount / answeredCount * 100) : 0;
+        document.getElementById('accuracy-rate').textContent = `${accuracy}%`;
+        document.getElementById('score').textContent = score;
+        document.getElementById('current-page').textContent = `${currentPage + 1}/${totalPages}`;
+
+        // 更新题型分布
+        const singleCount = questions.filter(q => q.type === "single").length;
+        const truefalseCount = questions.filter(q => q.type === "truefalse").length;
+        const fillCount = questions.filter(q => q.type === "fill").length;
+
+        document.getElementById('single-count').textContent = singleCount;
+        document.getElementById('truefalse-count').textContent = truefalseCount;
+        document.getElementById('fill-count').textContent = fillCount;
+
+        // 更新知识点掌握情况
+        updateKnowledgeProgress();
+
+        // 更新本页统计
+        updatePageStats();
+    }
+
+    // 更新本页统计
+    function updatePageStats() {
+        const startIndex = currentPage * QUESTIONS_PER_PAGE;
+        const endIndex = Math.min(startIndex + QUESTIONS_PER_PAGE, questions.length);
+
+        let pageTotal = endIndex - startIndex;
+        let pageAnswered = 0;
+        let pageCorrect = 0;
+        let pageScore = 0;
+
+        for (let i = startIndex; i < endIndex; i++) {
+            if (userAnswers[i] !== null && userAnswers[i] !== '') {
+                pageAnswered++;
+            }
+
+            if (questionStatus[i] === true) {
+                pageCorrect++;
+                pageScore += 10;
+            }
+        }
+
+        document.getElementById('page-total').textContent = pageTotal;
+        document.getElementById('page-answered').textContent = pageAnswered;
+        document.getElementById('page-correct').textContent = pageCorrect;
+        document.getElementById('page-score').textContent = pageScore;
+    }
+
+    // 更新知识点掌握情况
+    function updateKnowledgeProgress() {
+        const knowledgeProgressContainer = document.getElementById('knowledge-progress');
+        knowledgeProgressContainer.innerHTML = '';
+
+        // 只显示有题目的知识点
+        Object.keys(knowledgeStats).forEach(knowledge => {
+            const stat = knowledgeStats[knowledge];
+            if (stat.total > 0) {
+                const correct = stat.correct || 0;
+                const percentage = Math.round(correct / stat.total * 100);
+
+                const knowledgeItem = document.createElement('div');
+                knowledgeItem.className = 'knowledge-item';
+
+                const knowledgeName = document.createElement('div');
+                knowledgeName.className = 'knowledge-name';
+                knowledgeName.innerHTML = `<span>${knowledge}</span><span>${correct}/${stat.total}</span>`;
+
+                const knowledgeBar = document.createElement('div');
+                knowledgeBar.className = 'knowledge-bar';
+
+                const knowledgeFill = document.createElement('div');
+                knowledgeFill.className = 'knowledge-fill';
+                knowledgeFill.style.width = `${percentage}%`;
+
+                knowledgeBar.appendChild(knowledgeFill);
+                knowledgeItem.appendChild(knowledgeName);
+                knowledgeItem.appendChild(knowledgeBar);
+
+                knowledgeProgressContainer.appendChild(knowledgeItem);
+            }
+        });
+    }
+</script>
+</body>
+</html>

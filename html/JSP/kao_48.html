@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>JavaScript面向对象编程</title>
+</head>
+JavaScript面向对象编程<br>
+要求如下：<br>
+定义一个Student类，有name,score属性，有setName与getName方法。<br>
+constructor无参<br>
+实例化Student类，对象名为stu1<br>
+<body>
+<script>
+    class Person{
+        constructor(){
+            this.name="";
+            this.age="";
+        }
+        setName(name){
+            this.name = name;
+        }
+        getName(){
+            return this.name;
+        }
+        setAge(age){
+            this.age = age;
+        }
+        getage(){
+            return this.age;
+        }
+    }
+    class Student extends Person{
+        constructor(){
+            super();
+            this.major="";
+            this.score="";
+        }
+        setScore(score){
+            this.score=score;
+        }
+        getScore(){
+            return this.score;
+        }
+        setmajor(major){
+            this.major=major;
+        }
+        getmajor(){
+            return this.major;}
+        getInfo(){
+            return "姓名:"+super.getName()+"|年龄:"+super.getage()+"|专业:"+this.getmajor()+"|成绩:"+this.getScore();}
+    }
+    var stu1=new Student("mike");
+</script>
+
+</html>

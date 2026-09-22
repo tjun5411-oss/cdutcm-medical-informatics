@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>医学数据分析与挖掘 - 首页</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI','Microsoft YaHei',sans-serif}
+        body{background:#f0f5fb;color:#333;min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:40px 20px}
+        .container{max-width:1000px;width:100%}
+        header{text-align:center;padding:40px 30px;background:linear-gradient(135deg,#4A90D9 0%,#5BA0E9 100%);color:white;border-radius:16px;box-shadow:0 8px 25px rgba(74,144,217,0.25);margin-bottom:40px}
+        h1{font-size:2.4rem;margin-bottom:12px;letter-spacing:2px}
+        .subtitle{font-size:1.1rem;opacity:0.9;line-height:1.6}
+        .stats{margin-top:20px;display:flex;justify-content:center;gap:30px;flex-wrap:wrap}
+        .stat-item{background:rgba(255,255,255,0.15);padding:10px 20px;border-radius:10px;display:flex;align-items:center;gap:10px;font-size:0.95rem}
+        .stat-item i{font-size:1.2rem}
+        .chapter-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:20px;margin-bottom:40px}
+        .chapter-card{background:white;border-radius:14px;padding:25px;box-shadow:0 4px 15px rgba(0,0,0,0.06);transition:all 0.3s ease;cursor:pointer;text-decoration:none;color:#333;display:flex;flex-direction:column;border:1px solid #e0eaf5;position:relative;overflow:hidden}
+        .chapter-card:hover{transform:translateY(-4px);box-shadow:0 8px 25px rgba(74,144,217,0.15);border-color:#4A90D9}
+        .chapter-card:active{transform:translateY(-1px)}
+        .card-badge{position:absolute;top:0;right:0;background:linear-gradient(135deg,#4A90D9,#5BA0E9);color:white;padding:6px 16px;border-radius:0 14px 0 14px;font-size:0.8rem;font-weight:600}
+        .card-icon{font-size:2rem;color:#4A90D9;margin-bottom:16px}
+        .chapter-card h2{font-size:1.25rem;margin-bottom:6px;color:#2C6FBB}
+        .card-desc{font-size:0.9rem;color:#888;margin-bottom:14px;flex:1}
+        .card-meta{display:flex;gap:15px;font-size:0.82rem;color:#aaa}
+        .card-meta span{display:flex;align-items:center;gap:5px}
+        .info-section{background:white;border-radius:14px;padding:30px;box-shadow:0 4px 15px rgba(0,0,0,0.06);border:1px solid #e0eaf5;margin-bottom:30px}
+        .info-section h3{font-size:1.2rem;color:#2C6FBB;margin-bottom:15px;display:flex;align-items:center;gap:10px}
+        .info-section p{font-size:0.95rem;color:#666;line-height:1.8}
+        .footer{text-align:center;padding:20px;color:#bbb;font-size:0.85rem}
+        @media(max-width:640px){h1{font-size:1.8rem}.chapter-grid{grid-template-columns:1fr}.stats{flex-direction:column;align-items:center}}
+    </style>
+</head>
+<body>
+<div class="container">
+    <header>
+        <h1><i class="fas fa-dna" style="margin-right:10px"></i>医学数据分析与挖掘</h1>
+        <p class="subtitle">成都中医药大学 · 学堂在线课程习题</p>
+        <div class="stats">
+            <div class="stat-item"><i class="fas fa-book"></i><span>共 7 章</span></div>
+            <div class="stat-item"><i class="fas fa-file-alt"></i><span>共 140 题</span></div>
+            <div class="stat-item"><i class="fas fa-check-circle"></i><span>每题附带解析</span></div>
+        </div>
+    </header>
+
+    <div class="chapter-grid">
+        <a class="chapter-card" href="第一章.html">
+            <div class="card-badge">第一章</div>
+            <div class="card-icon"><i class="fas fa-database"></i></div>
+            <h2>数据挖掘概述</h2>
+            <p class="card-desc">了解数据挖掘的基本概念、任务分类和应用场景</p>
+            <div class="card-meta">
+                <span><i class="far fa-circle"></i> 8 单选</span>
+                <span><i class="fas fa-check-square"></i> 2 多选</span>
+                <span><i class="fas fa-balance-scale"></i> 10 判断</span>
+            </div>
+        </a>
+        <a class="chapter-card" href="第二章.html">
+            <div class="card-badge">第二章</div>
+            <div class="card-icon"><i class="fas fa-chart-bar"></i></div>
+            <h2>数据属性与统计描述</h2>
+            <p class="card-desc">掌握数据类型、集中趋势和离散趋势的统计分析</p>
+            <div class="card-meta">
+                <span><i class="far fa-circle"></i> 8 单选</span>
+                <span><i class="fas fa-check-square"></i> 2 多选</span>
+                <span><i class="fas fa-balance-scale"></i> 10 判断</span>
+            </div>
+        </a>
+        <a class="chapter-card" href="第三章.html">
+            <div class="card-badge">第三章</div>
+            <div class="card-icon"><i class="fas fa-filter"></i></div>
+            <h2>数据预处理</h2>
+            <p class="card-desc">学习数据清洗、集成、变换与归约等预处理方法</p>
+            <div class="card-meta">
+                <span><i class="far fa-circle"></i> 8 单选</span>
+                <span><i class="fas fa-check-square"></i> 2 多选</span>
+                <span><i class="fas fa-balance-scale"></i> 10 判断</span>
+            </div>
+        </a>
+        <a class="chapter-card" href="第四章.html">
+            <div class="card-badge">第四章</div>
+            <div class="card-icon"><i class="fas fa-link"></i></div>
+            <h2>关联规则挖掘</h2>
+            <p class="card-desc">理解Apriori算法、频繁项集和关联规则评价</p>
+            <div class="card-meta">
+                <span><i class="far fa-circle"></i> 8 单选</span>
+                <span><i class="fas fa-check-square"></i> 2 多选</span>
+                <span><i class="fas fa-balance-scale"></i> 10 判断</span>
+            </div>
+        </a>
+        <a class="chapter-card" href="第五章.html">
+            <div class="card-badge">第五章</div>
+            <div class="card-icon"><i class="fas fa-project-diagram"></i></div>
+            <h2>分类与回归</h2>
+            <p class="card-desc">掌握SVM、决策树、集成学习等分类回归算法</p>
+            <div class="card-meta">
+                <span><i class="far fa-circle"></i> 8 单选</span>
+                <span><i class="fas fa-check-square"></i> 2 多选</span>
+                <span><i class="fas fa-balance-scale"></i> 10 判断</span>
+            </div>
+        </a>
+        <a class="chapter-card" href="第六章.html">
+            <div class="card-badge">第六章</div>
+            <div class="card-icon"><i class="fas fa-circle-nodes"></i></div>
+            <h2>聚类分析</h2>
+            <p class="card-desc">学习K均值、DBSCAN、层次聚类等聚类方法</p>
+            <div class="card-meta">
+                <span><i class="far fa-circle"></i> 8 单选</span>
+                <span><i class="fas fa-check-square"></i> 2 多选</span>
+                <span><i class="fas fa-balance-scale"></i> 10 判断</span>
+            </div>
+        </a>
+        <a class="chapter-card" href="第七章.html">
+            <div class="card-badge">第七章</div>
+            <div class="card-icon"><i class="fas fa-calculator"></i></div>
+            <h2>统计与检验</h2>
+            <p class="card-desc">掌握t检验、x²检验、回归分析等统计方法</p>
+            <div class="card-meta">
+                <span><i class="far fa-circle"></i> 8 单选</span>
+                <span><i class="fas fa-check-square"></i> 2 多选</span>
+                <span><i class="fas fa-balance-scale"></i> 10 判断</span>
+            </div>
+        </a>
+    </div>
+
+    <div class="info-section">
+        <h3><i class="fas fa-lightbulb"></i> 使用说明</h3>
+        <p>点击上方任意章节卡片进入对应习题页面。每章包含 <strong>8 道单选题、2 道多选题和 10 道判断题</strong>，共 20 题。答题后可点击 <strong>"提交本小节答案"</strong> 查看正误和详细解析，也可随时 <strong>"重置本小节"</strong> 重新作答。完成全部题目后方可进入下一章。</p>
+    </div>
+
+    <div class="footer">
+        <p>医学数据分析与挖掘 · 习题系统 | 基于成都中医药大学学堂在线课程</p>
+    </div>
+</div>
+</body>
+</html>

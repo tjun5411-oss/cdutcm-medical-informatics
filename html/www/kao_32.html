@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <title>动态添加文本框</title>
+</head>
+用JavaScript自定义方法动态添加一个文本框到页面中。<br>
+要求如下：<br>
+通过自定义addInput函数实现。<br>
+文本框的类型为text<br>
+文本框的id为name,name为name，value为空。<br>
+form表单的id为form_1，其它属性为默认<br>
+注：此题在提交时，请把自行测试时调用函数的代码行注释掉或是删除<br>
+<body>
+<script>
+
+    function addInput() {
+        var form = document.createElement('form');
+        form.id = 'form_1';
+        var input = document.createElement('input');
+        input.type = 'text';
+        input.id = 'name';
+        input.name = 'name';
+        input.value = '';
+        form.appendChild(input);
+        document.body.appendChild(form);
+    }
+</script>
+</body>
+
+</html>

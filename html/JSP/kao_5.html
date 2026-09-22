@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>用户注册</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: inline-block;
+            width: 80px;
+            vertical-align: top;
+        }
+        input[type="text"], select {
+            width: 200px;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .radio-group, .checkbox-group {
+            display: inline-block;
+        }
+        .message {
+            color: #666;
+            margin-left: 10px;
+            font-size: 14px;
+        }
+        #ok {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            display: block;
+            margin-left: 80px;
+        }
+        #ok:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+form的id为form_1。<br>
+姓名框的id、name值为name。<br>
+姓名框span的id为nameSpan。<br>
+性别框的name为gender,id分别为male,female,value分别为01,02。<br>
+性别框span的id为genderSpan。<br>
+课程框的name为course,id分别为javascript,springboot,springcloud,value分别为javascript,springboot,springcloud。<br>
+课程框span的id为courseSpan。<br>
+籍贯框为select类型，控件的id、name为hometown。选择支的value分别为 北京：110100000000；成都：510100000000；重庆：500100000000，顺序不能变。<br>
+籍贯框span的id为hometownSpan。<br>
+保存按钮的id、name、value为ok。<br>
+点击ok按钮进行一致性检查,检查函数为checkData()。<br>
+对性别，课程情况进行检查。<br>
+根据所选定的性别在相应的位置显示“欢迎男同学”或“欢迎女同学”。<br>
+如果一门课程都没有选定，则在相应的位置显示“必须选一门课程”，否则不显示内容。<br>
+选定籍贯后，则在相应的位置显示“欢迎来自XX的同学”，否则不显示内容。<br>
+<h1>用户注册</h1>
+<form id="form_1">
+    <div class="form-group">
+        <label for="name">姓名:</label>
+        <input type="text" id="name" name="name">
+        <span id="nameSpan" class="message"></span>
+    </div>
+
+    <div class="form-group">
+        <label>性别:</label>
+        <div class="radio-group">
+            <input type="radio" name="gender" id="male" value="01" checked>
+            <label for="male">男</label>
+            <input type="radio" name="gender" id="female" value="02">
+            <label for="female">女</label>
+            <span id="genderSpan" class="message">欢迎男同学</span>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label>课程:</label>
+        <div class="checkbox-group">
+            <input type="checkbox" name="course" id="javascript" value="javascript">
+            <label for="javascript">JavaScript</label>
+            <input type="checkbox" name="course" id="springboot" value="springboot">
+            <label for="springboot">SpringBoot</label>
+            <input type="checkbox" name="course" id="springcloud" value="springcloud">
+            <label for="springcloud">SpringCloud</label>
+            <span id="courseSpan" class="message"></span>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="hometown">籍贯:</label>
+        <select id="hometown" name="hometown">
+            <option value="11010000000">北京</option>
+            <option value="51010000000" selected>成都</option>
+            <option value="50010000000">重庆</option>
+        </select>
+        <span id="hometownSpan" class="message">欢迎来自成都的同学</span>
+    </div>
+
+    <input type="button" id="ok" name="ok" value="ok" onclick="checkData()">
+</form>
+
+<script>
+    function checkData() {
+        // 检查课程是否至少选了一门
+        const courses = document.querySelectorAll('input[name="course"]:checked');
+        const courseSpan = document.getElementById('courseSpan');
+
+        if (courses.length === 0) {
+            courseSpan.textContent = "必须选一门课程";
+        } else {
+            courseSpan.textContent = "";
+        }
+
+        // 更新性别欢迎语
+        const gender = document.querySelector('input[name="gender"]:checked').value;
+        const genderSpan = document.getElementById('genderSpan');
+
+        if (gender === "01") {
+            genderSpan.textContent = "欢迎男同学";
+        } else {
+            genderSpan.textContent = "欢迎女同学";
+        }
+
+        // 更新籍贯欢迎语
+        const hometownSelect = document.getElementById('hometown');
+        const selectedHometown = hometownSelect.options[hometownSelect.selectedIndex].text;
+        const hometownSpan = document.getElementById('hometownSpan');
+
+        hometownSpan.textContent = `欢迎来自${selectedHometown}的同学`;
+    }
+
+    // 初始化事件监听
+    document.addEventListener('DOMContentLoaded', function() {
+        // 性别选择变化时更新欢迎语
+        document.querySelectorAll('input[name="gender"]').forEach(radio => {
+            radio.addEventListener('change', function() {
+                const genderSpan = document.getElementById('genderSpan');
+                if (this.value === "01") {
+                    genderSpan.textContent = "欢迎男同学";
+                } else {
+                    genderSpan.textContent = "欢迎女同学";
+                }
+            });
+        });
+
+        // 籍贯选择变化时更新欢迎语
+        document.getElementById('hometown').addEventListener('change', function() {
+            const selectedHometown = this.options[this.selectedIndex].text;
+            document.getElementById('hometownSpan').textContent = `欢迎来自${selectedHometown}的同学`;
+        });
+
+        // 课程选择变化时检查
+        document.querySelectorAll('input[name="course"]').forEach(checkbox => {
+            checkbox.addEventListener('change', function() {
+                const courses = document.querySelectorAll('input[name="course"]:checked');
+                const courseSpan = document.getElementById('courseSpan');
+
+                if (courses.length === 0) {
+                    courseSpan.textContent = "必须选一门课程";
+                } else {
+                    courseSpan.textContent = "";
+                }
+            });
+        });
+    });
+</script>
+</body>
+</html>

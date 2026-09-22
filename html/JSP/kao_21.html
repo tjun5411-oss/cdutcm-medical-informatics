@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>变参函数示例</title>
+</head>
+要求如下：<br>
+定义函数showArgs()，实现变参。<br>
+在函数体中，把各参数用"|"串起来，显示在div中。<br>
+div的id为div_1。<br>
+如showArgs(1,2,3)，则调用此函数后，div中出现 1|2|3。<br>
+注：此题在提交时，请把自行测试时调用函数的代码行注释掉或是删除<br>
+<body>
+<div id="div_1"></div>
+
+<script>
+    function showArgs() {
+        const argsArray = Array.from(arguments);
+        const result = argsArray.join('|');
+        document.getElementById('div_1').textContent = result;
+    }
+</script>
+</body>
+</html>

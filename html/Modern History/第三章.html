@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>中国近现代史纲要 - 第三章</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
+        }
+
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            padding: 20px;
+            background: linear-gradient(135deg, #8B0000 0%, #B22222 100%);
+            color: white;
+            border-radius: 12px;
+            box-shadow: 0 6px 15px rgba(139, 0, 0, 0.2);
+            margin-bottom: 25px;
+        }
+
+        h1 {
+            font-size: 2.4rem;
+            margin-bottom: 10px;
+            letter-spacing: 1px;
+        }
+
+        .subtitle {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .section-container {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            margin-bottom: 30px;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            margin-bottom: 25px;
+            color: #8B0000;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #eee;
+        }
+
+        .question-item {
+            border: 1px solid #eaeaea;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .question-item.correct {
+            border-color: #4CAF50;
+            background-color: #f9fff9;
+        }
+
+        .question-item.incorrect {
+            border-color: #f44336;
+            background-color: #fff9f9;
+        }
+
+        .question-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .question-number {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #8B0000;
+        }
+
+        .question-type {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 15px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .single-choice {
+            background-color: #ffe6e6;
+            color: #8B0000;
+        }
+
+        .multiple-choice {
+            background-color: #f0e6ff;
+            color: #6600cc;
+        }
+
+        .question-text {
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .options-container {
+            margin: 15px 0;
+        }
+
+        .option {
+            margin-bottom: 10px;
+            padding: 12px 15px;
+            border: 1px solid #eaeaea;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+        }
+
+        .option:hover {
+            border-color: #ffb3b3;
+            background-color: #fffafa;
+        }
+
+        .option.selected {
+            border-color: #ff6666;
+            background-color: #ffe6e6;
+        }
+
+        .option input {
+            margin-right: 10px;
+            cursor: pointer;
+        }
+
+        .feedback {
+            padding: 15px;
+            border-radius: 6px;
+            margin-top: 15px;
+            font-size: 0.95rem;
+            display: none;
+        }
+
+        .feedback.correct {
+            background-color: #e6ffe6;
+            border-left: 4px solid #4CAF50;
+        }
+
+        .feedback.incorrect {
+            background-color: #ffe6e6;
+            border-left: 4px solid #f44336;
+        }
+
+        .feedback-title {
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .correct-answer {
+            margin-top: 10px;
+            padding: 8px;
+            background-color: white;
+            border-radius: 4px;
+            border: 1px dashed #ccc;
+            font-weight: 600;
+        }
+
+        .explanation {
+            margin-top: 15px;
+            padding: 12px;
+            background-color: #f9f9f9;
+            border-radius: 6px;
+            border-left: 3px solid #ff6666;
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        .section-footer {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .section-btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .submit-btn {
+            background-color: #8B0000;
+            color: white;
+        }
+
+        .submit-btn:hover {
+            background-color: #A52A2A;
+        }
+
+        .reset-btn {
+            background-color: #666;
+            color: white;
+        }
+
+        .chapter-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+        }
+
+        .chapter-btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 6px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .prev-btn {
+            background-color: #666;
+            color: white;
+        }
+
+        .next-btn {
+            background-color: #8B0000;
+            color: white;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 20px;
+            color: #777;
+            font-size: 0.9rem;
+            margin-top: 40px;
+            border-top: 1px solid #eee;
+        }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 1.8rem; }
+            .section-container { padding: 15px; }
+            .section-footer { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <header>
+        <h1>中国近现代史纲要 - 第三章</h1>
+        <p class="subtitle">共50题 | 每10题一小节 | 实时反馈与详细解析</p>
+    </header>
+
+    <div id="quiz-container"></div>
+
+    <div class="chapter-navigation">
+        <button class="chapter-btn prev-btn" onclick="window.location.href='第二章.html'">
+            <i class="fas fa-arrow-left"></i> 上一章
+        </button>
+        <button class="chapter-btn next-btn" onclick="goToNextChapter()">
+            下一章 <i class="fas fa-arrow-right"></i>
+        </button>
+    </div>
+
+    <div class="footer">
+        <p>中国近现代史纲要复习系统 &copy; 2025</p>
+    </div>
+</div>
+
+<script>
+    const questions = [
+        // 单选题 1-10
+        {
+            type: "single",
+            text: "史学家陈旭麓指出：“辛亥革命……为2132年的历史打了一个用铁和血铸成的句号。但句号不是结束，而是另一种书写格式的开始。”对这句话最贴切的理解是，辛亥革命",
+            options: ["A. 以暴力方式彻底终结了封建制度，开启了和平建设时代", "B. 在制度层面终结了君主专制，但中国社会转型的深层问题仍未解决", "C. 标志着旧民主主义革命的完成，随即开始了新民主主义革命", "D. 结束了中国历史，开启了完全不同的世界历史新篇章"],
+            answer: 1,
+            explanation: "辛亥革命终结了君主专制制度，但并未改变半殖民地半封建的社会性质，社会转型的任务依然艰巨。"
+        },
+        {
+            type: "single",
+            text: "“此乃煽动游民，夺富济贫，扰乱乡里秩序之邪说”，“这是一个脱离农民运动、不切实际的资产阶级改良方案，未能触及封建土地所有制的根本。”这两份评论共同揭示了“平均地权”主张在哪个问题上的困境",
+            options: ["A. 理论来源的复杂性", "B. 对外宣传的策略性", "C. 实际操作的可行性", "D. 社会动员的实效性"],
+            answer: 3,
+            explanation: "评论反映了该主张既被旧势力排斥，又无法真正动员农民，显示了社会动员的实效性不足。"
+        },
+        {
+            type: "single",
+            text: "1906年，孙中山在针对“平均地权”解释道：“这也不是共产，这不过是改良社会经济组织，防止后来的社会革命。”这反映了革命派",
+            options: ["A. 具有超越时代的社会主义前瞻性眼光", "B. 对封建地主阶级抱有妥协与合作的幻想", "C. 其社会革命思想具有防御性和温和改良色彩", "D. 旨在混淆视听，争取各阶级的广泛支持"],
+            answer: 2,
+            explanation: "孙中山试图通过“民生主义”预防资本主义发展带来的贫富悬殊，体现了一种预防性的改良色彩。"
+        },
+        {
+            type: "single",
+            text: "武昌起义后，独立各省大多出现“革命党人发动，立宪派或旧官僚主持”的局面，这最深刻地表明",
+            options: ["A. 立宪派与旧官僚完全窃取了革命果实", "B. 资产阶级革命派具有成熟的政治智慧", "C. 革命派在政治力量、社会威望和组织能力上存在严重不足", "D. 这是南北和谈前的一种临时性权力安排"],
+            answer: 2,
+            explanation: "这种局面的出现本质上是因为资产阶级革命派力量弱小，不得不依靠旧势力。 "
+        },
+        {
+            type: "single",
+            text: "许多地方的“光复”仅仅是换了旗帜，基层权力结构、经济关系几乎原封未动。这论证了",
+            options: ["A. 辛亥革命是一场代价极小的成功革命", "B. 辛亥革命的影响主要局限于城市和精英阶层", "C. 中国社会具有强大的稳定性", "D. 资产阶级革命派的工作重心在城市"],
+            answer: 1,
+            explanation: "这反映了革命的局限性，即未能深入农村，未能引起深层的社会变革。"
+        },
+        {
+            type: "single",
+            text: "《中华民国临时约法》极力扩大议会权力、限制总统权力。这种差异源于中国当时",
+            options: ["A. 更先进的民主法治观念", "B. 对西方宪政制度的片面理解", "C. 特殊的政治斗争形势（即针对袁世凯）", "D. 缺乏实施抽象人权原则的社会基础"],
+            answer: 2,
+            explanation: "当时革命派为了限制即将就任总统的袁世凯，采取了“因人设法”的策略。"
+        },
+        {
+            type: "single",
+            text: "1912年清帝退位诏书中的“文本博弈”本质上反映了",
+            options: ["A. 袁世凯个人的奸诈权谋", "B. 南方革命派对法律文书作用的幼稚信赖", "C. 辛亥革命中“合法性”来源的模糊与争夺", "D. 君主制向共和制转型时程序上的必然混乱"],
+            answer: 2,
+            explanation: "反映了新旧政权交替过程中，关于权力合法性来源的博弈。"
+        },
+        {
+            type: "single",
+            text: "毛泽东强调辛亥革命失败的主要原因是",
+            options: ["A. 没有提出反对帝国主义的口号", "B. 产生的政权未能改变封建社会的经济基础与阶级结构", "C. 孙中山过早让位于袁世凯", "D. 缺乏一个组织严密的革命政党"],
+            answer: 1,
+            explanation: "政治革命虽推翻了皇帝，但未触动封建地主土地所有制这一经济基础。"
+        },
+        {
+            type: "single",
+            text: "“辛亥记忆”的多元性主要说明",
+            options: ["A. 历史真相无法被真正认识", "B. 辛亥革命本身性质复杂", "C. 历史研究始终受到现实政治的操纵", "D. 所有历史都是当代史，反映叙述者的立场与时代关切"],
+            answer: 3,
+            explanation: "历史评价往往随着时代的变迁和评价者立场的不同而发生变化。"
+        },
+        {
+            type: "single",
+            text: "1913年一位支持共和的华侨回国，最可能对辛亥革命产生的认识是",
+            options: ["A. 革命彻底成功了", "B. 革命推翻了清朝，但建立稳定现代国家的目标远未实现", "C. 革命不如改良", "D. 只有社会主义革命能解决问题"],
+            answer: 1,
+            explanation: "辛亥革命成功推翻了帝制，但随后的军阀割据说明民主共和的实效并未达成。"
+        },
+        // 单选题 11-20
+        {
+            type: "single",
+            text: "有学者认为辛亥革命砍掉了封建制度的政治“头颅”，但滋养着新的“头颅”。这强调",
+            options: ["A. 彻底的社会革命", "B. 政治革命与社会革命必须同步", "C. 封建制度的自我修复", "D. 辛亥革命的不彻底性根植于未变革经济基础"],
+            answer: 3,
+            explanation: "没有触动地主土地所有制，导致军阀官僚等旧势力依然拥有生存土壤。"
+        },
+        {
+            type: "single",
+            text: "20世纪初中国各政治力量在现代化措施上的相似，说明",
+            options: ["A. 南京临时政府继承了清政府遗产", "B. 现代化已成为各政治力量的共识与竞赛", "C. 缺乏创新性", "D. 政治目标本质一致"],
+            answer: 1,
+            explanation: "无论是清末新政还是民国建立，追求国家现代化是当时共同的时代趋势。"
+        },
+        {
+            type: "single",
+            text: "对孙中山晚年总结的“没有革命军的奋斗”最准确的理解是",
+            options: ["A. 完全没有武装起义", "B. 革命党未能建立和掌握一支有革命信念的常备武装", "C. 北洋军实力强大", "D. 过于依赖会党和新军"],
+            answer: 1,
+            explanation: "指辛亥革命时期缺乏像后来的红军、国民革命军那样由党直接领导的军队。"
+        },
+        {
+            type: "single",
+            text: "费正清认为“断裂”不够彻底的主要原因归结于当时中国",
+            options: ["A. 资本主义经济发展极不充分", "B. 儒家文化力量强大", "C. 革命领导者思想保守", "D. 帝国主义反对"],
+            answer: 0,
+            explanation: "经济基础决定上层建筑，资本主义发展的薄弱决定了资产阶级革命的不彻底。"
+        },
+        {
+            type: "single",
+            text: "将“辛亥革命作为‘中华民族’建构的里程碑”的主要现实功能是",
+            options: ["A. 还原满汉矛盾真相", "B. 服务于凝聚国家认同、整合多元族群的政治需要", "C. 批判清朝政策", "D. 为一党专政提供合法性"],
+            answer: 1,
+            explanation: "从“驱除鞑虏”到“五族共和”，体现了民族认同从排他向整合的转变。"
+        },
+        {
+            type: "single",
+            text: "全球史视角下，20世纪初各国革命的共同背景是",
+            options: ["A. 马克思主义指导", "B. 民族资本主义发展受到传统势力与帝国主义双重压迫", "C. 成功建立了稳定的共和国", "D. 周边国家援助"],
+            answer: 1,
+            explanation: "这些革命都属于亚非拉民族觉醒的一部分，具有相似的社会经济背景。"
+        },
+        {
+            type: "single",
+            text: "“共和”成为政治正确但理解南辕北辙，造成的直接后果是",
+            options: ["A. 思想百花齐放", "B. 导致政治话语虚伪空洞，难以形成实质共识", "C. 迫使军阀学习共和", "D. 为五四运动提供靶子"],
+            answer: 1,
+            explanation: "形式上的共和掩盖了军阀专制的实质，使得政治共识极难达成。"
+        },
+        {
+            type: "single",
+            text: "最能支撑“资产阶级软弱性”结论的史实是",
+            options: ["A. 依靠会党起义；推举黎元洪", "B. 约法被废；军阀混战", "C. 对帝国主义抱有幻想，承认不平等条约；向袁世凯妥协", "D. 提出平均地权但未实施；风气改良有限"],
+            answer: 2,
+            explanation: "不敢彻底反帝和对反动势力的政治妥协是软弱性的集中表现。"
+        },
+        {
+            type: "single",
+            text: "辛亥革命“双刃剑”效应中，导致整合危机的是",
+            options: ["A. 袁世凯称帝失败", "B. 1916年后中国出现军阀割据与混战局面", "C. 新文化运动", "D. 中国共产党成立"],
+            answer: 1,
+            explanation: "旧秩序瓦解后，新的稳定权威未能建立，导致了长期的社会动荡。"
+        },
+        {
+            type: "single",
+            text: "中国历史上第一部具有资产阶级共和国宪法性质的法典是",
+            options: ["A. 《钦定宪法大纲》", "B. 《中华民国约法》", "C. 《中华民国临时约法》", "D. 《共同纲领》"],
+            answer: 2,
+            explanation: "《临时约法》是中国历史上第一部具有资产阶级共和国宪法性质的法典。"
+        },
+        // 单选题 21-30
+        {
+            type: "single",
+            text: "1905-1907年革命派与改良派论战的焦点不包括",
+            options: ["A. 要不要暴力推翻清廷", "B. 要不要实行民主共和", "C. 要不要平均地权", "D. 要不要立即废除一切不平等条约"],
+            answer: 3,
+            explanation: "论战的核心是政体和手段问题，革命派当时并未明确提出立即废除一切不平等条约。"
+        },
+        {
+            type: "single",
+            text: "孙中山的“平均地权”在辛亥革命时期侧重于",
+            options: ["A. 没收土地平分", "B. 核定地价，涨价归公", "C. 耕者有其田", "D. 土地国有统一分配"],
+            answer: 1,
+            explanation: "这是孙中山提出的社会革命方案，主张涨价归公以解决贫富悬殊。"
+        },
+        {
+            type: "single",
+            text: "“无量头颅无量血，可怜购得假共和”揭示了",
+            options: ["A. 过程惨烈", "B. 成果辉煌", "C. 失败的根源", "D. 目标的伟大"],
+            answer: 2,
+            explanation: "反映了革命虽付出巨大牺牲，但并未实现真正的民主共和，揭示了革命的失败。"
+        },
+        {
+            type: "single",
+            text: "南京临时政府承认清政府签订的不平等条约继续有效，反映了",
+            options: ["A. 继承法统", "B. 对帝国主义抱有幻想", "C. 坚定反帝立场", "D. 权宜之计"],
+            answer: 1,
+            explanation: "资产阶级革命派不敢公开反对帝国主义，幻想以此换取列强的支持。"
+        },
+        {
+            type: "single",
+            text: "复辟、称帝与约法并存的截然相反现象，其根本原因在于",
+            options: ["A. 帝国主义干涉", "B. 方案不合国情", "C. 反封建不彻底，封建经济基础依然存在", "D. 缺乏军事力量"],
+            answer: 2,
+            explanation: "社会性质未变，导致旧势力随时可能卷土重来。"
+        },
+        {
+            type: "single",
+            text: "辛亥革命与太平天国最大的不同在于",
+            options: ["A. 是否反帝", "B. 是否在近代", "C. 领导阶级是否为先进阶级", "D. 是否建立全国政权"],
+            answer: 2,
+            explanation: "辛亥革命由资产阶级领导，而太平天国由农民阶级领导。"
+        },
+        {
+            type: "single",
+            text: "同盟会改组为国民党的主要目的是",
+            options: ["A. 准备二次革命", "B. 通过议会选举组阁以限制袁世凯", "C. 社会改革", "D. 国共合作"],
+            answer: 1,
+            explanation: "试图通过议会斗争的方式，利用责任内阁制约束袁世凯的权力。"
+        },
+        {
+            type: "single",
+            text: "毛泽东批评辛亥革命没有“大的农村变动”，主要是指",
+            options: ["A. 未依靠农民", "B. 未解决土地问题", "C. 未触动封建地主所有制", "D. 以上所有"],
+            answer: 3,
+            explanation: "革命脱离了广大农民，使得它缺乏坚实的社会基础。"
+        },
+        {
+            type: "single",
+            text: "习近平总书记在讲话中对“中华民族伟大复兴”历史脉络理解最全面的是",
+            options: ["A. 恢复汉唐强盛", "B. 连续阶梯式发展，辛亥革命启动了振兴中华伟业", "C. 侧重经济军事强大", "D. 前后本质不同"],
+            answer: 1,
+            explanation: "强调复兴是一个接续奋斗的过程，辛亥革命是其中的重要里程碑。"
+        },
+        {
+            type: "single",
+            text: "“句号”强调的是辛亥革命的",
+            options: ["A. 暴力性", "B. 妥协性", "C. 开创性", "D. 彻底性"],
+            answer: 3,
+            explanation: "这里的“句号”指终结了统治中国两千多年的封建君主专制制度，具有划时代的意义。"
+        },
+        // 单选题 31-40
+        {
+            type: "single",
+            text: "支持辛亥革命“胜利”一面的论据是",
+            options: ["A. 推翻了清王朝和封建帝制", "B. 建立了稳固政权", "C. 完成反帝反封建任务", "D. 改变了社会性质"],
+            answer: 0,
+            explanation: "辛亥革命最伟大的功绩在于推翻帝制，使民主共和观念深入人心。"
+        },
+        {
+            type: "single",
+            text: "剪辫、易服等移风易俗措施的主要意义在于",
+            options: ["A. 实现社会平等", "B. 促进资本主义发展", "C. 传播民主共和观念，推动思想解放", "D. 彻底清除封建文化"],
+            answer: 2,
+            explanation: "风俗的变化折射出政治观念的变革，有助于打破旧的精神枷锁。"
+        },
+        {
+            type: "single",
+            text: "清帝退位诏书中的“由袁世凯全权组织临时共和政府”，袁利用此宣称权力来自",
+            options: ["A. 临时政府任命", "B. 北洋军阀拥戴", "C. 清王朝的“禅让”", "D. 国民议会选举"],
+            answer: 2,
+            explanation: "袁世凯以此对抗南方革命党，宣扬权力的合法性继承自清廷。"
+        },
+        {
+            type: "single",
+            text: "哪一事件最能表明北洋政权代表地主和买办资产阶级利益",
+            options: ["A. 镇压二次革命", "B. 拒绝恢复约法", "C. 与日本签订“西原借款”等卖国条约", "D. 军阀混战"],
+            answer: 2,
+            explanation: "出卖国家主权以换取财政支持，充分暴露了其卖国本质。"
+        },
+        {
+            type: "single",
+            text: "辛亥革命作为“里程碑”最本质的定性是",
+            options: ["A. 证明资产阶级共和国方案是唯一道路", "B. 标志着中国人民实现民族复兴斗争历史必然性的伟大开端", "C. 成功终结外国侵略", "D. 直接催生了中国共产党"],
+            answer: 1,
+            explanation: "它是中国近代史上一次伟大的资产阶级民主革命，开启了复兴征程。"
+        },
+        {
+            type: "single",
+            text: "章士钊批评革命“革人民之命”，意在指责",
+            options: ["A. 带来动荡", "B. 未能带来实质社会变革，人民未获解放", "C. 不必要", "D. 牺牲民众"],
+            answer: 1,
+            explanation: "批评辛亥革命未能改善基层民众的处境。"
+        },
+        {
+            type: "single",
+            text: "历史趋势看，辛亥革命最大的贡献在于",
+            options: ["A. 打击帝国主义", "B. 推动黄金时代", "C. 为中国进步打开了闸门，使反动统治再也无法稳定下来", "D. 培育共产党种子"],
+            answer: 2,
+            explanation: "此后任何复辟帝制的企图都迅速失败，民主潮流不可阻挡。"
+        },
+        {
+            type: "single",
+            text: "“实业救国”等思潮盛行说明",
+            options: ["A. 认为政治革命已成功", "B. 找到了正确道路", "C. 障碍已扫清", "D. 失望于现状，转而寻求其他途径"],
+            answer: 3,
+            explanation: "由于民国初年政治混乱，不少知识分子转而希望通过经济、教育等手段救国。"
+        },
+        {
+            type: "single",
+            text: "中国辛亥革命思想宣传与起义结合紧密的原因是",
+            options: ["A. 擅长实践", "B. 民族危机深重，救亡任务紧迫", "C. 传播迅速", "D. 清政府控制力弱"],
+            answer: 1,
+            explanation: "由于面临瓜分豆剖的危险，革命者追求速效。 "
+        },
+        {
+            type: "single",
+            text: "辛亥革命的失败证明了（ ）在中国行不通。",
+            options: ["A. 封建专制", "B. 农民革命", "C. 资产阶级共和国方案", "D. 君主立宪"],
+            answer: 2,
+            explanation: "在半殖民地半封建的中国，资产阶级无法领导革命取得彻底胜利。"
+        },
+
+        // 多选题 41-45
+        {
+            type: "multiple",
+            text: "清末“新政”和“预备立宪”加速其灭亡的原因在于",
+            options: ["A. 强化集权加剧矛盾", "B. “皇族内阁”暴露本质", "C. 增加捐税激化矛盾", "D. 改革范围过窄", "E. 革命派利用控制松动积聚力量"],
+            answer: [0, 1, 2, 4],
+            explanation: "选项D错误，新政涉及了政治军事经济等多个方面，不只是限于军经。"
+        },
+        {
+            type: "multiple",
+            text: "三民主义学说的内在局限性体现在",
+            options: ["A. 缺乏明确反帝内容", "B. 狭隘的“排满”色彩", "C. 未能真正关照工农地位", "D. 未正面触及封建土地所有制", "E. 体系庞杂自相矛盾"],
+            answer: [0, 1, 2, 3],
+            explanation: "三民主义虽不完美，但它是当时最完备的革命纲领，E选项描述不准确。"
+        },
+        {
+            type: "multiple",
+            text: "南京临时政府的革命性与局限性表现为",
+            options: ["A. 颁布《临时约法》", "B. 承认不平等条约", "C. 保护工商业政策", "D. 无满足农民土地要求措施", "E. 成员中旧官僚占比高"],
+            answer: [0, 1, 2, 3, 4],
+            explanation: "以上均是南京临时政府作为资产阶级政权的显著特点。"
+        },
+        {
+            type: "multiple",
+            text: "袁世凯能够窃取果实的原因包括",
+            options: ["A. 北洋军集团实力", "B. 帝国主义压力与选择", "C. 资产阶级软弱妥协", "D. 立宪派旧官僚内部施压", "E. 革命派组织涣散存在拥袁倾向"],
+            answer: [0, 1, 2, 3, 4],
+            explanation: "这是内外因共同作用的结果。"
+        },
+        {
+            type: "multiple",
+            text: "辛亥革命在历史上的伟大意义在于",
+            options: ["A. 结束封建帝制，建立共和", "B. 获得真正民族独立", "C. 思想解放，观念入心", "D. 促进社会经济变革", "E. 为中共成立准备条件"],
+            answer: [0, 2, 3, 4],
+            explanation: "选项B错误，辛亥革命并未改变半殖民地的性质，未获得真正的独立。"
+        }
+    ];
+
+    const itemsPerPage = 10;
+    const sections = [];
+    const userAnswers = new Array(questions.length).fill(null);
+    const questionStatus = new Array(questions.length).fill(null);
+
+    function init() {
+        const container = document.getElementById('quiz-container');
+        for (let i = 0; i < questions.length; i += itemsPerPage) {
+            sections.push({ start: i, end: Math.min(i + itemsPerPage, questions.length) });
+        }
+
+        sections.forEach((sec, sIdx) => {
+            const secDiv = document.createElement('div');
+            secDiv.className = 'section-container';
+            secDiv.innerHTML = `<h2 class="section-title">第 ${sIdx + 1} 小节 (${sec.start + 1}-${sec.end}题)</h2>`;
+
+            for (let i = sec.start; i < sec.end; i++) {
+                secDiv.appendChild(createQuestionHTML(i));
+            }
+
+            const footer = document.createElement('div');
+            footer.className = 'section-footer';
+            footer.innerHTML = `
+                <button class="section-btn reset-btn" onclick="resetSection(${sIdx})">重置本节</button>
+                <button class="section-btn submit-btn" onclick="submitSection(${sIdx})">提交本节答案</button>
+            `;
+            secDiv.appendChild(footer);
+            container.appendChild(secDiv);
+        });
+    }
+
+    function createQuestionHTML(i) {
+        const q = questions[i];
+        const div = document.createElement('div');
+        div.className = 'question-item';
+        div.setAttribute('data-index', i);
+
+        let optionsHTML = q.options.map((opt, oIdx) => `
+            <div class="option" onclick="handleSelect(${i}, ${oIdx})">
+                <input type="${q.type === 'single' ? 'radio' : 'checkbox'}" name="q${i}" id="q${i}_${oIdx}">
+                <label>${opt}</label>
+            </div>
+        `).join('');
+
+        div.innerHTML = `
+            <div class="question-header">
+                <span class="question-number">第 ${i + 1} 题</span>
+                <span class="question-type ${q.type === 'single' ? 'single-choice' : 'multiple-choice'}">
+                    ${q.type === 'single' ? '单选题' : '多选题'}
+                </span>
+            </div>
+            <p class="question-text">${q.text}</p>
+            <div class="options-container">${optionsHTML}</div>
+            <div class="feedback" id="feedback-${i}"></div>
+        `;
+        return div;
+    }
+
+    window.handleSelect = function(qIdx, oIdx) {
+        if (questionStatus[qIdx] !== null) return;
+        const q = questions[qIdx];
+        const container = document.querySelector(`.question-item[data-index="${qIdx}"]`);
+        const inputs = container.querySelectorAll('input');
+
+        if (q.type === 'single') {
+            userAnswers[qIdx] = oIdx;
+            container.querySelectorAll('.option').forEach(opt => opt.classList.remove('selected'));
+            container.querySelectorAll('.option')[oIdx].classList.add('selected');
+            inputs[oIdx].checked = true;
+        } else {
+            if (!userAnswers[qIdx]) userAnswers[qIdx] = [];
+            const idx = userAnswers[qIdx].indexOf(oIdx);
+            if (idx > -1) {
+                userAnswers[qIdx].splice(idx, 1);
+                container.querySelectorAll('.option')[oIdx].classList.remove('selected');
+                inputs[oIdx].checked = false;
+            } else {
+                userAnswers[qIdx].push(oIdx);
+                container.querySelectorAll('.option')[oIdx].classList.add('selected');
+                inputs[oIdx].checked = true;
+            }
+        }
+    };
+
+    window.submitSection = function(sIdx) {
+        const sec = sections[sIdx];
+        let correctCount = 0;
+        let totalCount = sec.end - sec.start;
+
+        for (let i = sec.start; i < sec.end; i++) {
+            const q = questions[i];
+            const uAns = userAnswers[i];
+
+            if (uAns === null || (Array.isArray(uAns) && uAns.length === 0)) {
+                alert(`第 ${i + 1} 题尚未完成，请先答题！`);
+                return;
+            }
+
+            let isCorrect = false;
+            if (q.type === 'single') {
+                isCorrect = uAns === q.answer;
+            } else {
+                isCorrect = JSON.stringify(uAns.sort()) === JSON.stringify(q.answer.sort());
+            }
+
+            if (isCorrect) correctCount++;
+            questionStatus[i] = isCorrect;
+            showFeedback(i, isCorrect, q);
+        }
+
+        const wrongCount = totalCount - correctCount;
+        alert(`第 ${sIdx + 1} 小节提交成功！\n\n统计结果：\n✅ 正确：${correctCount} 道\n❌ 错误：${wrongCount} 道\n💯 正确率：${((correctCount/totalCount)*100).toFixed(2)}%`);
+    };
+
+    function showFeedback(i, isCorrect, q) {
+        const fb = document.getElementById(`feedback-${i}`);
+        const item = document.querySelector(`.question-item[data-index="${i}"]`);
+        item.classList.add(isCorrect ? 'correct' : 'incorrect');
+        fb.style.display = 'block';
+        fb.className = `feedback ${isCorrect ? 'correct' : 'incorrect'}`;
+
+        let correctText = q.type === 'single' ? q.options[q.answer] : q.answer.map(idx => q.options[idx]).join(', ');
+        fb.innerHTML = `
+            <div class="feedback-title">${isCorrect ? '✅ 回答正确' : '❌ 回答错误'}</div>
+            <div class="correct-answer">正确答案：${correctText}</div>
+            <div class="explanation">解析：${q.explanation}</div>
+        `;
+    }
+
+    window.resetSection = function(sIdx) {
+        if (!confirm("确定重置本节吗？所有答案和反馈将被清空。")) return;
+        const sec = sections[sIdx];
+        for (let i = sec.start; i < sec.end; i++) {
+            // 1. 重置逻辑数据
+            userAnswers[i] = null;
+            questionStatus[i] = null;
+
+            // 2. 重置界面样式
+            const item = document.querySelector(`.question-item[data-index="${i}"]`);
+            item.classList.remove('correct', 'incorrect');
+            item.querySelectorAll('.option').forEach(opt => opt.classList.remove('selected'));
+
+            // 3. 必须重置真实的 input 状态，否则下次点击可能无效
+            item.querySelectorAll('input').forEach(input => input.checked = false);
+
+            // 4. 隐藏反馈
+            const fb = document.getElementById(`feedback-${i}`);
+            fb.style.display = 'none';
+        }
+        alert(`第 ${sIdx + 1} 小节数据已重置！`);
+    };
+
+    window.goToNextChapter = function() {
+        window.location.href = '第四章.html';
+    };
+
+    document.addEventListener('DOMContentLoaded', init);
+</script>
+</body>
+</html>

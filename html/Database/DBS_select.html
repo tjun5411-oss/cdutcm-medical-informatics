@@ -1,0 +1,1292 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>数据库应用练习系统</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Microsoft YaHei', sans-serif;
+        }
+        body {
+            background: linear-gradient(135deg, #1a2980, #26d0ce);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+        }
+        header {
+            background: linear-gradient(to right, #1a2980, #26d0ce);
+            color: white;
+            padding: 20px 30px;
+            text-align: center;
+            position: relative;
+        }
+        h1 {
+            font-size: 2.2rem;
+            margin-bottom: 5px;
+        }
+        .chapter-info {
+            font-size: 1.4rem;
+            font-weight: 500;
+            background-color: rgba(255, 255, 255, 0.15);
+            display: inline-block;
+            padding: 5px 20px;
+            border-radius: 20px;
+            margin-top: 10px;
+        }
+        .progress-container {
+            height: 8px;
+            background-color: #e0e0e0;
+            border-radius: 4px;
+            margin: 15px 0;
+            overflow: hidden;
+        }
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(to right, #4facfe, #00f2fe);
+            border-radius: 4px;
+            transition: width 0.5s ease;
+        }
+        .content {
+            padding: 30px;
+            max-height: 65vh;
+            overflow-y: auto;
+        }
+        .question-container {
+            margin-bottom: 25px;
+            padding: 20px;
+            border-radius: 10px;
+            background-color: #f8f9fa;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            border-left: 4px solid transparent;
+        }
+        .question-container.incorrect {
+            background-color: #fff0f0;
+            border-left: 4px solid #ff6b6b;
+        }
+        .question-header {
+            display: flex;
+            margin-bottom: 15px;
+        }
+        .question-number {
+            background-color: #4e89ae;
+            color: white;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 15px;
+            flex-shrink: 0;
+        }
+        .question-text {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            flex: 1;
+        }
+        .options {
+            margin-left: 47px;
+        }
+        .option {
+            margin: 12px 0;
+            display: flex;
+            align-items: flex-start;
+        }
+        .option input {
+            margin-top: 5px;
+            margin-right: 12px;
+        }
+        .option label {
+            line-height: 1.5;
+        }
+        .answer-section {
+            margin-top: 15px;
+            padding: 15px;
+            border-radius: 8px;
+            background-color: #e8f4f8;
+            display: none;
+        }
+        .correct-answer {
+            color: #2ecc71;
+            font-weight: bold;
+            margin-top: 8px;
+        }
+        .user-answer {
+            margin-top: 5px;
+            font-style: italic;
+        }
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            padding: 20px 30px;
+            background-color: #f1f3f5;
+            border-top: 1px solid #dee2e6;
+        }
+        .btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 30px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .btn-primary {
+            background: linear-gradient(to right, #1a2980, #26d0ce);
+            color: white;
+            box-shadow: 0 4px 15px rgba(26, 41, 128, 0.3);
+        }
+        .btn-secondary {
+            background: linear-gradient(to right, #606c88, #3f4c6b);
+            color: white;
+        }
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 7px 20px rgba(0, 0, 0, 0.2);
+        }
+        .btn:active {
+            transform: translateY(1px);
+        }
+        .result-summary {
+            text-align: center;
+            padding: 20px;
+            font-size: 1.2rem;
+            display: none;
+        }
+        .score {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #1a2980;
+            margin: 10px 0;
+        }
+        .footer {
+            text-align: center;
+            padding: 20px;
+            color: #6c757d;
+            font-size: 0.9rem;
+            border-top: 1px solid #dee2e6;
+        }
+        .multi-tag {
+            background-color: #ff6b6b;
+            color: white;
+            font-size: 0.8rem;
+            padding: 2px 8px;
+            border-radius: 10px;
+            margin-left: 10px;
+            vertical-align: middle;
+        }
+        @media (max-width: 768px) {
+            .content {
+                padding: 20px 15px;
+            }
+            .question-container {
+                padding: 15px;
+            }
+            .btn {
+                padding: 10px 20px;
+                font-size: 1rem;
+            }
+            .controls {
+                flex-direction: column;
+                gap: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <header>
+        <h1>数据库应用练习系统</h1>
+        <div class="chapter-info">第 <span id="current-chapter">1</span> 章</div>
+        <div class="progress-container">
+            <div class="progress-bar" id="progress-bar" style="width: 14.28%;"></div>
+        </div>
+    </header>
+
+    <div class="content" id="content">
+        <!-- 题目会动态加载到这里 -->
+    </div>
+
+    <div class="result-summary" id="result-summary">
+        <h2>本章练习结果</h2>
+        <div class="score" id="score">0/0</div>
+        <p>正确率: <span id="accuracy">0</span>%</p>
+        <p id="result-message"></p>
+    </div>
+
+    <div class="controls">
+        <button class="btn btn-secondary" id="prev-chapter" onclick="changeChapter(-1)">上一章</button>
+        <button class="btn btn-primary" id="submit-btn" onclick="submitAnswers()">提交答案</button>
+        <button class="btn btn-primary" id="next-chapter" onclick="changeChapter(1)">下一章</button>
+    </div>
+
+    <div class="footer">
+        数据库应用练习系统 &copy; 2025 - 巩固知识，提升技能
+    </div>
+</div>
+
+<script>
+    // 完整的题目数据（7章，共70+题）
+    const chapters = [
+        {
+            title: "数据库系统概述",
+            questions: [
+                {
+                    id: "q1-1",
+                    text: "在数据管理技术的发展过程中，经历了人工管理阶段、文件系统阶段和数据库系统阶段。在这几个阶段中，数据独立性最高的是阶段。",
+                    options: [
+                        "A．数据库系统",
+                        "B．文件系统",
+                        "C．人工管理",
+                        "D．数据项管理"
+                    ],
+                    answer: "A"
+                },
+                {
+                    id: "q1-2",
+                    text: "数据库的概念模型独立于。",
+                    options: [
+                        "A．具体的机器和DBMS",
+                        "B．E-R图",
+                        "C．信息世界",
+                        "D．现实世界"
+                    ],
+                    answer: "A"
+                },
+                {
+                    id: "q1-3",
+                    text: "数据库的基本特点是。",
+                    options: [
+                        "A．(1)数据可以共享(或数据结构化) (2)数据独立性 (3)数据冗余大，易移植 (4)统一管理和控制",
+                        "B．(1)数据可以共享(或数据结构化) (2)数据独立性 (3)数据冗余小，易扩充 (4)统一管理和控制",
+                        "C．(1)数据可以共享(或数据结构化) (2)数据互换性 (3)数据冗余小，易扩充 (4)统一管理和控制",
+                        "D．(1)数据非结构化 (2)数据独立性 (3)数据冗余小，易扩充 (4)统一管理和控制"
+                    ],
+                    answer: "B"
+                },
+                {
+                    id: "q1-4",
+                    text: "是存储在计算机内有结构的数据的集合。",
+                    options: [
+                        "A．数据库系统",
+                        "B．数据库",
+                        "C．数据库管理系统",
+                        "D．数据结构"
+                    ],
+                    answer: "B"
+                },
+                {
+                    id: "q1-5",
+                    text: "数据库中存储的是。",
+                    options: [
+                        "A．数据",
+                        "B．数据模型",
+                        "C．数据以及数据之间的联系",
+                        "D．信息"
+                    ],
+                    answer: "C"
+                },
+                {
+                    id: "q1-6",
+                    text: "数据库中，数据的物理独立性是指。",
+                    options: [
+                        "A．数据库与数据库管理系统的相互独立",
+                        "B．用户程序与DBMS的相互独立",
+                        "C．用户的应用程序与存储在磁盘上数据库中的数据是相互独立的",
+                        "D．应用程序与数据库中数据的逻辑结构相互独立"
+                    ],
+                    answer: "C"
+                },
+                {
+                    id: "q1-7",
+                    text: "数据库的特点之一是数据的共享，严格地讲，这里的数据共享是指。",
+                    options: [
+                        "A．同一个应用中的多个程序共享一个数据集合",
+                        "B．多个用户、同一种语言共享数据",
+                        "C．多个用户共享一个数据文件",
+                        "D．多种应用、多种语言、多个用户相互覆盖地使用数据集合"
+                    ],
+                    answer: "D"
+                },
+                {
+                    id: "q1-8",
+                    text: "数据库系统的核心是。",
+                    options: [
+                        "A．数据库",
+                        "B．数据库管理系统",
+                        "C．数据库应用系统",
+                        "D．软件工具"
+                    ],
+                    answer: "B"
+                },
+                {
+                    id: "q1-9",
+                    text: "下述关于数据库系统的正确叙述是。",
+                    options: [
+                        "A．数据库系统减少了数据冗余",
+                        "B．数据库系统避免了一切冗余",
+                        "C．数据库系统中数据的一致性是指数据类型一致",
+                        "D．数据库系统比文件系统能管理更多的数据"
+                    ],
+                    answer: "A"
+                },
+                {
+                    id: "q1-10",
+                    text: "描述数据库全体数据的全局逻辑结构和特性的是。",
+                    options: [
+                        "A.模式",
+                        "B.内模式",
+                        "C.外模式",
+                        "D.用户模式"
+                    ],
+                    answer: "A"
+                },
+                {
+                    id: "q1-11",
+                    text: "数据库(DB)、数据库系统(DBS)和数据库管理系统(DBMS)三者之间的关系是。",
+                    options: [
+                        "A．DBS包括DB和DBMS",
+                        "B．DDMS包括DB和DBS",
+                        "C．DB包括DBS和DBMS",
+                        "D．DBS就是DB，也就是DBMS"
+                    ],
+                    answer: "A"
+                },
+                {
+                    id: "q1-12",
+                    text: "在数据库中，产生数据不一致的根本原因是。",
+                    options: [
+                        "A．数据存储量太大",
+                        "B．没有严格保护数据",
+                        "C．未对数据进行完整性控制",
+                        "D．数据冗余"
+                    ],
+                    answer: "D"
+                },
+                {
+                    id: "q1-13",
+                    text: "数据库管理系统(DBMS)是。",
+                    options: [
+                        "A．数学软件",
+                        "B．应用软件",
+                        "C．计算机辅助设计",
+                        "D．系统软件"
+                    ],
+                    answer: "D"
+                },
+                {
+                    id: "q1-14",
+                    text: "数据库管理系统(DBMS)的主要功能是。",
+                    options: [
+                        "A．修改数据库",
+                        "B．定义数据库",
+                        "C．应用数据库",
+                        "D．保护数据库"
+                    ],
+                    answer: "B"
+                },
+                {
+                    id: "q1-15",
+                    text: "数据库系统的特点是、数据独立、减少数据冗余、避免数据不一致和加强了数据保护。",
+                    options: [
+                        "A．数据共享",
+                        "B．数据存储",
+                        "C．数据应用",
+                        "D．数据保密"
+                    ],
+                    answer: "A"
+                }
+            ]
+        },
+        {
+            title: "关系数据库",
+            questions: [
+                {
+                    id: "q2-1",
+                    text: "关系数据库管理系统应能实现的专门关系运算包括。",
+                    options: [
+                        "A．排序、索引、统计",
+                        "B．选择、投影、连接",
+                        "C．关联、更新、排序",
+                        "D．显示、打印、制表"
+                    ],
+                    answer: "B"
+                },
+                {
+                    id: "q2-2",
+                    text: "关系模型中，一个关键字是。",
+                    options: [
+                        "A．可由多个任意属性组成",
+                        "B．至多由一个属性组成",
+                        "C．可由一个或多个其值能惟一标识该关系模式中任何元组的属性组成",
+                        "D．以上都不是"
+                    ],
+                    answer: "C"
+                },
+                {
+                    id: "q2-3",
+                    text: "自然连接是构成新关系的有效方法。一般情况下，当对关系R和S使用自然连接时，要求R和S含有一个或多个共有的。",
+                    options: [
+                        "A．元组",
+                        "B．行",
+                        "C．记录",
+                        "D．属性"
+                    ],
+                    answer: "D"
+                },
+                {
+                    id: "q2-4",
+                    text: "关系运算中花费时间可能最长的运算是。",
+                    options: [
+                        "A．投影",
+                        "B．选择",
+                        "C．笛卡尔积",
+                        "D．除"
+                    ],
+                    answer: "C"
+                },
+                {
+                    id: "q2-5",
+                    text: "关系模式的任何属性。",
+                    options: [
+                        "A．不可再分",
+                        "B．可再分",
+                        "C．命名在该关系模式中可以不惟一",
+                        "D．以上都不是"
+                    ],
+                    answer: "A"
+                },
+                {
+                    id: "q2-6",
+                    text: "在关系代数运算中，五种基本运算为。",
+                    options: [
+                        "A．并、差、选择、投影、连接",
+                        "B．并、差、交、选择、投影",
+                        "C．并、差、选择、投影、笛卡尔积",
+                        "D．并、差、交、选择、笛卡尔积"
+                    ],
+                    answer: "C"
+                },
+                {
+                    id: "q2-7",
+                    text: "设有关系R，按条件f对关系R进行选择，正确的是。",
+                    options: [
+                        "A．R×R",
+                        "B．R ▷◁ R",
+                        "C． σ~f~(R)",
+                        "D．Πf(R)"
+                    ],
+                    answer: "C"
+                },
+                {
+                    id: "q2-8",
+                    text: "现有如下关系：患者（患者编号，患者姓名，性别，出生日起，所在单位）医生（医生编号，医生姓名，科室）医疗（医生编号，患者编号，诊断日期，诊断结果）其中，患者关系中患者编号为主码，医生关系中医生编号为主码，医疗关系中的外码是。",
+                    options: [
+                        "A. 患者编号",
+                        "B. 患者姓名",
+                        "C. 医生编号和患者编号",
+                        "D. 医生姓名和患者姓名"
+                    ],
+                    answer: "C"
+                },
+                {
+                    id: "q2-9",
+                    text: "如图所示，两个关系R1和R2，它们进行运算后得到R3。",
+                    options: [
+                        "A．交",
+                        "B．并",
+                        "C．自然连接",
+                        "D．等值连接"
+                    ],
+                    answer: "C"
+                },
+                {
+                    id: "q2-10",
+                    text: "有两个关系R(A,B,C)和S(B,C,D)，将R和S进行自然连接，得到的结果包含几列。",
+                    options: [
+                        "A．4",
+                        "B．5",
+                        "C．6",
+                        "D．7"
+                    ],
+                    answer: "A"
+                }
+            ]
+        },
+        {
+            title: "SQL语言",
+            questions: [
+                {
+                    id: "q3-1",
+                    text: "SQL语言是的语言，易学习。",
+                    options: [
+                        "A．过程化",
+                        "B．非过程化",
+                        "C．格式化",
+                        "D．导航式"
+                    ],
+                    answer: "B"
+                },
+                {
+                    id: "q3-2",
+                    text: "SQL语言是语言。",
+                    options: [
+                        "A．层次数据库",
+                        "B．网络数据库",
+                        "C．关系数据库",
+                        "D．非数据库"
+                    ],
+                    answer: "C"
+                },
+                {
+                    id: "q3-3",
+                    text: "SQL语言具有的功能。",
+                    options: [
+                        "A．关系规范化、数据操纵、数据控制",
+                        "B．数据定义、数据操纵、数据控制",
+                        "C．数据定义、关系规范化、数据控制",
+                        "D．数据定义、关系规范化、数据操纵"
+                    ],
+                    answer: "B"
+                },
+                {
+                    id: "q3-4",
+                    text: "SQL语言具有两种使用方式，分别称为交互式SQL和。",
+                    options: [
+                        "A．提示式SQL",
+                        "B．多用户SQL",
+                        "C．嵌入式SQL",
+                        "D．解释式SQL"
+                    ],
+                    answer: "C"
+                },
+                {
+                    id: "q3-5",
+                    text: "假定学生关系是S(S#，SNAME，SEX，AGE)，课程关系是C(C#，CNAME，TEACHER)，学生选课关系是SC(S#，C#，GRADE)。要查找选修\"COMPUTER\"课程的\"女\"学生姓名，将涉及到关系。",
+                    options: [
+                        "A．S",
+                        "B．SC，C",
+                        "C．S，SC",
+                        "D．S，C，SC"
+                    ],
+                    answer: "D"
+                },
+                {
+                    id: "q3-6",
+                    text: "若用如下的SQL语句创建一个student表：<br>" +
+                        "CREATE TABLE student(NO C(4) NOT NULL，<br>" +
+                        "NAME C(8) NOT NULL，<br>" +
+                        "SEX C(2)，<br>" +
+                        "AGE N(2))<br>" +
+                        "可以插入到student表中的是",
+                    options: [
+                        "A．('1031'，'曾华'，男，23)",
+                        "B．('1031'，'曾华'，NULL，NULL)",
+                        "C．(NULL，'曾华'，'男'，'23')",
+                        "D．('1031'，NULL，'男'，23)"
+                    ],
+                    answer: "B"
+                },
+                {
+                    id: "q3-7",
+                    text: "基于学生表S、课程表C和学生选课表SC，它们的结构如下：S(S#，SN，SEX，AGE，DEPT) C(C#，CN) SC(S#，C#，GRADE)。检索所有比\"王华\"年龄大的学生姓名、年龄和性别。正确的SELECT语句是。",
+                    options: [
+                        "A．SELECT SN，AGE，SEX FROM S WHERE AGE＞(SELECT AGE FROM S WHERE SN=\"王华\")",
+                        "B．SELECT SN，AGE，SEX FROM S WHERE SN＝\"王华\"",
+                        "C．SELECT SN，AGE，SEX FROM S WHERE AGE＞(SELECT AGE WHERE SN=\"王华\")",
+                        "D．SELECT SN，AGE，SEX FROM S WHERE AGE＞王华．AGE"
+                    ],
+                    answer: "A"
+                },
+                {
+                    id: "q3-8",
+                    text: "检索选修课程\"C2\"的学生中成绩最高的学生的学号。正确的SELECT语句是。",
+                    options: [
+                        "A．SELECT S# FORM SC WHERE C#=\"C2\" AND GRAD＞＝(SELECT GRADE FORM SC WHERE C#=\"C2\")",
+                        "B．SELECT S# FORM SC WHERE C#=\"C2\" AND GRADE IN (SELECT GRADE FORM SC WHERE C#=\"C2\")",
+                        "C．SELECT S# FORM SC WHERE C#=\"C2\" AND GRADE NOT IN (SELECT GRADE FORM SC WHERE C#=\"C2\")",
+                        "D．SELECT S# FORM SC WHERE C#=\"C2\" AND GRADE＞＝ALL (SELECT GRADE FORM SC WHERE C#=\"C2\")"
+                    ],
+                    answer: "D"
+                },
+                {
+                    id: "q3-9",
+                    text: "检索学生姓名及其所选修课程的课程号和成绩。正确的SELECT语句是。",
+                    options: [
+                        "A．SELECT S．SN，SC．C#，SC．GRADE FROM S WHERE S．S#=SC．S#",
+                        "B．SELECT S．SN，SC．C#，SC．GRADE FROM SC WHERE S．S#＝SC．GRADE",
+                        "C．SELECT S．SN，SC．C#，SC．GRADE FROM S，SC WHERE S．S#=SC．S#",
+                        "D．SELECT S．SN，SC．C#，SC．GRADE FROM S．SC"
+                    ],
+                    answer: "C"
+                },
+                {
+                    id: "q3-10",
+                    text: "下列的SQL语句中，不是数据定义语句。",
+                    options: [
+                        "A．CREATE TABLE",
+                        "B．ALTER TABLE",
+                        "C．CREATE VIEW",
+                        "D．SELECT"
+                    ],
+                    answer: "D"
+                },
+                {
+                    id: "q3-11",
+                    text: "SQL语言具有两种使用方式，分别称为交互式SQL和。",
+                    options: [
+                        "A．提示式SQL",
+                        "B．多用户SQL",
+                        "C．解释式SQL",
+                        "D．嵌入式SQL"
+                    ],
+                    answer: "D"
+                }
+            ]
+        },
+        {
+            title: "数据库完整性",
+            questions: [
+                {
+                    id: "q5-1",
+                    text: "在数据库系统中，保证数据及语义正确和有效的功能是。",
+                    options: [
+                        "A.并发控制",
+                        "B.存取控制",
+                        "C.安全控制",
+                        "D.完整性控制"
+                    ],
+                    answer: "D"
+                },
+                {
+                    id: "q5-2",
+                    text: "关于主键约束以下说法错误的是。",
+                    options: [
+                        "A. 一个表中只能设置一个主键约束",
+                        "B. 允许空值的字段上不能定义主键约束",
+                        "C. 允许空值的字段上可以定义主键约束",
+                        "D. 可以将包含多个字段的字段组合设置为主键"
+                    ],
+                    answer: "C"
+                },
+                {
+                    id: "q5-3",
+                    text: "下述SQL语言中的关键词，允许用户定义新关系时，引用其他关系的主码作为外码。",
+                    options: [
+                        "A. INSERT",
+                        "B. DELETE",
+                        "C. REFERENCES",
+                        "D. SELECT"
+                    ],
+                    answer: "C"
+                },
+                {
+                    id: "q5-4",
+                    text: "数据库的______是指数据的正确性和相容性。",
+                    options: [
+                        "A．安全性",
+                        "B．完整性",
+                        "C．并发控制",
+                        "D．恢复"
+                    ],
+                    answer: "B"
+                },
+                {
+                    id: "q5-5",
+                    text: "在数据库的表定义中，主码\"课程号\"不能取空值，属于数据的约束。",
+                    options: [
+                        "A．实体完整性",
+                        "B．参照完整性",
+                        "C．用户自定义完整性",
+                        "D．域完整性"
+                    ],
+                    answer: "A"
+                },
+                {
+                    id: "q5-6",
+                    text: "在数据库的表定义中，表SC的外码\"学号\"必须等于表student中的主码\"学号\"的值，属于数据的约束。",
+                    options: [
+                        "A．实体完整性",
+                        "B．参照完整性",
+                        "C．用户自定义完整性",
+                        "D．域完整性"
+                    ],
+                    answer: "B"
+                }
+            ]
+        },
+        {
+            title: "关系规范化",
+            questions: [
+                {
+                    id: "q6-1",
+                    text: "关系规范化中的删除操作异常是指 [①]，插入操作异常是指 [②]。",
+                    options: [
+                        "A．不该删除的数据被删除",
+                        "B．不该插入的数据被插入",
+                        "C．应该删除的数据未被删除",
+                        "D．应该插入的数据未被插入"
+                    ],
+                    answer: "AD",
+                    type: "multi"  // 标记为多选题
+                },
+                {
+                    id: "q6-2",
+                    text: "设计性能较优的关系模式称为规范化，规范化主要的理论依据是。",
+                    options: [
+                        "A．关系规范化理论",
+                        "B．关系运算理论",
+                        "C．关系代数理论",
+                        "D．数理逻辑"
+                    ],
+                    answer: "A"
+                },
+                {
+                    id: "q6-3",
+                    text: "规范化过程主要为克服数据库逻辑结构中的插入异常，删除异常以及冗余度大的缺陷。",
+                    options: [
+                        "A．数据的不一致性",
+                        "B．结构不合理",
+                        "C．更新异常",
+                        "D．数据丢失"
+                    ],
+                    answer: "C"
+                },
+                {
+                    id: "q6-4",
+                    text: "当关系模式R(A，B)已属于3NF，下列说法中是正确的。",
+                    options: [
+                        "A．它一定消除了插入和删除异常",
+                        "B．仍存在一定的插入和删除异常",
+                        "C．一定属于BCNF",
+                        "D．A和C都是"
+                    ],
+                    answer: "B"
+                },
+                {
+                    id: "q6-5",
+                    text: "关系模型中的关系模式至少是。",
+                    options: [
+                        "A．1NF",
+                        "B．2NF",
+                        "C．3NF",
+                        "D．BCNF"
+                    ],
+                    answer: "A"
+                },
+                {
+                    id: "q6-6",
+                    text: "在关系DB中，任何二元关系模式的最高范式必定是。",
+                    options: [
+                        "A．1NF",
+                        "B．2NF",
+                        "C．3NF",
+                        "D．BCNF"
+                    ],
+                    answer: "D"
+                },
+                {
+                    id: "q6-7",
+                    text: "在关系模式R中，若其每一个决定因素都包含码，则R最高范式是。",
+                    options: [
+                        "A．2NF",
+                        "B．3NF",
+                        "C．4NF",
+                        "D．BCNF"
+                    ],
+                    answer: "D"
+                },
+                {
+                    id: "q6-8",
+                    text: "候选关键字中的属性称为。",
+                    options: [
+                        "A．非主属性",
+                        "B．主属性",
+                        "C．复合属性",
+                        "D．关键属性"
+                    ],
+                    answer: "B"
+                },
+                {
+                    id: "q6-9",
+                    text: "消除了部分函数依赖的1NF的关系模式，必定是。",
+                    options: [
+                        "A．1NF",
+                        "B．2NF",
+                        "C．3NF",
+                        "D．4NF"
+                    ],
+                    answer: "B"
+                },
+                {
+                    id: "q6-10",
+                    text: "关系模式的候选关键字可以有 [①]，主关键字有 [②]。",
+                    options: [
+                        "A．0个",
+                        "B．1个",
+                        "C．1个或多个",
+                        "D．多个"
+                    ],
+                    answer: "CB",
+                    type: "multi"  // 标记为多选题
+                },
+                {
+                    id: "q6-11",
+                    text: "关系模式R中的属性全是主属性，则R的最高范式必定是。",
+                    options: [
+                        "A. 1NF",
+                        "B. 2NF",
+                        "C. 3NF",
+                        "D. BCNF"
+                    ],
+                    answer: "C"
+                },
+                {
+                    id: "q6-12",
+                    text: "下列说法不正确的是。",
+                    options: [
+                        "A. 任何一个包含两个属性的关系模式一定满足3NF",
+                        "B. 任何一个包含两个属性的关系模式一定满足BCNF",
+                        "C. 任何一个关系模式都一定有码",
+                        "D. 任何一个包含三个属性的关系模式一定满足3NF"
+                    ],
+                    answer: "D"
+                },
+                {
+                    id: "q6-13",
+                    text: "消除了非主属性对码的部分函数依赖和传递函数依赖的1NF的关系模式，最高范式是。",
+                    options: [
+                        "A.2NF",
+                        "B.3NF",
+                        "C.4NF",
+                        "D.BCNF"
+                    ],
+                    answer: "B"
+                },
+                {
+                    id: "q6-14",
+                    text: "已知关系模式R（A，B，C，D，E）及其上的函数相关性集合F＝{A→D，B→C，E→A}，该关系模式的候选码是。",
+                    options: [
+                        "A.AB",
+                        "B.BE",
+                        "C.CD",
+                        "D.DE"
+                    ],
+                    answer: "B"
+                }
+            ]
+        },
+        {
+            title: "数据库设计",
+            questions: [
+                {
+                    id: "q7-1",
+                    text: "在数据库设计中，用E-R图来描述信息结构但不涉及信息在计算机中的表示，它是数据库设计阶段。",
+                    options: [
+                        "A．需求分析",
+                        "B．概念设计",
+                        "C．逻辑设计",
+                        "D．物理设计"
+                    ],
+                    answer: "B"
+                },
+                {
+                    id: "q7-2",
+                    text: "在关系数据库设计中，设计关系模式是的任务。",
+                    options: [
+                        "A．需求分析阶段",
+                        "B．概念设计阶段",
+                        "C．逻辑设计阶段",
+                        "D．物理设计阶段"
+                    ],
+                    answer: "C"
+                },
+                {
+                    id: "q7-3",
+                    text: "一个m:n的E-R图转换成关系模型，可以转换为关系模式。",
+                    options: [
+                        "A．1个",
+                        "B．2个",
+                        "C．3个",
+                        "D．4个"
+                    ],
+                    answer: "C"
+                },
+                {
+                    id: "q7-4",
+                    text: "在数据库的概念设计中，最常用的数据模型是。",
+                    options: [
+                        "A．关系模型",
+                        "B．物理模型",
+                        "C．逻辑模型",
+                        "D．ER模型"
+                    ],
+                    answer: "D"
+                },
+                {
+                    id: "q7-5",
+                    text: "从E-R模型关系向关系模型转换时，一个M∶N联系转换为关系模型时，该关系模式的关键字是。",
+                    options: [
+                        "A．M端实体的关键字",
+                        "B．N端实体的关键字",
+                        "C．M端实体关键字与N端实体关键字组合",
+                        "D．重新选取其他属性"
+                    ],
+                    answer: "C"
+                },
+                {
+                    id: "q7-6",
+                    text: "当局部E-R图合并成全局E-R图时可能出现冲突，不属于合并时出现冲突的是。",
+                    options: [
+                        "A．属性冲突",
+                        "B．语法冲突",
+                        "C．结构冲突",
+                        "D．命名冲突"
+                    ],
+                    answer: "B"
+                },
+                {
+                    id: "q7-7",
+                    text: "概念模型独立于。",
+                    options: [
+                        "A．E-R模型",
+                        "B．硬件设备和DBMS",
+                        "C．操作系统和DBMS",
+                        "D．DBMS"
+                    ],
+                    answer: "B"
+                },
+                {
+                    id: "q7-8",
+                    text: "E-R图的集成,首先设计各子系统的，然后集成起来，得到全局E-R图。",
+                    options: [
+                        "A.联系图",
+                        "B.分E-R图",
+                        "C.实体图",
+                        "D.结构图"
+                    ],
+                    answer: "B"
+                },
+                {
+                    id: "q7-9",
+                    text: "从ER图导出关系模型时，如果实体间的联系是M：N的，下列说法中正确的是。",
+                    options: [
+                        "A.将N端的码和联系的属性纳入M端的属性中",
+                        "B.将M端的码和联系的属性纳入N端的属性中",
+                        "C.增加一个关系，并将M端和N端的码加入到该关系",
+                        "D.在M端属性和N端属性中均增加一个表示级别的属性"
+                    ],
+                    answer: "C"
+                },
+                {
+                    id: "q7-10",
+                    text: "在ER模型中，如果有3个不同的实体集，3个M：N联系，根据ER模型转换为关系模型的规则，转换为关系的数目是。",
+                    options: [
+                        "A.4",
+                        "B.5",
+                        "C.6",
+                        "D.7"
+                    ],
+                    answer: "C"
+                },
+                {
+                    id: "q7-11",
+                    text: "在ER图中，联系用表示。",
+                    options: [
+                        "A.矩形",
+                        "B.椭圆",
+                        "C.菱形",
+                        "D.圆形"
+                    ],
+                    answer: "C"
+                },
+                {
+                    id: "q7-12",
+                    text: "关系模式R(U,D,DOM,F)，其中为属性间的一组数据依赖。",
+                    options: [
+                        "A.U",
+                        "B.D",
+                        "C.DOM",
+                        "D.F"
+                    ],
+                    answer: "D"
+                }
+            ]
+        }
+    ];
+
+    let currentChapter = 0;
+    let userAnswers = {};
+    let submitted = false;
+
+    // 页面加载时初始化
+    document.addEventListener('DOMContentLoaded', function() {
+        loadChapter(currentChapter);
+        updateProgressBar();
+        updateChapterButtons();
+    });
+
+    // 加载章节
+    function loadChapter(chapterIndex) {
+        const chapter = chapters[chapterIndex];
+        document.getElementById('current-chapter').textContent = chapterIndex + 1;
+
+        const contentDiv = document.getElementById('content');
+        contentDiv.innerHTML = '';
+
+        // 添加章节标题
+        const chapterTitle = document.createElement('h2');
+        chapterTitle.style.marginBottom = '20px';
+        chapterTitle.style.color = '#1a2980';
+        chapterTitle.textContent = chapter.title;
+        contentDiv.appendChild(chapterTitle);
+
+        // 添加题目
+        chapter.questions.forEach((question, index) => {
+            const questionDiv = document.createElement('div');
+            questionDiv.className = 'question-container';
+            questionDiv.id = `question-${question.id}`;
+
+            const questionHeader = document.createElement('div');
+            questionHeader.className = 'question-header';
+
+            const questionNumber = document.createElement('div');
+            questionNumber.className = 'question-number';
+            questionNumber.textContent = index + 1;
+
+            const questionText = document.createElement('div');
+            questionText.className = 'question-text';
+
+            // 添加题目文本
+            const textSpan = document.createElement('span');
+            textSpan.innerHTML = question.text;
+            questionText.appendChild(textSpan);
+
+            // 如果是多选题，添加标记
+            if (question.type === 'multi') {
+                const multiTag = document.createElement('span');
+                multiTag.className = 'multi-tag';
+                multiTag.textContent = '多选题';
+                questionText.appendChild(multiTag);
+            }
+
+            questionHeader.appendChild(questionNumber);
+            questionHeader.appendChild(questionText);
+            questionDiv.appendChild(questionHeader);
+
+            const optionsDiv = document.createElement('div');
+            optionsDiv.className = 'options';
+
+            question.options.forEach((option, optIndex) => {
+                const optionDiv = document.createElement('div');
+                optionDiv.className = 'option';
+
+                const input = document.createElement('input');
+                // 根据题目类型设置单选或多选
+                input.type = question.type === 'multi' ? 'checkbox' : 'radio';
+                input.name = question.id;
+                input.value = String.fromCharCode(65 + optIndex);
+                input.id = `${question.id}-opt-${optIndex}`;
+                input.disabled = submitted;
+
+                // 恢复用户答案
+                if (userAnswers[question.id]) {
+                    if (question.type === 'multi') {
+                        // 多选题：检查当前选项是否在用户答案中
+                        if (userAnswers[question.id].includes(input.value)) {
+                            input.checked = true;
+                        }
+                    } else {
+                        // 单选题
+                        if (userAnswers[question.id] === input.value) {
+                            input.checked = true;
+                        }
+                    }
+                }
+
+                const label = document.createElement('label');
+                label.htmlFor = input.id;
+                label.textContent = option;
+
+                optionDiv.appendChild(input);
+                optionDiv.appendChild(label);
+                optionsDiv.appendChild(optionDiv);
+            });
+
+            questionDiv.appendChild(optionsDiv);
+
+            // 答案区域
+            const answerSection = document.createElement('div');
+            answerSection.className = 'answer-section';
+            answerSection.id = `answer-${question.id}`;
+
+            const correctAnswer = document.createElement('div');
+            correctAnswer.className = 'correct-answer';
+            correctAnswer.textContent = `正确答案: ${question.answer}`;
+
+            const userAnswer = document.createElement('div');
+            userAnswer.className = 'user-answer';
+            userAnswer.id = `user-answer-${question.id}`;
+            userAnswer.textContent = '您的答案: 未回答';
+
+            answerSection.appendChild(correctAnswer);
+            answerSection.appendChild(userAnswer);
+
+            if (submitted) {
+                answerSection.style.display = 'block';
+
+                // 显示用户答案
+                if (userAnswers[question.id]) {
+                    userAnswer.textContent = `您的答案: ${userAnswers[question.id]}`;
+
+                    // 标记错误答案
+                    if (userAnswers[question.id] !== question.answer) {
+                        questionDiv.classList.add('incorrect');
+                    }
+                }
+            }
+
+            questionDiv.appendChild(answerSection);
+            contentDiv.appendChild(questionDiv);
+        });
+
+        // 重置提交状态
+        submitted = false;
+        document.getElementById('result-summary').style.display = 'none';
+        document.getElementById('submit-btn').textContent = '提交答案';
+        document.getElementById('submit-btn').disabled = false;
+    }
+
+    // 提交答案
+    function submitAnswers() {
+        const chapter = chapters[currentChapter];
+        let correctCount = 0;
+
+        // 收集答案并验证
+        chapter.questions.forEach(question => {
+            let userAnswer = '';
+
+            if (question.type === 'multi') {
+                // 处理多选题
+                const checkedBoxes = document.querySelectorAll(`input[name="${question.id}"]:checked`);
+                if (checkedBoxes.length > 0) {
+                    // 将选中的值按字母顺序排序
+                    userAnswer = Array.from(checkedBoxes)
+                        .map(box => box.value)
+                        .sort()
+                        .join('');
+                }
+            } else {
+                // 处理单选题
+                const selectedOption = document.querySelector(`input[name="${question.id}"]:checked`);
+                if (selectedOption) {
+                    userAnswer = selectedOption.value;
+                }
+            }
+
+            // 保存用户答案
+            userAnswers[question.id] = userAnswer || '未回答';
+
+            // 显示答案区域
+            const answerSection = document.getElementById(`answer-${question.id}`);
+            answerSection.style.display = 'block';
+
+            // 显示用户答案
+            const userAnswerElement = document.getElementById(`user-answer-${question.id}`);
+            userAnswerElement.textContent = `您的答案: ${userAnswers[question.id]}`;
+
+            // 标记错误答案
+            const questionDiv = document.getElementById(`question-${question.id}`);
+            if (userAnswers[question.id] === question.answer) {
+                correctCount++;
+            } else {
+                questionDiv.classList.add('incorrect');
+            }
+        });
+
+        submitted = true;
+
+        // 禁用所有输入框
+        document.querySelectorAll('input').forEach(input => {
+            input.disabled = true;
+        });
+
+        // 更新提交按钮
+        document.getElementById('submit-btn').textContent = '已提交';
+        document.getElementById('submit-btn').disabled = true;
+
+        // 显示结果摘要
+        const resultSummary = document.getElementById('result-summary');
+        const scoreDiv = document.getElementById('score');
+        const accuracyDiv = document.getElementById('accuracy');
+        const resultMessage = document.getElementById('result-message');
+
+        scoreDiv.textContent = `${correctCount}/${chapter.questions.length}`;
+        const accuracy = Math.round((correctCount / chapter.questions.length) * 100);
+        accuracyDiv.textContent = accuracy;
+
+        if (accuracy >= 80) {
+            resultMessage.textContent = "太棒了！您对本章内容掌握得很好！";
+            resultMessage.style.color = "#2ecc71";
+        } else if (accuracy >= 60) {
+            resultMessage.textContent = "不错！再复习一下可以做得更好！";
+            resultMessage.style.color = "#f39c12";
+        } else {
+            resultMessage.textContent = "需要加强学习，建议复习本章内容后再试一次。";
+            resultMessage.style.color = "#e74c3c";
+        }
+
+        resultSummary.style.display = 'block';
+
+        // 滚动到结果区域
+        resultSummary.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    // 切换章节
+    function changeChapter(direction) {
+        const newChapter = currentChapter + direction;
+
+        if (newChapter >= 0 && newChapter < chapters.length) {
+            currentChapter = newChapter;
+            loadChapter(currentChapter);
+            updateProgressBar();
+            updateChapterButtons();
+
+            // 滚动到顶部
+            document.getElementById('content').scrollTop = 0;
+        }
+    }
+
+    // 更新进度条
+    function updateProgressBar() {
+        const progress = ((currentChapter + 1) / chapters.length) * 100;
+        document.getElementById('progress-bar').style.width = `${progress}%`;
+    }
+
+    // 更新章节按钮状态
+    function updateChapterButtons() {
+        document.getElementById('prev-chapter').disabled = currentChapter === 0;
+        document.getElementById('next-chapter').disabled = currentChapter === chapters.length - 1;
+
+        if (currentChapter === chapters.length - 1) {
+            document.getElementById('next-chapter').textContent = '最后一章';
+        } else {
+            document.getElementById('next-chapter').textContent = '下一章';
+        }
+    }
+</script>
+</body>
+</html>

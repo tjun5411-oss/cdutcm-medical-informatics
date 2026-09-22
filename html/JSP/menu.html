@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2025JSP妙妙工具</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #2c3e50;
+            --secondary: #3498db;
+            --accent: #9b59b6;
+            --light: #ecf0f1;
+            --dark: #1a252f;
+            --success: #2ecc71;
+            --warning: #f39c12;
+            --danger: #e74c3c;
+            --card-bg: rgba(255, 255, 255, 0.95);
+            --transition: all 0.3s ease;
+        }
+
+        body {
+            font-family: 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            line-height: 1.6;
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #1a2a6c);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            color: #333;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* 头部样式 */
+        .header {
+            text-align: center;
+            margin: 0 auto 30px;
+            padding: 20px 0;
+            position: relative;
+            max-width: 1200px;
+        }
+
+        .title {
+            font-size: 3rem;
+            font-weight: 700;
+            color: white;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            margin-bottom: 10px;
+            position: relative;
+            display: inline-block;
+        }
+
+        .title::after {
+            content: "";
+            position: absolute;
+            bottom: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 70px;
+            height: 4px;
+            background: linear-gradient(to right, var(--secondary), var(--accent));
+            border-radius: 2px;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.85);
+            max-width: 800px;
+            margin: 0 auto;
+            font-weight: 300;
+        }
+
+        /* 导航容器 */
+        .menu-container {
+            max-width: 1300px;
+            margin: 0 auto;
+            display: grid;
+            gap: 20px;
+            grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+        }
+
+        /* 菜单项样式 */
+        .menu-item {
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 16px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+            transition: var(--transition);
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+        }
+
+        .menu-item::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, var(--secondary), var(--accent));
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.5s ease;
+        }
+
+        .menu-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .menu-item:hover::before {
+            transform: scaleX(1);
+        }
+
+        /* 分类标签 */
+        .category-tag {
+            background: linear-gradient(90deg, var(--secondary), var(--accent));
+            color: white;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            align-self: flex-start;
+            font-weight: 600;
+            box-shadow: 0 4px 10px rgba(52, 152, 219, 0.3);
+            position: relative;
+            z-index: 2;
+        }
+
+        /* 链接样式 */
+        .menu-link {
+            text-decoration: none;
+            color: var(--primary);
+            font-weight: 500;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 12px;
+            border-radius: 8px;
+            background: rgba(236, 240, 241, 0.7);
+            position: relative;
+            z-index: 2;
+            font-size: 0.95rem;
+        }
+
+        .menu-link i {
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background: rgba(52, 152, 219, 0.1);
+            font-size: 0.9rem;
+            color: var(--secondary);
+            transition: var(--transition);
+        }
+
+        .menu-link:hover {
+            background: var(--secondary);
+            color: white;
+            transform: translateX(3px);
+        }
+
+        .menu-link:hover i {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            transform: scale(1.1);
+        }
+
+        /* 页脚样式 */
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            padding: 15px 0;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.85rem;
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+
+            .header {
+                padding: 15px 0;
+                margin-bottom: 20px;
+            }
+
+            .title {
+                font-size: 2rem;
+            }
+
+            .subtitle {
+                font-size: 1rem;
+            }
+
+            .menu-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* 装饰元素 */
+        .decor {
+            position: absolute;
+            z-index: -1;
+            opacity: 0.1;
+        }
+
+        .decor.circle {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            border: 8px solid var(--secondary);
+            top: 10%;
+            left: 5%;
+        }
+
+        .decor.triangle {
+            width: 0;
+            height: 0;
+            border-left: 80px solid transparent;
+            border-right: 80px solid transparent;
+            border-bottom: 140px solid var(--accent);
+            bottom: 5%;
+            right: 5%;
+            transform: rotate(25deg);
+        }
+
+        /* 动画效果 */
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-8px); }
+            100% { transform: translateY(0px); }
+        }
+
+        .floating {
+            animation: float 4s ease-in-out infinite;
+        }
+
+        /* 双列布局 */
+        .two-columns {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .sub-category {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .sub-category .category-tag {
+            margin-bottom: 5px;
+        }
+
+        .column-links {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        @media (max-width: 768px) {
+            .two-columns {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .column-links {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .separator {
+            height: 1px;
+            background: linear-gradient(to right, transparent, rgba(52, 152, 219, 0.3), transparent);
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+<!-- 背景装饰元素 -->
+<div class="decor circle floating"></div>
+<div class="decor triangle floating" style="animation-delay: 0.5s;"></div>
+
+<!-- 头部区域 -->
+<div class="header">
+    <h1 class="title">JSP妙妙工具</h1>
+    <p class="subtitle">一站式JSP编程练习导航平台，精选各类实战案例，助力编程技能提升</p>
+</div>
+
+<!-- 导航容器 -->
+<div class="menu-container">
+    <!-- 基础练习 + DOM编程 -->
+    <div class="menu-item">
+        <div class="two-columns">
+            <div class="sub-category">
+                <span class="category-tag">基础练习</span>
+                <a href="kao_1.html" class="menu-link"><i class="fas fa-edit"></i>填空练习</a>
+                <a href="kao_19.html" class="menu-link"><i class="fas fa-list-ol"></i>数组操作</a>
+                <a href="kao_42.html" class="menu-link"><i class="fas fa-code"></i>JSP代码填空</a>
+            </div>
+
+            <div class="sub-category">
+                <span class="category-tag">DOM编程</span>
+                <a href="kao_25.html" class="menu-link"><i class="fas fa-sitemap"></i>DOM1</a>
+                <a href="kao_26.html" class="menu-link"><i class="fas fa-project-diagram"></i>DOM2</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- DIV布局设计 + 数据处理 -->
+    <div class="menu-item">
+        <div class="two-columns">
+            <div class="sub-category">
+                <span class="category-tag">DIV布局设计</span>
+                <a href="kao_2.html" class="menu-link"><i class="fas fa-th"></i>DIV1</a>
+                <a href="kao_20.html" class="menu-link"><i class="fas fa-border-all"></i>DIV2</a>
+                <a href="kao_18.html" class="menu-link"><i class="fas fa-grip"></i>DIV3</a>
+                <a href="kao_43.html" class="menu-link"><i class="fas fa-table"></i>DIV4</a>
+                <a href="kao_44.html" class="menu-link"><i class="fas fa-object-group"></i>DIV5</a>
+                <a href="kao_57.html" class="menu-link"><i class="fas fa-object-group"></i>DIV+CSS</a>
+            </div>
+
+            <div class="sub-category">
+                <span class="category-tag">数据处理</span>
+                <a href="kao_10.html" class="menu-link"><i class="fab fa-js"></i>JSON编程</a>
+                <a href="kao_11.html" class="menu-link"><i class="fas fa-file-code"></i>XML编程</a>
+                <a href="kao_28.html" class="menu-link"><i class="fas fa-exchange-alt"></i>AJAX 编程</a>
+                <a href="kao_36.html" class="menu-link"><i class="fas fa-server"></i>AJAX获取服务器时间1</a>
+                <a href="kao_37.html" class="menu-link"><i class="fas fa-clock"></i>AJAX获取服务器时间2</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- 表单编程（两列） -->
+    <div class="menu-item">
+        <span class="category-tag">表单编程</span>
+        <div class="column-links">
+            <div class="sub-category">
+                <a href="kao_3.html" class="menu-link"><i class="fas fa-sort-numeric-up"></i>取最大值</a>
+                <a href="kao_58.html" class="menu-link"><i class="fas fa-sort-numeric-up"></i>大到小排序，返回最大值</a>
+                <a href="kao_4.html" class="menu-link"><i class="fas fa-window-maximize"></i>表单编程1</a>
+                <a href="kao_5.html" class="menu-link"><i class="fas fa-window-restore"></i>表单编程2</a>
+                <a href="kao_8.html" class="menu-link"><i class="fas fa-search"></i>表单编程3</a>
+                <a href="kao_9.html" class="menu-link"><i class="fas fa-chart-bar"></i>表单编程4</a>
+            </div>
+
+            <div class="sub-category">
+                <a href="kao_14.html" class="menu-link"><i class="fas fa-keyboard"></i>表单1</a>
+                <a href="kao_15.html" class="menu-link"><i class="fas fa-desktop"></i>表单2</a>
+                <a href="kao_46.html" class="menu-link"><i class="fas fa-table"></i>表单3</a>
+                <a href="kao_47.html" class="menu-link"><i class="fas fa-list"></i>表单4<br>(未使用focus)</a>
+                <a href="kao_51.html" class="menu-link"><i class="fas fa-file-alt"></i>表单5</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- JSP基础（两列） -->
+    <div class="menu-item">
+        <span class="category-tag">JSP基础</span>
+        <div class="column-links">
+            <div class="sub-category">
+                <a href="kao_6.html" class="menu-link"><i class="fas fa-calendar-day"></i>事件处理1</a>
+                <a href="kao_12.html" class="menu-link"><i class="fas fa-calendar-week"></i>事件处理2</a>
+                <a href="kao_49.html" class="menu-link"><i class="fas fa-calendar-check"></i>事件处理3</a>
+                <a href="kao_7.html" class="menu-link"><i class="fas fa-terminal"></i>基础编程1</a>
+                <a href="kao_13.html" class="menu-link"><i class="fas fa-laptop-code"></i>基础编程2</a>
+            </div>
+
+            <div class="sub-category">
+                <a href="kao_30.html" class="menu-link"><i class="fas fa-code"></i>基础编程3</a>
+                <a href="kao_34.html" class="menu-link"><i class="fas fa-file-code"></i>基础编程4</a>
+                <a href="kao_48.html" class="menu-link"><i class="fas fa-cube"></i>面向对象编程</a>
+                <a href="kao_52.html" class="menu-link"><i class="fas fa-function"></i>函数式编程</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- JSP高级（两列） -->
+    <div class="menu-item">
+        <span class="category-tag">JSP高级</span>
+        <div class="column-links">
+            <div class="sub-category">
+                <a href="kao_16.html" class="menu-link"><i class="fas fa-text-width"></i>动态文本框</a>
+                <a href="kao_17.html" class="menu-link"><i class="fas fa-font"></i>批量文本框</a>
+                <a href="kao_21.html" class="menu-link"><i class="fas fa-cogs"></i>函数变参</a>
+                <a href="kao_22.html" class="menu-link"><i class="fas fa-language"></i>分词操作</a>
+            </div>
+
+            <div class="sub-category">
+                <a href="kao_23.html" class="menu-link"><i class="fas fa-redo"></i>回调1</a>
+                <a href="kao_24.html" class="menu-link"><i class="fas fa-undo"></i>回调2</a>
+                <a href="kao_29.html" class="menu-link"><i class="fas fa-cubes"></i>面向对象编程</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- 其他（两列） -->
+    <div class="menu-item">
+        <span class="category-tag">其他</span>
+        <div class="column-links">
+            <div class="sub-category">
+                <a href="kao_31.html" class="menu-link"><i class="fas fa-vial"></i>Prototype Example</a>
+                <a href="kao_33.html" class="menu-link"><i class="fas fa-user"></i>Person 类演示</a>
+                <a href="kao_35.html" class="menu-link"><i class="fas fa-check-square"></i>复选框</a>
+                <a href="kao_38.html" class="menu-link"><i class="fas fa-mouse"></i>鼠标事件编程1</a>
+                <a href="kao_39.html" class="menu-link"><i class="fas fa-mouse-pointer"></i>鼠标事件编程2</a>
+                <a href="kao_40.html" class="menu-link"><i class="fas fa-clinic-medical"></i>HIS程序设计评测</a>
+                <a href="kao_56.html" class="menu-link"><i class="fas fa-laptop-medical"></i>HIS前端程序设计</a>
+            </div>
+
+            <div class="sub-category">
+                <a href="kao_41.html" class="menu-link"><i class="fas fa-file-medical"></i>患者病历</a>
+                <a href="kao_45.html" class="menu-link"><i class="fas fa-stopwatch"></i>定时器编程</a>
+                <a href="kao_50.html" class="menu-link"><i class="fas fa-filter"></i>前端正则编程</a>
+                <a href="kao_53.html" class="menu-link"><i class="fas fa-weight"></i>BMI健康指标计算器</a>
+                <a href="kao_54.html" class="menu-link"><i class="fas fa-cookie"></i>使用cookie离线存储</a>
+                <a href="kao_55.html" class="menu-link"><i class="fas fa-exclamation-triangle"></i>try catch错误处理</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 页脚 -->
+<div class="footer">
+    <p>© 2025 JSP妙妙工具 | 精心打造，助力编程学习</p>
+</div>
+</body>
+</html>

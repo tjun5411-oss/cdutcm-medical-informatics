@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>form表单的动态生成二</title>
+</head>
+<body>
+<a href="myweb_1.html">返回首页</a><br>
+<script>
+    let textElements=[
+        {id:"name",name:"name",value:"",label:"姓名"},
+        {id:"age",name:"age",value:"",label:"年龄"},
+        {id:"score",name:"score",value:"",label:"成绩"},
+        {id:"father",name:"father",value:"",label:"父亲姓名"},
+    ];//来自于后台（服务器，由用户自行添加完成
+    for (let i=0;i<textElements.length;i++){
+        let objSpan=document.createElement("span");
+        objSpan.innerText=textElements[i].label;
+        document.body.appendChild(objSpan)
+
+        let objInputText=document.createElement("input");
+        objInputText.type="text";
+        objInputText.id=textElements[i].id;
+        objInputText.name=textElements[i].name;
+        objInputText.value=textElements[i].value;
+        document.body.appendChild(objInputText);
+
+        document.body.appendChild(document.createElement("br"))
+    }
+</script>
+</body>
+</html>

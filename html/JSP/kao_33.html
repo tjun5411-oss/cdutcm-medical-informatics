@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Person 类演示</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .demo-container {
+            border: 1px solid #ddd;
+            padding: 20px;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+        input {
+            padding: 8px;
+            width: 200px;
+            margin-right: 10px;
+        }
+        button {
+            padding: 8px 15px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .error {
+            color: red;
+            margin-top: 10px;
+        }
+        .success {
+            color: green;
+            margin-top: 10px;
+        }
+        .output {
+            margin-top: 15px;
+            padding: 10px;
+            background-color: #f5f5f5;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+Javascript面向对象编程<br>
+要求如下：<br>
+定义一个Person类，有name,error_message属性。<br>
+有setName与getName方法。<br>
+setName方法中，当传入的姓名参数为空时，设置error_message的值为“姓名不能为空”。<br>
+实例化Person类的对象名为person(注用var修饰person)<br>
+用ES6的语法实现。<br>
+<body>
+<h1>Person 类演示</h1>
+<div class="demo-container">
+    <h2>设置姓名</h2>
+    <input type="text" id="nameInput" placeholder="请输入姓名">
+    <button onclick="setPersonName()">设置姓名</button>
+    <div id="errorMessage" class="error"></div>
+    <div id="successMessage" class="success"></div>
+    <h2>获取姓名</h2>
+    <button onclick="getPersonName()">获取姓名</button>
+    <div id="nameOutput" class="output"></div>
+</div>
+
+<script>
+    class Person {
+        constructor() {
+            this.name = '';
+            this.error_message = '';
+        }
+        setName(name) {
+            if (!name || name.trim() === '') {
+                this.error_message = '姓名不能为空';
+                return false;
+            } else {
+                this.name = name;
+                this.error_message = '';
+                return true;
+            }
+        }
+
+        getName() {
+            return this.name;
+        }
+    }
+    var person = new Person();
+    function setPersonName() {
+        const nameInput = document.getElementById('nameInput');
+        const errorElement = document.getElementById('errorMessage');
+        const successElement = document.getElementById('successMessage');
+        errorElement.textContent = '';
+        successElement.textContent = '';
+        const success = person.setName(nameInput.value);
+        if (success) {
+            successElement.textContent = '姓名设置成功！';
+        } else {
+            errorElement.textContent = person.error_message;
+        }
+    }
+    function getPersonName() {
+        const nameOutput = document.getElementById('nameOutput');
+        const currentName = person.getName();
+        if (currentName) {
+            nameOutput.textContent = `当前姓名: ${currentName}`;
+        } else {
+            nameOutput.textContent = '尚未设置姓名';
+        }
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>0</title>
+</head>
+<body>
+表单编程,样式如下<br>
+要求如下：<br>
+form的id为form_1。<br>
+姓名框的id、name值为name。<br>
+姓名框span的id为spanName。<br>
+密码框1的id、name为password_1,密码框2的id、name为password_2，类型为password。<br>
+密码框1的span的id为spanPassword_1。<br>
+保存按钮的id、name、value为ok。<br>
+点击ok按钮进行一致性检查,检查函数为checkData()。<br>
+注意，此题单独定义checkData函数，不定义在按钮事件处理中。<br>
+对姓名为空，密码为空，密码不一致三种情况进行检查。<br>
+检查后的错误提示分别为"姓名不能为空","密码不能为空","两次密码不一致"<br>
+<br>
+学生注册表<br>
+<form action="" id="form_1"method="post">
+    姓名:<input type="text" id="name" name="name" value="" ><span id="spanName"></span><br>
+    密码1:<input type="password" id="password_1" name="password_1" value=""><span id="spanPassword_1"></span><br>
+    密码2:<input type="password" id="password_2" name="password_2" value=""><br>
+
+
+
+    <input type="button" id="ok" name="ok" value="ok" onclick="checkData()()">
+</form>
+<script>
+    function checkData() {
+        let objName=document.getElementById("name");
+        let  objPassword_1=document.getElementById("password_1")
+        let  objPassword_2=document.getElementById("password_2")
+        let name=objName.value;
+        if (objName.value==="")
+        {
+            document.getElementById("spanName").innerHTML="姓名不能为空";
+            objName.focus();
+        }
+        if(objName.value==="123"){
+
+        }
+        if(objPassword_1.value===""){
+            document.getElementById("spanPassword_1").innerHTML="密码不能为空"}
+        if(objPassword_1.value!==objPassword_2.value){
+            document.getElementById("spanPassword_1").innerHTML="两次密码不一致"
+
+        }
+
+
+    }
+</script>
+</body>
+</html>

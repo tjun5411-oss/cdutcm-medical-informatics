@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>网站技术知识搜索工具</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #1a2a6c);
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 350px;
+            gap: 25px;
+        }
+
+        header {
+            grid-column: 1 / -1;
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        h1 {
+            font-size: 2.8rem;
+            color: #1a2a6c;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: #555;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .knowledge-list {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        .search-section {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            height: fit-content;
+            position: sticky;
+            top: 20px;
+        }
+
+        .search-box {
+            margin-bottom: 25px;
+        }
+
+        .search-title {
+            font-size: 1.8rem;
+            color: #1a2a6c;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .search-controls {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        #searchInput {
+            flex: 1;
+            padding: 14px 18px;
+            border: 2px solid #ddd;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            transition: all 0.3s;
+            outline: none;
+        }
+
+        #searchInput:focus {
+            border-color: #1a2a6c;
+            box-shadow: 0 0 10px rgba(26, 42, 108, 0.3);
+        }
+
+        .search-btn {
+            padding: 14px 25px;
+            background: linear-gradient(to right, #1a2a6c, #4a569d);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            font-weight: 600;
+            transition: all 0.3s;
+            box-shadow: 0 4px 10px rgba(26, 42, 108, 0.3);
+        }
+
+        .search-btn:hover {
+            background: linear-gradient(to right, #4a569d, #1a2a6c);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(26, 42, 108, 0.4);
+        }
+
+        .clear-btn {
+            padding: 14px 25px;
+            background: linear-gradient(to right, #b21f1f, #d43f3f);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            font-weight: 600;
+            transition: all 0.3s;
+            box-shadow: 0 4px 10px rgba(178, 31, 31, 0.3);
+        }
+
+        .clear-btn:hover {
+            background: linear-gradient(to right, #d43f3f, #b21f1f);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(178, 31, 31, 0.4);
+        }
+
+        .search-results {
+            background: #f9f9f9;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+            min-height: 100px;
+            border: 1px solid #eee;
+        }
+
+        .highlight {
+            background-color: #ff5252;
+            color: white;
+            font-weight: bold;
+            padding: 2px 5px;
+            border-radius: 4px;
+        }
+
+        .info-card {
+            background: linear-gradient(to right, #4a569d, #1a2a6c);
+            color: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 25px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .info-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .info-card p {
+            font-size: 1rem;
+            line-height: 1.6;
+        }
+
+        .knowledge-item {
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px dashed #eee;
+        }
+
+        .knowledge-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .item-number {
+            display: inline-block;
+            background: #1a2a6c;
+            color: white;
+            width: 32px;
+            height: 32px;
+            text-align: center;
+            line-height: 32px;
+            border-radius: 50%;
+            margin-right: 10px;
+            font-weight: bold;
+        }
+
+        footer {
+            grid-column: 1 / -1;
+            text-align: center;
+            margin-top: 40px;
+            padding: 20px;
+            color: white;
+            font-size: 1rem;
+        }
+
+        @media (max-width: 900px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+
+            .search-section {
+                position: static;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <header>
+        <h1>网站技术知识要点</h1>
+        <p class="subtitle">全面整理网站开发中的重要概念、技术术语及常见问题解答</p>
+    </header>
+
+    <main class="knowledge-list" id="knowledgeContent">
+        <div class="knowledge-item">
+            <span class="item-number">1</span>
+            网站后台常见的服务器编程技术/服务器端开发技术：ASP，PHP，JSP。
+        </div>
+        <div class="knowledge-item">
+            <span class="item-number">2</span>
+            JavaScript是一种弱类型/解释型编程语言（是一种弱类型编程语言；采用解释方式运行）。
+        </div>
+        <div class="knowledge-item">
+            <span class="item-number">3</span>
+            CMS：内容管理系统。
+        </div>
+        <div class="knowledge-item">
+            <span class="item-number">4</span>
+            网站制作完成后，一般通过FTP工具上传到服务器上。
+        </div>
+        <div class="knowledge-item">
+            <span class="item-number">5</span>
+            HTTP端口：80；jsp tomcat端口：8080。FTP端口：21。
+        </div>
+        <div class="knowledge-item">
+            <span class="item-number">6</span>
+            NodeJS是服务器端编程语言。
+        </div>
+        <div class="knowledge-item">
+            <span class="item-number">7</span>
+            JavaScript定义变量name的语法是var name。
+        </div>
+        <div class="knowledge-item">
+            <span class="item-number">8</span>
+            根据标签名取对象的语法是document.getElementsByTagName（）。
+        </div>
+        <div class="knowledge-item">
+            <span class="item-number">9</span>
+            CSS中#是id选择器。
+        </div>
+        <div class="knowledge-item">
+            <span class="item-number">10</span>
+            JavaScript写过程信息到控制台的命令是console.log()。
+        </div>
+        <div class="knowledge-item">
+            <span class="item-number">11</span>
+            网站的根：www；在根下有一个称为首页的文件名：index
+        </div>
+        <div class="knowledge-item">
+            <span class="item-number">12</span>
+            小型网站，可采用申请虚拟主机的方式运行。
+        </div>
+        <div class="knowledge-item">
+            <span class="item-number">13</span>
+            中型网站，可采用申请主机租用（云主机，VPS）的方式运行。
+        </div>
+        <div class="knowledge-item">
+            <span class="item-number">14</span>
+            大型网站，可采用申请自建机房或是整体租用电信机房的机柜的方式运行。
+        </div>
+        <div class="knowledge-item">
+            <span class="item-number">15</span>
+            Jquery：JS类库（javascript类）。
+        </div>
+        <div class="knowledge-item">
+            <span class="item-number">16</span>
+            FTP：文件传输。
+        </div>
+        <div class="knowledge-item">
+            <span class="item-number">17</span>
+            SVN：版本管理（开源并且免费的）。
+        </div>
+        <div class="knowledge-item">
+            <span class="item-number">18</span>
+            无刷新局部更新技术：AJAX（也是一种单项刷新技术）。
+        </div>
+        <div class="knowledge-item">
+            <span class="item-number">19</span>
+            web socket：终极技术（服务器主动推送）。
+        </div>
+        <div class="knowledge-item">
+            <span class="item-number">20</span>
+            获取当前日期与时间(年份)：Date now（）.toTime。
+        </div>
+        <div class="knowledge-item">
+            <span class="item-number">21</span>
+            产生随机数：Math.random。
+        </div>
+        <div class="knowledge-item">
+            <span class="item-number">22</span>
+            控件id为’user_name’，获取此控件引用的命令是：document.getElementById('user_name') 。
+        </div>
+        <div class="knowledge-item">
+            <span class="item-number">23</span>
+            document.getElementById的功能是：获取对象。
+        </div>
+        <div class="knowledge-item">
+            <span class="item-number">24</span>
+            HTML:超文本传输语言
+        </div>
+        <div class="knowledge-item">
+            <span class="item-number">25</span>
+            XML：可扩展语言
+        </div>
+        <div class="knowledge-item">
+            <span class="item-number">26</span>
+            一般情况下，所有的网站都有一个入口页面，称为 首页；
+        </div>
+        <div class="knowledge-item">
+            <span class="item-number">27</span>
+            弹出警告框的命令是alter
+        </div>
+        <div class="knowledge-item">
+            <span class="item-number">28</span>
+            用js开发服务器端的技术是NodeJS。
+        </div>
+        <div class="knowledge-item">
+            <span class="item-number">29</span>
+            当鼠标移动到html元素上方时触发的函数是onmouseover
+        </div>
+        <div class="knowledge-item">
+            <span class="item-number">30</span>
+            html5中，绘画标签是指canvas。
+        </div>
+        <div class="knowledge-item">
+            <span class="item-number">31</span>
+            数组排序函数是sort。
+        </div>
+        <div class="knowledge-item">
+            <span class="item-number">32</span>
+            input的三个题答案:第一个onchange，第二个onblur，第三个onfocus。
+        </div>
+        <div class="knowledge-item">
+            <span class="item-number">33</span>
+            当鼠标移出时产生的事件是onmouseout。 当鼠标移动时产生的事件是onmousemove。
+        </div>
+        <div class="knowledge-item">
+            <span class="item-number">34</span>
+            ajax技术中，因响应状态改变发生的事件是onreadstatechange。
+        </div>
+        <div class="knowledge-item">
+            <span class="item-number">35</span>
+            ajax技术中，因收到消息发生的事件是onmessage。
+        </div>
+        <div class="knowledge-item">
+            <span class="item-number">36</span>
+            当页面加载完成发生的事件是onload。
+        </div>
+        <div class="knowledge-item">
+            <span class="item-number">37</span>
+            中型网站，可采用 主机租用 的方式运行；
+        </div>
+        <div class="knowledge-item">
+            <span class="item-number">38</span>
+            小型网站，可采用 虚拟主机 的方式运行；
+        </div>
+        <div class="knowledge-item">
+            <span class="item-number">39</span>
+            一般网站首页文件名为 index；
+        </div>
+        <div class="knowledge-item">
+            <span class="item-number">40</span>
+            当按下任意键后，在chrome浏览器中onkeydown,onkeypress,oninput,onkeyup第一个产生的事件是onkeydown，最后一个是onkeyup。
+        </div>
+        <div class="knowledge-item">
+            <span class="item-number">41</span>
+            <br> textContent用于插入纯文本，不会解析HTML标签。
+            <br>innerText用于插入可见文本内容，会解析HTML标签并重新渲染，同时忽略被CSS隐藏的内容。
+            <br>innerHTML用于插入带有HTML标签和脚本的内容，会解析并执行其中的标签和脚本。
+        </div>
+        <div class="knowledge-item">
+            <span class="item-number">42</span>
+            <br> click：鼠标单击事件，当鼠标按下并释放时触发。<br> dblclick：鼠标双击事件，当鼠标快速连续点击两次时触发。
+            <br>mousedown：鼠标按下事件，当鼠标按钮被按下时触发。 <br>mouseup：鼠标释放事件，当鼠标按钮被释放时触发。
+            <br> mousemove：鼠标移动事件，当鼠标在元素内部移动时触发。<br> mouseover：鼠标进入事件，当鼠标移动到元素上方时触发。
+            <br>mouseout：鼠标离开事件，当鼠标移出元素时触发。<br> mouseenter：鼠标进入事件，当鼠标移动到元素上方时触发，不会冒泡。
+            <br> mouseleave：鼠标离开事件，当鼠标移出元素时触发，不会冒泡。<br> contextmenu：上下文菜单事件，当用户右键点击元素时触发。
+            <br> mousewheel：鼠标滚轮事件，当鼠标滚轮滚动时触发。<br> dragstart：拖拽开始事件，当开始拖拽元素时触发。
+            <br>dragend：拖拽结束事件，当拖拽操作结束时触发。<br> drag：拖拽事件，当拖拽过程中持续触发。
+            <br> drop：释放拖拽物体事件，当在目标元素上释放拖拽物体时触发。<br> scroll：滚动事件，当滚动条滚动时触发。
+        </div>
+        <div class="knowledge-item">
+            <span class="item-number">43</span>
+            程序应用多端自适应中的多端一般指电脑端与移动端
+        </div>
+        <div class="knowledge-item">
+            <span class="item-number">44</span>
+            vue是一套渐进式JavaScript框架
+        </div>
+        <div class="knowledge-item">
+            <span class="item-number">45</span>
+            vue实现了MVVM模式
+        </div>
+        <div class="knowledge-item">
+            <span class="item-number">46</span>
+            vue3 cli构建项目的命令是vue create 项目名
+        </div>
+        <div class="knowledge-item">
+            <span class="item-number">47</span>
+            vue axios依赖包的安装命令是npm install axios
+        </div>
+        <div class="knowledge-item">
+            <span class="item-number">48</span>
+            vue项目模式启动命令是npm run serve
+        </div>
+        <div class="knowledge-item">
+            <span class="item-number">49</span>
+            插槽分为默认插槽与名称插槽
+        </div>
+        <div class="knowledge-item">
+            <span class="item-number">50</span>
+            SPA模式指Single Page Application
+        </div>
+        <div class="knowledge-item">
+            <span class="item-number">51</span>
+            $emit实现了子到父组件通讯
+        </div>
+        <div class="knowledge-item">
+            <span class="item-number">52</span>
+            props实现了父到子组件通讯
+        </div>
+    </main>
+
+    <aside class="search-section">
+        <h2 class="search-title">知识搜索工具</h2>
+
+        <div class="search-box">
+            <div class="search-controls">
+                <input type="text" id="searchInput" placeholder="输入要搜索的关键词...">
+                <button class="search-btn" id="searchBtn">搜索</button>
+            </div>
+            <button class="clear-btn" id="clearBtn">清除高亮</button>
+
+            <div class="search-results" id="resultsContainer">
+                <p>输入关键词搜索相关内容，匹配的内容将会以红色高亮显示</p>
+            </div>
+        </div>
+
+        <div class="info-card">
+            <h3>使用提示</h3>
+            <p>1. 输入关键词后点击"搜索"按钮或按Enter键进行搜索</p>
+            <p>2. 搜索不区分大小写，支持多关键词搜索</p>
+            <p>3. 点击"清除高亮"可移除所有高亮标记</p>
+            <p>4. 左侧列出了42个网站开发的重要知识点</p>
+        </div>
+    </aside>
+
+    <footer>
+        <p>网站技术知识要点总结 &copy; 2023 | 搜索高亮工具</p>
+    </footer>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const searchInput = document.getElementById('searchInput');
+        const searchBtn = document.getElementById('searchBtn');
+        const clearBtn = document.getElementById('clearBtn');
+        const resultsContainer = document.getElementById('resultsContainer');
+        const knowledgeContent = document.getElementById('knowledgeContent');
+        const knowledgeItems = document.querySelectorAll('.knowledge-item');
+
+        // 搜索功能
+        function performSearch() {
+            const searchTerm = searchInput.value.trim();
+
+            if (!searchTerm) {
+                resultsContainer.innerHTML = '<p>请输入要搜索的关键词</p>';
+                return;
+            }
+
+            // 移除之前的高亮
+            removeHighlights();
+
+            // 进行搜索
+            let foundCount = 0;
+            const regex = new RegExp(searchTerm, 'gi');
+
+            knowledgeItems.forEach(item => {
+                const originalHTML = item.innerHTML;
+                const highlightedHTML = originalHTML.replace(regex, match =>
+                    `<span class="highlight">${match}</span>`
+                );
+
+                if (originalHTML !== highlightedHTML) {
+                    item.innerHTML = highlightedHTML;
+                    foundCount++;
+                }
+            });
+
+            // 显示结果
+            if (foundCount > 0) {
+                resultsContainer.innerHTML = `<p>找到 <strong>${foundCount}</strong> 条包含 "<strong>${searchTerm}</strong>" 的结果</p>`;
+            } else {
+                resultsContainer.innerHTML = `<p>没有找到包含 "<strong>${searchTerm}</strong>" 的内容</p>`;
+            }
+
+            // 滚动到第一个结果
+            if (foundCount > 0) {
+                const firstHighlight = document.querySelector('.highlight');
+                if (firstHighlight) {
+                    firstHighlight.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+            }
+        }
+
+        // 清除高亮
+        function removeHighlights() {
+            const highlights = document.querySelectorAll('.highlight');
+
+            highlights.forEach(highlight => {
+                const parent = highlight.parentNode;
+                parent.replaceChild(document.createTextNode(highlight.textContent), highlight);
+            });
+
+            resultsContainer.innerHTML = '<p>已清除所有高亮标记</p>';
+        }
+
+        // 事件监听
+        searchBtn.addEventListener('click', performSearch);
+
+        clearBtn.addEventListener('click', removeHighlights);
+
+        searchInput.addEventListener('keyup', function(event) {
+            if (event.key === 'Enter') {
+                performSearch();
+            }
+        });
+    });
+</script>
+</body>
+</html>

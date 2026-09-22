@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>分词统计工具</title>
+</head>
+<body>
+要求如下：<br>
+定义函数NLP(args)。<br>
+参数为传入的句子。<br>
+在函数体中，统计句子中的单词数返回（return xxx)。<br>
+注意：句子单词之间是用空格分开的。<br>
+注：此题在提交时，请把自行测试时调用函数的代码行注释掉或是删除<br>
+<h3>单词分词统计</h3>
+<input type="text" id="inputText" placeholder="输入句子...">
+<button onclick="countWords()">统计</button>
+<p id="result">单词数量: <span id="wordCount">0</span></p>
+
+<script>
+    function NLP(args) {
+        const trimmed = args.trim();
+        if (trimmed === '') return 0;
+        const words = trimmed.split(/\s+/);
+        return words.length;
+    }
+
+    function countWords() {
+        const input = document.getElementById('inputText').value;
+        const count = NLP(input);
+        document.getElementById('wordCount').textContent = count;
+    }
+</script>
+</body>
+</html>

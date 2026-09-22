@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>动态添加多个文本框</title>
+</head>
+<body>
+要求如下：<br>
+通过自定义addMultInputBox函数实现。<br>
+函数带一个形参number，根据这个形参的数量动态生成多个文本框。<br>
+文本框的类型为text<br>
+文本框的id、name,分别为id_1,id_2...id_n，name_1,name_2,...name_n。value为空。<br>
+form表单的id为form_1，其它属性为默认<br>
+注：此题在提交时，请把自行测试时调用函数的代码行注释掉或是删除<br>
+<form id="form_1"></form>
+<input type="number" id="count" placeholder="输入数量">
+<button onclick="addMultInputBox(document.getElementById('count').value)">添加文本框</button>
+
+<script>
+    function addMultInputBox(number) {
+        const form = document.getElementById('form_1');
+        form.innerHTML = '';
+
+        for (let i = 1; i <= number; i++) {
+            const input = document.createElement('input');
+            input.type = 'text';
+            input.id = `id_${i}`;
+            input.name = `name_${i}`;
+            input.value = '';
+            form.appendChild(input);
+        }
+    }
+</script>
+</body>
+</html>

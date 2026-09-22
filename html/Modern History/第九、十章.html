@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>纲要练习 - 第九、十章合订版</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --primary-red: #C0392B;
+      --gold: #D4AC0D;
+      --bg-gray: #F4F7F6;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif; }
+    body { background-color: var(--bg-gray); color: #2C3E50; line-height: 1.7; padding: 20px; }
+    .container { max-width: 1000px; margin: 0 auto; }
+
+    header {
+      text-align: center;
+      padding: 40px 20px;
+      background: linear-gradient(135deg, var(--primary-red) 0%, #E74C3C 100%);
+      color: white;
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(192, 57, 43, 0.3);
+      margin-bottom: 40px;
+    }
+
+    /* 阶段卡片 */
+    .phase-card {
+      background: white;
+      border-radius: 15px;
+      padding: 25px;
+      margin-bottom: 50px;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+      border-left: 8px solid var(--primary-red);
+    }
+    .phase-header {
+      font-size: 1.5rem;
+      color: var(--primary-red);
+      margin-bottom: 25px;
+      display: flex;
+      align-items: center;
+      border-bottom: 2px solid #F0F0F0;
+      padding-bottom: 10px;
+    }
+    .phase-header i { margin-right: 12px; color: var(--gold); }
+
+    /* 题目样式 */
+    .question-item { margin-bottom: 30px; padding: 15px; border-radius: 10px; }
+    .q-text { font-weight: 600; margin-bottom: 15px; display: block; font-size: 1.05rem; }
+    .options-grid { display: grid; grid-template-columns: 1fr; gap: 10px; }
+
+    .option-btn {
+      padding: 12px 18px;
+      border: 1px solid #EEE;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: 0.2s;
+      background: #FFF;
+    }
+    .option-btn:hover { background: #F9F9F9; border-color: var(--gold); }
+    .option-btn.selected { background: #FBFCF0; border-color: var(--gold); font-weight: bold; }
+    .option-btn.correct { background: #D4EFDF !important; border-color: #27AE60 !important; color: #1E8449; }
+    .option-btn.wrong { background: #FADBD8 !important; border-color: #E74C3C !important; color: #943126; }
+
+    /* 按钮组 */
+    .action-group {
+      display: flex;
+      gap: 15px;
+      margin-top: 30px;
+      padding-top: 20px;
+      border-top: 1px solid #EEE;
+    }
+    .btn {
+      padding: 12px 30px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 1rem;
+      transition: 0.3s;
+    }
+    .btn-submit { background: var(--primary-red); color: white; }
+    .btn-reset { background: #BDC3C7; color: white; }
+    .btn:hover { opacity: 0.9; transform: translateY(-2px); }
+
+    /* 庆祝按钮 */
+    .celebrate-area { text-align: center; margin: 80px 0 50px; }
+    .btn-celebrate {
+      background: linear-gradient(45deg, #D4AC0D, #F1C40F);
+      color: #7D6608;
+      padding: 20px 60px;
+      font-size: 1.5rem;
+      border-radius: 50px;
+      border: 2px solid #B7950B;
+      box-shadow: 0 10px 25px rgba(212, 172, 13, 0.4);
+      text-decoration: none;
+      display: inline-block;
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
+    }
+
+    .feedback-msg { margin-top: 10px; font-weight: bold; display: none; }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <header>
+    <h1>第九、十章 综合通关</h1>
+    <p>每一阶段10题，愿你登顶历史之巅</p>
+  </header>
+
+  <div id="quiz-app">
+  </div>
+
+  <div class="celebrate-area">
+    <p style="margin-bottom: 20px; color: #7F8C8D;">完成所有题目后，点击下方开启惊喜</p>
+    <a href="庆祝.html" class="btn-celebrate">
+      <i class="fas fa-trophy"></i> 考完了！点此开启庆祝 <i class="fas fa-fire-alt"></i>
+    </a>
+  </div>
+</div>
+
+<script>
+  const allQuestions = [
+    // 1-10 题
+    { q: "1. 党的十一届三中全会实现伟大历史转折的“伟大觉醒”性质，最核心的体现是", opts: ["A. 从“以阶级斗争为纲”转向以经济建设为中心", "B. 打破“两个凡是”思想束缚，重新确立实事求是思想路线", "C. 认识到必须通过改革开放解放和发展生产力，完善社会主义制度", "D. 作出了实行改革开放的重大决策"], ans: 2 },
+    { q: "2. 家庭联产承包责任制之所以能迅速解放农村生产力，其最根本的机制在于", opts: ["A. 改变了土地集体所有制性质", "B. 通过“交够国家的，留足集体的，剩下都是自己的”实现了产权激励", "C. 国家大幅提高了农产品收购价格", "D. 使农民获得了完全的生产经营自主权"], ans: 1 },
+    { q: "3. 设立经济特区作为“试验田”，其最深刻的战略意图是", opts: ["A. 吸引外资和扩大出口", "B. 探索市场调节与计划管理相结合的体制机制", "C. 学习国外先进技术和管理", "D. 为沿海地区创造发展机遇"], ans: 1 },
+    { q: "4. 改革开放初期“计划经济为主，市场调节为辅”的提法，其历史进步性主要在于", opts: ["A. 确立了市场在资源配置中的决定性作用", "B. 在传统计划经济框架内为市场机制打开了合法空间", "C. 彻底否定了计划经济的必要性", "D. 直接催生了私营经济的蓬勃发展"], ans: 1 },
+    { q: "5. 邓小平“南方谈话”被称作改革开放的“第二次思想解放”，其最核心的突破是", opts: ["A. 提出“发展才是硬道理”的论断", "B. 明确了计划与市场都是经济手段，而非社会制度本质属性", "C. 强调科学技术是第一生产力", "D. 鼓励证券、股市要坚决地试"], ans: 1 },
+    { q: "6. 我国确立社会主义市场经济体制的改革目标，其最深层的实践依据来源于", opts: ["A. 西方经济学理论的成功经验", "B. 经济特区及沿海地区市场化改革的实践经验", "C. 国有企业改革遭遇的普遍困境", "D. 加入世界贸易组织的客观要求"], ans: 1 },
+    { q: "7. 国有企业改革从“放权让利”到“制度创新”的转变，根本上是为了解决", opts: ["A. 企业奖金分配不公", "B. 企业与政府之间权责不清的深层体制矛盾", "C. 企业生产设备老化", "D. 企业社会负担过重"], ans: 1 },
+    { q: "8. 中国在2001年历经漫长谈判加入世界贸易组织（WTO），其战略考量最深层的是", opts: ["A. 获取最惠国待遇，扩大出口", "B. 利用外部规则“倒逼”国内深层次体制改革", "C. 吸引更多外商直接投资", "D. 参与全球经贸规则制定"], ans: 1 },
+    { q: "9. 改革开放以来，正确处理改革、发展、稳定关系的核心方法论是", opts: ["A. 稳定置于绝对优先地位", "B. 以改革为动力，以发展为目标，以稳定为前提，动态平衡", "C. 为了发展可以暂时牺牲稳定", "D. 三者并重，没有主次之分"], ans: 1 },
+    { q: "10. “三个代表”重要思想的提出，其最深刻的历史方位判断是基于", opts: ["A. 社会主义市场经济体制已完全建立", "B. 中国社会结构、利益格局和党的历史方位发生深刻变化", "C. 国有企业改革已取得全面成功", "D. 反腐败斗争成为压倒一切的任务"], ans: 1 },
+    // 11-20 题
+    { q: "11. 科学发展观强调“以人为本”，其直接的现实针对性是", opts: ["A. 纠正“以阶级斗争为纲”", "B. 解决经济社会发展中不平衡、不协调、不可持续问题", "C. 取代“发展是硬道理”", "D. 应对全球金融危机"], ans: 1 },
+    { q: "12. 改革开放前后两个历史时期的关系，最准确的概括是", opts: ["A. 彼此割裂", "B. 探索失误与成功实践的对比", "C. 本质上都是社会主义建设的实践探索，是承前启后、辩证统一的关系", "D. 前一时期是反面教训"], ans: 2 },
+    { q: "13. 中国特色社会主义理论体系形成和发展的共同主线是", opts: ["A. 进行新民主主义革命", "B. 探索在中国如何建设、巩固和发展社会主义", "C. 应对全球化挑战", "D. 实现共产主义理想"], ans: 1 },
+    { q: "14. 中国改革开放取得巨大成就的一条根本经验是", opts: ["A. 完全复制西方模式", "B. 坚持了社会主义基本制度与市场经济的高效结合", "C. 依靠廉价劳动力", "D. 避免了所有矛盾"], ans: 1 },
+    { q: "15. 当前全面深化改革强调“系统性、整体性、协同性”，针对的是", opts: ["A. 探索性不足", "B. 改革进入深水区后，单项改革难以突破利益固化藩篱", "C. 群众热情下降", "D. 国际误解"], ans: 1 },
+    { q: "16. “使市场在资源配置中起决定性作用”论断的哲学基础是", opts: ["A. 自由主义理论", "B. 对政府与市场关系的辩证唯物主义认识的深化", "C. 计划管理模式", "D. 政府全面退出"], ans: 1 },
+    { q: "17. 从“引进来”到“走出去”再到“一带一路”，其演进逻辑是", opts: ["A. 从学习追随到主动塑造，深度参与并引领全球治理", "B. 简单地理扩展", "C. 仅内容增加", "D. 仅形式变化"], ans: 0 },
+    { q: "18. 改革开放被称为“中国的第二次革命”，其“革命性”本质是", opts: ["A. 暴力推翻", "B. 引发了社会结构和思想观念的深刻变革", "C. 政治运动", "D. 推翻原有一切制度"], ans: 1 },
+    { q: "19. 始终强调“解放思想”的先导作用，是因为", opts: ["A. 理论落后实践", "B. 实践探索无止境，需不断突破思想禁锢", "C. 干部水平低", "D. 斗争需要"], ans: 1 },
+    { q: "20. 改革开放取得成功的政治前提和最根本保证是", opts: ["A. 资源丰富", "B. 国际环境", "C. 坚持中国共产党的领导", "D. 劳动力低廉"], ans: 2 },
+    // 21-30 题
+    { q: "21. 新时代“历史方位”判断的根本依据是", opts: ["A. 我国社会主要矛盾发生了变化", "B. 综合国力进入世界前列", "C. GDP总量世界第二", "D. 国际影响力提升"], ans: 0 },
+    { q: "22. “坚持党对一切工作的领导”位列基本方略第一位，表明", opts: ["A. 仅是政治原则", "B. 党的领导是具体的、贯穿于各领域各方面的", "C. 是随机排列的", "D. 临时强调"], ans: 1 },
+    { q: "23. “不平衡不充分的发展”主要指", opts: ["A. 经济总量不够", "B. 发展质量效益待提升，领域区域群体存在差距", "C. 速度太慢", "D. 工业不发达"], ans: 1 },
+    { q: "24. “五位一体”与“四个全面”的关系是", opts: ["A. 目标体系与战略举措的关系", "B. 内容完全相同", "C. 长远与短期的关系", "D. 互不相关的两个布局"], ans: 0 },
+    { q: "25. 经济“高质量发展”阶段的实质是", opts: ["A. 降低速度", "B. 实现发展方式、结构和动力的系统性变革", "C. 放弃出口", "D. 结束初级阶段"], ans: 1 },
+    { q: "26. 全面深化改革的总目标中，前后两句的关系是", opts: ["A. 前者规定方向，后者明确路径，有机统一", "B. 完全割裂", "C. 照搬国外治理", "D. 完善制度是短期目标"], ans: 0 },
+    { q: "27. 中国特色社会主义法治之魂是", opts: ["A. 法律面前人人平等", "B. 党的领导", "C. 司法独立", "D. 权力制衡"], ans: 1 },
+    { q: "28. 把党的政治建设摆在首位，根本原因在于", opts: ["A. 它可以取代组织建设", "B. 政治方向是党生存发展第一位的问题", "C. 临时需要", "D. 其他建设已完成"], ans: 1 },
+    { q: "29. “中国之治”实现长期稳定与持续发展的核心密钥是", opts: ["A. 代表整体利益、具有战略定力的核心领导力量", "B. 放弃所有竞争", "C. 静态的一成不变", "D. 纯靠历史惯性"], ans: 0 },
+    { q: "30. “共商共建共享”体现了“一带一路”的", opts: ["A. 排他性", "B. 平等性、开放性和互利性", "C. 单向援助", "D. 能源需求"], ans: 1 },
+    // 31-40 题
+    { q: "31. 乡村振兴战略的全局性意义是", opts: ["A. 环境美化", "B. 补短板", "C. 关系全面建设现代化国家的全局性、历史性任务", "D. 资本下乡"], ans: 2 },
+    { q: "32. 共同富裕是", opts: ["A. 平均主义", "B. 全体人民富裕，是物质与精神生活的辩证统一", "C. 少数人富裕", "D. 同时富裕"], ans: 1 },
+    { q: "33. “双循环”新发展格局的关键在于", opts: ["A. 关起门建设", "B. 经济循环的畅通无阻，国内国际相互促进", "C. 应对制裁", "D. 放弃全球化"], ans: 1 },
+    { q: "34. 文化自信被强调为“更持久的力量”，是因为", opts: ["A. 它是经济附属品", "B. 就是复古", "C. 关涉民族精神独立性与价值认同", "D. 排外需要"], ans: 2 },
+    { q: "35. 中国式现代化五大特征的根本指向是", opts: ["A. 复制西方模式", "B. 创造了人类文明新形态", "C. 脱离工业化", "D. 没有挑战"], ans: 1 },
+    { q: "36. “社会管理”到“社会治理”核心精神变化是", opts: ["A. 削弱政府", "B. 突出多元主体共同参与和平等协作", "C. 社会自主", "D. 文字游戏"], ans: 1 },
+    { q: "37. “五年规划”功能的转型本质上是", opts: ["A. 转变为市场经济下国家战略管理核心工具", "B. 变为参考文件", "C. 仅为超越美国", "D. 只是动员口号"], ans: 0 },
+    { q: "38. “人类命运共同体”产生共鸣的根本原因是", opts: ["A. 中国野心", "B. 契合了各国人民对和平发展、合作共赢的普遍愿望", "C. 空洞口号", "D. 放弃主权"], ans: 1 },
+    { q: "39. 2025贸易博弈反映中国角色变化是", opts: ["A. 被动卷入", "B. 从适应者向塑造者的角色转变", "C. 放弃谈判", "D. 放弃经济"], ans: 1 },
+    { q: "40. 对新时代“战略机遇期”最准确的理解是", opts: ["A. 更多由内部发展和改革创造", "B. 挑战消失", "C. 放弃全球化", "D. 仅科技有机遇"], ans: 0 }
+  ];
+
+  const userAnswers = new Array(allQuestions.length).fill(null);
+
+  function initQuiz() {
+    const app = document.getElementById('quiz-app');
+    for (let phase = 0; phase < 4; phase++) {
+      const phaseDiv = document.createElement('div');
+      phaseDiv.className = 'phase-card';
+      phaseDiv.id = `phase-${phase}`;
+
+      let phaseTitle = ["第一阶段：伟大转折与体制突破 (1-10)", "第二阶段：理论演进与深化改革 (11-20)", "第三阶段：进入新时代与新思想 (21-30)", "第四阶段：中国式现代化与全球治理 (31-40)"];
+
+      let html = `<h2 class="phase-header"><i class="fas fa-flag-checkered"></i> ${phaseTitle[phase]}</h2>`;
+
+      for (let i = phase * 10; i < (phase + 1) * 10; i++) {
+        const q = allQuestions[i];
+        html += `
+                    <div class="question-item" id="q-container-${i}">
+                        <span class="q-text">${q.q}</span>
+                        <div class="options-grid">
+                            ${q.opts.map((opt, optIdx) => `
+                                <div class="option-btn" id="q-${i}-opt-${optIdx}" onclick="selectOption(${i}, ${optIdx})">${opt}</div>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+      }
+
+      html += `
+                <div class="action-group">
+                    <button class="btn btn-submit" onclick="submitPhase(${phase})">提交本阶段</button>
+                    <button class="btn btn-reset" onclick="resetPhase(${phase})">重置本阶段</button>
+                    <div id="phase-feedback-${phase}" class="feedback-msg"></div>
+                </div>
+            `;
+
+      phaseDiv.innerHTML = html;
+      app.appendChild(phaseDiv);
+    }
+  }
+
+  function selectOption(qIdx, optIdx) {
+    const phase = Math.floor(qIdx / 10);
+    // 如果该阶段已经提交，则不允许修改
+    if (document.getElementById(`phase-feedback-${phase}`).style.display === 'block') return;
+
+    // 清除本题其他选中状态
+    for (let i = 0; i < 4; i++) {
+      document.getElementById(`q-${qIdx}-opt-${i}`).classList.remove('selected');
+    }
+    document.getElementById(`q-${qIdx}-opt-${optIdx}`).classList.add('selected');
+    userAnswers[qIdx] = optIdx;
+  }
+
+  function submitPhase(phase) {
+    let score = 0;
+    let unanswered = false;
+
+    for (let i = phase * 10; i < (phase + 1) * 10; i++) {
+      if (userAnswers[i] === null) {
+        unanswered = true;
+        break;
+      }
+    }
+
+    if (unanswered) {
+      alert("本阶段还有题目没做完哦！");
+      return;
+    }
+
+    // 判定结果
+    for (let i = phase * 10; i < (phase + 1) * 10; i++) {
+      const correctAns = allQuestions[i].ans;
+      const userAns = userAnswers[i];
+      const options = document.querySelectorAll(`#q-container-${i} .option-btn`);
+
+      options[userAns].classList.add(userAns === correctAns ? 'correct' : 'wrong');
+      if (userAns !== correctAns) {
+        options[correctAns].classList.add('correct');
+      }
+      if (userAns === correctAns) score++;
+    }
+
+    const fb = document.getElementById(`phase-feedback-${phase}`);
+    fb.innerHTML = `本阶段得分：${score} / 10。${score === 10 ? '完美！继续保持！' : '要加油哦！'}`;
+    fb.style.display = 'block';
+    fb.style.color = score > 6 ? '#27AE60' : '#E74C3C';
+  }
+
+  function resetPhase(phase) {
+    if (!confirm("确定要清空本阶段的选择吗？")) return;
+
+    for (let i = phase * 10; i < (phase + 1) * 10; i++) {
+      userAnswers[i] = null;
+      const options = document.querySelectorAll(`#q-container-${i} .option-btn`);
+      options.forEach(opt => {
+        opt.classList.remove('selected', 'correct', 'wrong');
+      });
+    }
+    document.getElementById(`phase-feedback-${phase}`).style.display = 'none';
+  }
+
+  window.onload = initQuiz;
+</script>
+
+</body>
+</html>

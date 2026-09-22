@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+编程实现取最大值操作。<br>
+要求如下：<br>
+函数名为maxValue(),带一个数组形参，形参名自定义，传入整型数组。<br>
+返回值为得到的最大值。<br>
+<script>
+    function maxValue(intArray){
+        let maxValue=0;
+        for(let i=0;i<intArray.length;i++){
+            if(maxValue<intArray[i]){
+                maxValue=intArray[i];
+            }
+        }
+        return maxValue;
+    }
+</script>
+
+</body>
+</html>

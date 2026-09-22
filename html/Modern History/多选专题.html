@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>中国近现代史纲要 - 多选专题刷题库</title>
+    <style>
+        :root {
+            --primary-color: #3498db;
+            --success-color: #2ecc71;
+            --error-color: #e74c3c;
+            --bg-color: #f4f7f6;
+            --card-bg: #ffffff;
+            --text-color: #2c3e50;
+        }
+
+        body {
+            font-family: "Helvetica Neue", Helvetica, Arial, "Microsoft Yahei", sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding-bottom: 80px; /* 防止底部控制栏遮挡内容 */
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            color: #2c3e50;
+            font-size: 1.8rem;
+        }
+
+        .progress-bar {
+            text-align: center;
+            color: #7f8c8d;
+            margin-bottom: 20px;
+            font-size: 0.9rem;
+        }
+
+        .question-card {
+            background: var(--card-bg);
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            padding: 20px;
+            margin-bottom: 25px;
+            border-left: 5px solid var(--primary-color);
+        }
+
+        .question-text {
+            font-weight: bold;
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+        }
+
+        .question-type {
+            font-size: 0.8rem;
+            background: #ecf0f1;
+            color: #7f8c8d;
+            padding: 2px 8px;
+            border-radius: 4px;
+            margin-right: 8px;
+            vertical-align: middle;
+        }
+
+        .options-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .option-item {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            margin-bottom: 10px;
+            padding: 12px 15px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: flex-start;
+        }
+
+        .option-item:hover {
+            background-color: #e8f4fd;
+        }
+
+        /* 选中状态（未提交时） */
+        .option-item.selected {
+            background-color: #d6eaf8;
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+            font-weight: 500;
+        }
+
+        /* 提交后的状态样式 */
+        .option-item.correct-answer {
+            background-color: #d4efdf !important;
+            border-color: var(--success-color) !important;
+            color: #145a32 !important;
+        }
+
+        .option-item.wrong-choice {
+            background-color: #fadbd8 !important;
+            border-color: var(--error-color) !important;
+            color: #7b241c !important;
+        }
+
+        .option-item.missed-answer {
+            border: 1px dashed var(--success-color) !important;
+            background-color: #fff !important;
+            position: relative;
+        }
+
+        .option-item.missed-answer::after {
+            content: "(正确答案)";
+            font-size: 0.75rem;
+            color: var(--success-color);
+            margin-left: auto;
+        }
+
+        .explanation-box {
+            display: none; /* 默认隐藏 */
+            margin-top: 15px;
+            padding: 15px;
+            background-color: #fff8e1;
+            border-left: 4px solid #f1c40f;
+            border-radius: 4px;
+            font-size: 0.95rem;
+        }
+
+        .knowledge-point {
+            display: block;
+            font-size: 0.85rem;
+            color: #d35400;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        /* 底部控制栏 */
+        .controls {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 15px 20px;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: center;
+            backdrop-filter: blur(5px);
+            z-index: 100;
+        }
+
+        .controls-inner {
+            max-width: 800px;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background 0.3s;
+            font-weight: 500;
+        }
+
+        .btn-primary { background: var(--primary-color); color: white; }
+        .btn-primary:hover { background: #2980b9; }
+
+        .btn-secondary { background: #95a5a6; color: white; }
+        .btn-secondary:hover { background: #7f8c8d; }
+
+        .btn-success { background: var(--success-color); color: white; }
+        .btn-success:hover { background: #27ae60; }
+
+        .btn-outline { background: transparent; border: 1px solid #bdc3c7; color: #7f8c8d; }
+        .btn-outline:hover { background: #ecf0f1; }
+
+        /* 分数展示小红点或文字 */
+        .score-toast {
+            font-weight: bold;
+            color: var(--success-color);
+            margin-right: 15px;
+            display: none;
+        }
+
+        @media (max-width: 600px) {
+            .controls-inner {
+                flex-direction: column;
+                gap: 10px;
+            }
+            .btn {
+                width: 100%;
+            }
+            .pagination-controls {
+                display: flex;
+                width: 100%;
+                gap: 10px;
+            }
+            .action-buttons {
+                display: flex;
+                width: 100%;
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>🇨🇳 中国近现代史纲要</h1>
+        <p>多选题专项突破训练</p>
+    </header>
+
+    <div class="progress-bar" id="pageInfo">
+        加载中...
+    </div>
+
+    <div id="quiz-list">
+    </div>
+</div>
+
+<div class="controls">
+    <div class="controls-inner">
+        <div class="pagination-controls">
+            <button class="btn btn-outline" id="prevBtn" onclick="changePage(-1)">上一页</button>
+            <button class="btn btn-outline" id="nextBtn" onclick="changePage(1)">下一页</button>
+        </div>
+
+        <div class="action-buttons" style="display: flex; align-items: center; justify-content: flex-end;">
+            <span id="scoreDisplay" class="score-toast"></span>
+            <button class="btn btn-secondary" style="margin-right: 10px;" onclick="resetCurrentPage()">重置本页</button>
+            <button class="btn btn-success" onclick="submitCurrentPage()">提交本页</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    // ==================== 数据部分 (保持不变) ====================
+
+    const dataPart1 = [
+        { type: "multiple", text: "中国半殖民地半封建社会的基本特征包括", options: [ "A. 资本-帝国主义侵略势力日益成为统治中国的决定性力量", "B. 中国的封建势力同帝国主义侵略势力相互勾结，成为其统治中国的社会基础", "C. 封建剥削制度的根基依然存在，中国新兴的民族资本主义经济发展缓慢", "D. 中国各地区经济、政治和文化的发展表现出极端的不平衡", "E. 中国人民特别是农民日益贫困化以至大批地破产，过着饥寒交迫和毫无政治权利的生活" ], answer: [0, 1, 2, 3, 4], knowledge: "半殖民地半封建社会特征", explanation: "中国半殖民地半封建社会具有以上所有特征，这些特征共同构成了近代中国的基本国情。" },
+        { type: "multiple", text: "近代以来中华民族面临的两大历史任务是", options: [ "A. 实现国家的社会主义工业化", "B. 争取民族独立和人民解放", "C. 进行无产阶级社会主义革命", "D. 实现国家繁荣富强和人民共同富裕", "E. 完成资产阶级民主革命" ], answer: [1, 3], knowledge: "中华民族的历史任务", explanation: "近代以来中华民族面临的两大历史任务是：争取民族独立和人民解放；实现国家繁荣富强和人民共同富裕。" },
+        { type: "multiple", text: "关于中国近代史的'基本线索'，学术界的主要观点包括", options: [ "A. '两个过程'论（帝国主义侵略与中国人民反抗）", "B. '四个阶梯'论（太平天国—洋务运动—戊戌变法—辛亥革命）", "C. '现代化（近代化）'论", "D. '革命范式'与'现代化范式'的辩证统一", "E. '冲击—反应'模式" ], answer: [0, 1, 2, 3, 4], knowledge: "近代史基本线索", explanation: "学术界关于中国近代史'基本线索'的主要观点包括以上所有选项，这些观点从不同角度解读中国近代史。" },
+        { type: "multiple", text: "学习《中国近现代史纲要》的主要方法包括", options: [ "A. 坚持历史唯物主义和辩证唯物主义的立场、观点和方法", "B. 把握历史发展的主题、主线和主流、本质", "C. 将历史事件置于特定的历史条件下进行分析和评价", "D. 反对历史虚无主义，正确评价重要历史人物和事件", "E. 注重理论联系实际，做到学以致用、用以促学" ], answer: [0, 1, 2, 3, 4], knowledge: "学习方法", explanation: "学习《中国近现代史纲要》应当采用以上所有方法，以全面、客观、科学地理解中国近现代史。" },
+        { type: "multiple", text: "中国共产党的成立是开天辟地的大事变，因为它", options: [ "A. 深刻改变了近代以后中华民族发展的方向和进程", "B. 深刻改变了中国人民和中华民族的前途和命运", "C. 深刻改变了世界发展的趋势和格局", "D. 给中国革命带来了全新的指导思想——马克思列宁主义", "E. 使中国革命有了坚强的领导核心" ], answer: [0, 1, 2, 3, 4], knowledge: "中国共产党成立的意义", explanation: "中国共产党的成立是开天辟地的大事变，具有以上所有重要意义，它使中国革命的面貌焕然一新。" },
+        { type: "multiple", text: "关于鸦片战争后中国社会性质的变化，下列表述中准确的有", options: [ "A. 中国不再是一个完全独立的主权国家，但保持了形式上的独立", "B. 封建社会的根基——地主阶级对农民的剥削依然存在，并同买办资本、高利贷资本相结合", "C. 民族资本主义在经济中占据主导地位，成为主要的经济形式", "D. 中国的经济、政治和文化发展表现出极大的不平衡性", "E. 帝国主义不但操纵了中国的财政和经济命脉，并且逐步控制了中国的政治中枢" ], answer: [0, 1, 3, 4], knowledge: "半殖民地半封建社会的特征", explanation: "C选项错误，鸦片战争后，民族资本主义并未在经济中占据主导地位，自然经济和外国资本主义经济仍占主导。其他选项均为中国半殖民地半封建社会的特征。" },
+        { type: "multiple", text: "下列对《天朝田亩制度》和《资政新篇》的比较中，正确的有", options: [ "A. 两者都反映了农民阶级反对封建土地所有制的强烈愿望", "B. 前者是太平天国前期革命性的体现，后者是太平天国后期改革内政、建设国家的新方案", "C. 前者主张绝对平均分配土地，后者主张发展资本主义工商业", "D. 两者都因当时严峻的战争环境而未能付诸实施", "E. 前者具有空想性，后者缺乏实施的阶级基础和社会条件" ], answer: [1, 2, 3, 4], knowledge: "太平天国两个纲领的比较", explanation: "A选项错误，《资政新篇》并未反映农民阶级反对封建土地所有制的愿望，而是主张发展资本主义。其他选项均正确。" },
+        { type: "multiple", text: "资本-帝国主义列强对近代中国进行军事侵略、政治控制、经济掠夺和文化渗透，其最终目的是", options: [ "A. 将中国变为其独立的殖民地", "B. 推动中国社会的现代化转型", "C. 维持中国的半独立状态，以便于长期掠夺和统治", "D. 阻碍和压制中国民族资本主义的发展", "E. 与中国封建势力结成同盟，共同剥削中国人民" ], answer: [2, 3, 4], knowledge: "帝国主义侵华的最终目的", explanation: "帝国主义侵华的最终目的是维持中国的半独立状态以便于长期掠夺和统治，阻碍和压制中国民族资本主义的发展，与中国封建势力结成同盟共同剥削中国人民。A选项错误，列强倾向于维持中国的半殖民地状态而非完全殖民地；B选项明显错误。" },
+        { type: "multiple", text: "19世纪70至80年代，中国陷入严重的'边疆危机'，其主要表现包括", options: [ "A. 英国从印度侵入西藏，并武装入侵云南", "B. 法国侵犯广西，并发动中法战争，将越南变为其殖民地", "C. 俄国伙同阿古柏势力，侵占新疆伊犁地区", "D. 日本吞并琉球，并出兵侵犯台湾", "E. 德国强租胶州湾，将山东划为其势力范围" ], answer: [0, 1, 2, 3], knowledge: "19世纪边疆危机", explanation: "E选项所述为19世纪90年代后期（1897年）的事件，不属于70-80年代的'边疆危机'。其他选项均为19世纪70-80年代中国边疆危机的表现。" },
+        { type: "multiple", text: "关于近代中国人民反抗外来侵略的斗争，下列叙述正确的有", options: [ "A. 三元里抗英斗争是中国人民第一次大规模的反侵略武装斗争", "B. 义和团运动粉碎了帝国主义列强瓜分和灭亡中国的图谋", "C. 鸦片战争期间，清军将领关天培、海龄、陈化成等英勇战死", "D. 林则徐、魏源等提出了'师夷长技以制夷'的主张，是反侵略斗争在思想领域的体现", "E. 所有反侵略战争失败的根本原因在于中国经济和技术的落后" ], answer: [0, 1, 2, 3], knowledge: "近代反侵略斗争", explanation: "E选项错误，近代中国反侵略战争失败的根本原因是社会制度的腐败，经济技术的落后是重要原因但非根本原因。其他选项均正确。" },
+        { type: "multiple", text: "关于《天朝田亩制度》与《资政新篇》，下列表述中正确的有", options: [ "A. 两者都反映了太平天国领袖改造社会的理想蓝图", "B. 前者主张在小农经济基础上废除私有制，后者主张学习西方，发展资本主义", "C. 前者体现了农民阶级的革命性，后者符合当时中国社会发展的客观要求", "D. 两者都得到了广大军民的热烈拥护并得以全面推行", "E. 两者的内容存在巨大差异，甚至相互矛盾，反映了农民政权内部的思想混乱" ], answer: [0, 1, 2, 4], knowledge: "《天朝田亩制度》与《资政新篇》比较", explanation: "D选项错误，《天朝田亩制度》虽得到农民拥护但未能全面推行，《资政新篇》则缺乏实施的社会基础。其他选项均正确。" },
+        { type: "multiple", text: "太平天国运动的历史意义在于它", options: [ "A. 沉重打击了封建统治阶级，强烈撼动了清政府的统治根基", "B. 正式提出了在中国发展资本主义的完整方案", "C. 拒绝了西方列强的拉拢，有力地打击了外国侵略势力", "D. 颁布了《天朝田亩制度》，表达了农民对土地的渴望", "E. 为后来的反帝反封建的农民运动提供了宝贵的经验教训" ], answer: [0, 2, 3, 4], knowledge: "太平天国运动的历史意义", explanation: "B选项错误，太平天国虽然提出了《资政新篇》，但这不是一个完整的发展资本主义方案，也未正式实施。其他选项均正确。" },
+        { type: "multiple", text: "洋务运动时期创办的民用企业（如轮船招商局、上海机器织布局等）具有的主要特点是", options: [ "A. 基本属于资本主义性质的企业", "B. 主要采取'官督商办'的经营方式", "C. 其产品大部分用于调拨，不具有商品性质", "D. 在客观上对外国资本主义的经济侵略起到了一定的抵制作用", "E. 在客观上对中国民族资本主义的产生起了诱导作用" ], answer: [0, 1, 3, 4], knowledge: "洋务民用企业的特点", explanation: "C选项错误，洋务民用企业的产品具有商品性质，进入市场销售。其他选项均正确。" },
+        { type: "multiple", text: "洋务运动最终未能使中国走上富强道路的根本原因在于", options: [ "A. 其指导思想是'中学为体，西学为用'，企图在维护封建制度的前提下学习西方技术", "B. 洋务派内部存在严重的派系之争，难以形成合力", "C. 洋务企业受到封建衙门式管理的严重束缚，生产效率低下", "D. 清政府中央政府对兴办洋务态度消极，甚至多方阻挠", "E. 西方列强并不希望中国真正富强，在技术和设备上进行封锁和刁难" ], answer: [0, 1, 2, 3, 4], knowledge: "洋务运动失败的原因", explanation: "以上所有选项都是洋务运动未能使中国走上富强道路的原因。" },
+        { type: "multiple", text: "早期维新思想家（如王韬、薛福成、郑观应）的思想主张主要包括", options: [ "A. 大力批判封建专制制度，主张实行民主共和", "B. 主张发展民族工商业，与外国进行'商战'", "C. 主张变革政治，实行君主立宪制度", "D. 主张废八股、改科举，兴办新式学校", "E. 其思想为后来的戊戌维新运动作了必要的思想准备" ], answer: [1, 2, 3, 4], knowledge: "早期维新思想", explanation: "A选项错误，早期维新思想家主张君主立宪，而非民主共和。其他选项均正确。" },
+        { type: "multiple", text: "戊戌维新运动作为一场政治改革运动，其主要内容包括", options: [ "A. 改革行政机构，裁撤闲散重叠机构，裁汰冗员", "B. 设立议院，制定宪法，实行完全的议会政治", "C. 保护和奖励农工商业，提倡开办实业", "D. 裁撤旧式绿营兵，改练新式陆军", "E. 创办京师大学堂，提倡西学，废除八股" ], answer: [0, 2, 3, 4], knowledge: "戊戌变法的主要内容", explanation: "B选项错误，戊戌变法并未设立议院、制定宪法，康有为等人虽然提出过开议院的主张，但在变法措施中并未实施。其他选项均正确。" },
+        { type: "multiple", text: "戊戌维新运动之所以迅速失败，是由于维新派自身存在着以下致命的弱点和局限", options: [ "A. 不敢否定封建主义，在政治上企图依靠并无实权的皇帝", "B. 对帝国主义抱有幻想，企图依靠列强的支持来实现改革", "C. 惧怕人民群众，脱离人民群众，把运动局限于士大夫阶层", "D. 在策略上急于求成，变法措施过于激进，树敌过多", "E. 缺乏可靠的军事后盾，当顽固派反扑时毫无招架之力" ], answer: [0, 1, 2, 3, 4], knowledge: "戊戌变法失败的原因", explanation: "以上所有选项都是戊戌维新运动迅速失败的原因。" },
+        { type: "multiple", text: "与太平天国运动相比，戊戌维新运动作为一次资产阶级性质的改良运动，其'新'主要体现在", options: [ "A. 它是由新兴的民族资产阶级领导和发动的", "B. 它的目标是在中国建立君主立宪的资本主义制度", "C. 它拥有广泛而坚实的群众基础，得到了农民和工人的支持", "D. 它系统地介绍了西方资产阶级的社会政治学说和自然科学知识", "E. 它采取了和平请愿、上书言事等非暴力的斗争方式" ], answer: [0, 1, 3, 4], knowledge: "戊戌维新运动的'新'特点", explanation: "C选项错误，戊戌维新运动缺乏广泛而坚实的群众基础，主要局限于士大夫阶层。其他选项均正确。" },
+        { type: "multiple", text: "曾国藩、李鸿章等洋务派代表人物，他们兴办洋务事业的复杂动机包括", options: [ "A. '剿发逆'（镇压太平天国），维护清王朝的封建统治", "B. '勤远略'（抵御外侮），实现国家的自强自立", "C. 在地方扩张本集团的政治、军事和经济实力", "D. 顺应历史潮流，推动中国社会向资本主义过渡", "E. 在'千古变局'中，为封建统治找到新的出路" ], answer: [0, 1, 2, 4], knowledge: "洋务派的动机", explanation: "D选项错误，洋务派并不想推动中国社会向资本主义过渡，他们的根本目的是维护封建统治。其他选项均正确。" },
+        { type: "multiple", text: "从太平天国到洋务运动，再到戊戌变法，这三场运动相继失败说明了", options: [ "A. 农民阶级和资产阶级改良派都不能领导中国革命取得胜利", "B. 不触动封建根基的自强运动和改良主义，无法改变中国的命运", "C. 帝国主义与中国的封建势力相结合，严重阻碍了中国的现代化", "D. 中国进行彻底的反帝反封建的民族民主革命具有必然性", "E. 学习西方必须从制度层面入手，仅学习技术或进行局部改良是远远不够的" ], answer: [0, 1, 2, 3, 4], knowledge: "近代改革运动的共同教训", explanation: "以上所有选项都是从太平天国到洋务运动再到戊戌变法失败所说明的历史教训。" },
+        { type: "multiple", text: "清末“新政”和“预备立宪”加速其灭亡的原因在于", options: ["A. 强化集权加剧矛盾", "B. “皇族内阁”暴露本质", "C. 增加捐税激化矛盾", "D. 改革范围过窄", "E. 革命派利用控制松动积聚力量"], answer: [0, 1, 2, 4], explanation: "选项D错误，新政涉及了政治军事经济等多个方面，不只是限于军经。" },
+        { type: "multiple", text: "三民主义学说的内在局限性体现在", options: ["A. 缺乏明确反帝内容", "B. 狭隘的“排满”色彩", "C. 未能真正关照工农地位", "D. 未正面触及封建土地所有制", "E. 体系庞杂自相矛盾"], answer: [0, 1, 2, 3], explanation: "三民主义虽不完美，但它是当时最完备的革命纲领，E选项描述不准确。" },
+        { type: "multiple", text: "南京临时政府的革命性与局限性表现为", options: ["A. 颁布《临时约法》", "B. 承认不平等条约", "C. 保护工商业政策", "D. 无满足农民土地要求措施", "E. 成员中旧官僚占比高"], answer: [0, 1, 2, 3, 4], explanation: "以上均是南京临时政府作为资产阶级政权的显著特点。" },
+        { type: "multiple", text: "袁世凯能够窃取果实的原因包括", options: ["A. 北洋军集团实力", "B. 帝国主义压力与选择", "C. 资产阶级软弱妥协", "D. 立宪派旧官僚内部施压", "E. 革命派组织涣散存在拥袁倾向"], answer: [0, 1, 2, 3, 4], explanation: "这是内外因共同作用的结果。" },
+        { type: "multiple", text: "辛亥革命在历史上的伟大意义在于", options: ["A. 结束封建帝制，建立共和", "B. 获得真正民族独立", "C. 思想解放，观念入心", "D. 促进社会经济变革", "E. 为中共成立准备条件"], answer: [0, 2, 3, 4], explanation: "选项B错误，辛亥革命并未改变半殖民地的性质，未获得真正的独立。" },
+        { type: "multiple", text: "新文化运动前期呈现的局限性体现在", options: ["A. 民主的形式化", "B. 科学范围狭窄", "C. 绝对肯定或否定的偏向", "D. 局限于知识分子", "E. 儒学与孔教混淆"], answer: [0, 1, 2, 3, 4], explanation: "新文化运动虽伟大，但存在脱离群众和思想偏激等问题。" },
+        { type: "multiple", text: "五四运动的复杂性和多层次性体现在", options: ["A. 爱国/思想解放结合", "B. 外交/反帝反封建主题", "C. 参与主体扩展", "D. 革命转折点", "E. 长远影响"], answer: [0, 1, 2, 3, 4], explanation: "五四运动是一场全方位的影响深远的运动。" },
+        { type: "multiple", text: "马克思主义最终被中国先进分子选择是因为", options: ["A. 提供了科学的世界观", "B. 苏俄放弃不平等条约", "C. 阶级基础", "D. 改良主义失败", "E. 传统契合点"], answer: [0, 1, 2, 3, 4], explanation: "马克思主义符合中国救亡图存的迫切需求。" },
+        { type: "multiple", text: "中共早期组织的活动重点包括", options: ["A. 思想论战", "B. 工人宣传组织", "C. 探讨理论应用", "D. 严格遵循指示", "E. 培养后备力量"], answer: [0, 1, 2, 4], explanation: "D选项错误，虽然受国际影响，但早期已开始有自主探索。" },
+        { type: "multiple", text: "中共一大的局限性包括", options: ["A. 确立最高目标", "B. 未认识到农民和武装斗争重要性", "C. 策略局限（断绝一切联系）", "D. 组织纪律严明", "E. 纲领待具体化"], answer: [1, 2, 4], explanation: "A和D是优点而非局限。局限性在于未区分民主革命阶段任务。" },
+        { type: "multiple", text: "陈独秀的思想演变轨迹包括", options: ["A. 文化启蒙转向政治革命", "B. 民主主义转向马克思主义", "C. 不谈政治转向投身斗争", "D. 建立权威但也埋下家长制隐患", "E. 始终反对合作"], answer: [0, 1, 2, 3], explanation: "陈独秀后来是促成国共合作的关键人物，E错误。" },
+        { type: "multiple", text: "五四后知识分子的去向包括", options: ["A. 马克思主义革命", "B. 自由主义改良", "C. 回归书斋", "D. 基尔特社会主义", "E. 无政府主义"], answer: [0, 1, 2, 3, 4], explanation: "反映了当时思想界的多元与剧变。" },
+        { type: "multiple", text: "“问题与主义”之争的影响在于", options: ["A. 社会改造道路之争", "B. 阵营分裂", "C. 注重理论联系实际", "D. 扩大马主义影响", "E. 彻底解决分歧（误）"], answer: [0, 1, 2, 3], explanation: "E选项太绝对，分歧并未通过论战彻底消除。" },
+        { type: "multiple", text: "中共成立的“必然性”体现包括", options: ["A. 思想基础", "B. 阶级基础", "C. 干部基础", "D. 外部条件", "E. 此前失败的教训"], answer: [0, 1, 2, 3, 4], explanation: "中共的诞生是近代中国社会矛盾发展的必然结果。" },
+        { type: "multiple", text: "中共成立使中国革命面貌“焕然一新”的内涵包括", options: ["A. 新领导力量", "B. 新指导思想", "C. 新革命纲领", "D. 新革命方法", "E. 新国际背景"], answer: [0, 1, 2, 3, 4], explanation: "这五点共同构成了“焕然一新”的实质内容。" },
+        { type: "multiple", text: "1. 毛泽东关于“工农武装割据”的思想，其完整内涵包括", options: ["A. 在中国共产党领导下的土地革命", "B. 以根据地为依托的武装斗争", "C. 以统一战线为策略", "D. 以土地革命为基本内容", "E. 以农村革命根据地建设为战略基地"], answer: [0, 1, 3, 4], explanation: "统一战线在当时并非工农武装割据定义的三大支柱内容。" },
+        { type: "multiple", text: "2. 1927年大革命失败后，中共发动武装起义的历史意义在于", options: ["A. 开创独立领导武装新时期", "B. 成功探索出完整道路", "C. 打击了反动派", "D. 开始从城市到农村转移的初步实践", "E. 建立稳固政权"], answer: [0, 2, 3], explanation: "B完整道路在当时尚未形成，E早期政权并不稳固。" },
+        { type: "multiple", text: "3. 土地革命时期在根据地开展土地革命的核心内容和作用包括", options: ["A. 实行农民土地所有制", "B. 解放农村生产力", "C. 为红军壮大提供物质基础", "D. 彻底完成革命任务", "E. 形成完整的路线方法"], answer: [0, 1, 2, 4], explanation: "民主革命任务直到1949年才彻底完成。" },
+        { type: "multiple", text: "4. 党内三次“左”倾错误共同的思想根源和主要表现是", options: ["A. 经验神圣化", "B. 坚持“城市中心论”", "C. 关门主义", "D. 军事冒险/保守/逃跑主义", "E. 残酷斗争，无情打击"], answer: [0, 1, 2, 3, 4], explanation: "这些是王明左倾教条主义的全方位表现。" },
+        { type: "multiple", text: "5. 遵义会议的历史贡献体现在", options: ["A. 解决军事组织问题", "B. 结束左倾统治", "C. 确立毛泽东领导地位", "D. 标志政治上开始走向成熟", "E. 制定抗日统一战线方针"], answer: [0, 1, 2, 3], explanation: "抗日策略主要是在后来的瓦窑堡会议制定的。" },
+        { type: "multiple", text: "6. 中国红军长征胜利的伟大意义在于", options: ["A. 转危为安", "B. 实现团结形成核心", "C. 扩大影响", "D. 推动统一战线形成", "E. 铸就长征精神"], answer: [0, 1, 2, 3, 4], explanation: "长征胜利是革命历史的伟大里程碑。" },
+        { type: "multiple", text: "7. 1935年华北事变后，中共进行的政策调整和斗争包括", options: ["A. 发表《八一宣言》", "B. 召开瓦窑堡会议", "C. 调整为“逼蒋抗日”", "D. 领导一二九运动", "E. 和平解决西安事变"], answer: [0, 1, 2, 3, 4], explanation: "这一系列行动促成了全民族抗日的局面。" },
+        { type: "multiple", text: "8. 延安时期整风运动的主要内容和影响是", options: ["A. 反主观主义", "B. 反宗派主义", "C. 反官僚主义", "D. 思想教育运动", "E. 奠定胜利基础"], answer: [0, 1, 3, 4], explanation: "整风三大内容为：学风、党风、文风。" },
+        { type: "multiple", text: "9. 古田会议决议的核心思想是", options: ["A. 思想建党、政治建军", "B. 规定红军性质任务", "C. 绝对领导原则", "D. 战争理念", "E. 解决在农村建设无产阶级政党问题"], answer: [0, 1, 2, 4], explanation: "古田会议主要是为了克服非无产阶级思想的影响。" },
+        { type: "multiple", text: "10. 毛泽东探索新道路中形成的马克思主义中国化成果体现包括", options: ["A. 工农武装割据思想", "B. 农村包围城市道路", "C. 人民战争战术原则", "D. 总路线总政策", "E. 实事求是思想路线"], answer: [0, 1, 2], explanation: "D和E主要在抗战后期成熟并在七大系统确立。" }
+    ];
+
+    const dataPart2 = [
+        { q: "1. 新中国初期巩固政权的重大斗争包括", a: [0, 1, 2, 3], type: "multiple", opts: ["A. 土地改革", "B. 抗美援朝", "C. “三反”“五反”", "D. 镇反运动", "E. 和平共处五项原则"] },
+        { q: "2. 资本主义工商业改造“和平赎买”得以实现的条件包括", a: [0, 1, 2, 4], type: "multiple", opts: ["A. 政治经济保障", "B. 民族资产阶级两面性", "C. 农业合作化切断联系", "D. 苏联援助", "E. 低级到高级的过渡形式"] },
+        { q: "3. 1950-1953年土地改革运动深远影响体现在", a: [0, 1, 2, 3], type: "multiple", opts: ["A. 摧毁封建根基", "B. 为工业化开路", "C. 解放生产力", "D. 巩固工农联盟", "E. 彻底完成任务"] },
+        { q: "4. “三反”与“五反”运动的内在关联性在于", a: [0, 1, 2, 3], type: "multiple", opts: ["A. 巩固政权", "B. 针对内部腐败与外部不法", "C. 线索关联", "D. 共同打击侵蚀", "E. 矛盾激化"] },
+        { q: "5. 外交“一边倒”方针的含义和依据包括", a: [0, 2, 3], type: "multiple", opts: ["A. 站在社会主义阵营一边", "B. 听命于苏联", "C. 必然选择", "D. 打破封锁", "E. 与独立自主相悖"] },
+        { q: "6. 对个体农业进行社会主义改造的成功经验包括", a: [0, 1, 2, 4], type: "multiple", opts: ["A. 趁热打铁引导合作", "B. 逐步过渡形式", "C. 稳步前进方针", "D. 阶级路线", "E. 自愿互利典型示范"] },
+        { q: "7. 能够对民族资本主义经济实行和平赎买是由于", a: [0, 1, 2, 3, 4], type: "multiple", opts: ["A. 两面性", "B. 强大政权", "C. 国家机器", "D. 掌握命脉", "E. 割断联系"] },
+        { q: "8. 社会主义改造过程中出现的偏差和遗留问题包括", a: [0, 1, 2, 3], type: "multiple", opts: ["A. 所有制结构单一", "B. 计划体制扩大", "C. 排斥市场", "D. 四过（急、快、粗、单）", "E. 阶级斗争动力"] },
+        { q: "9. 高级社与初级社相比，“完全社会主义性质”体现在", a: [1, 3], type: "multiple", opts: ["A. 个人所有", "B. 集体所有", "C. 统一经营", "D. 按劳分配", "E. 自留地"] },
+        { q: "10. “三大改造”胜利完成的深远历史意义在于", a: [0, 1, 2, 3], type: "multiple", opts: ["A. 制度初步确立", "B. 深刻变革", "C. 奠定政治制度基础", "D. 赎买范例", "E. 照搬苏联模式"] },
+        { q: "12. “和平赎买”政策的复杂性体现在", a: [0, 1, 2, 4], type: "multiple", opts: ["A. 伴随斗争", "B. 非等价交换", "C. 包含思想改造", "D. 排除强制手段", "E. 形式随深入而演变"] },
+        { q: "13. 三大改造完成标志社会主义制度确立，具体涵义包括", a: [0, 1, 2, 3], type: "multiple", opts: ["A. 公有制主体", "B. 按劳分配建立", "C. 计划配置资源", "D. 阶级结构变化", "E. 法律确认地位"] },
+        { q: "14. “四过”问题的成因分析合理的包括", a: [0, 1, 2, 3, 4], type: "multiple", opts: ["A. 缺乏充分认识", "B. 赶超驱动", "C. 群众运动习惯", "D. 苏联模式局限", "E. 低估复杂性"] },
+        { q: "16. 中共八大在探索道路方面的重要成果有", a: [0, 1, 2, 3], type: "multiple", opts: ["A. 分析主要矛盾", "B. 建设方针", "C. 民主法制", "D. 民主集中制", "E. 双百方针"] },
+        { q: "17. 《关于正确处理人民内部矛盾的问题》基本观点包括", a: [0, 1, 2, 3, 4], type: "multiple", opts: ["A. 社会充满矛盾", "B. 基本矛盾论述", "C. 两类矛盾划分", "D. 性质区分", "E. 政治生活主题"] },
+        { q: "18. 1957年整风逆转并扩大化的原因包括", a: [0, 1, 2, 3, 4], type: "multiple", opts: ["A. 右派进攻事实", "B. 严重估计形势", "C. 习惯运动方法", "D. 群众不满", "E. 缺乏法制甄别"] },
+        { q: "19. 1956-1957年经济管理体制方面富有创见的思想包括", a: [0, 1, 2, 4], type: "multiple", opts: ["A. 三个主体三个补充", "B. 中央地方积极性", "C. 私营补充", "D. 知识分子论述", "E. 农业生产责任制构想"] },
+        { q: "20. 探索成果未能坚持的深层原因在于", a: [0, 1, 2, 3, 4], type: "multiple", opts: ["A. 认识不深刻", "B. 左倾偏差", "C. 革命思维惯性", "D. 国际影响", "E. 缺乏保障"] }
+    ];
+
+    // 标准化数据函数
+    function normalizeData() {
+        const formattedPart2 = dataPart2.map(item => ({
+            type: "multiple",
+            text: item.q,
+            options: item.opts,
+            answer: item.a,
+            knowledge: "社会主义改造与建设", // 补充默认知识点
+            explanation: "无特定解析，请参考教材相关章节。" // 补充默认解析
+        }));
+        return [...dataPart1, ...formattedPart2];
+    }
+
+    const allQuestions = normalizeData();
+    const QUESTIONS_PER_PAGE = 5;
+    let currentPage = 0;
+    let totalPages = Math.ceil(allQuestions.length / QUESTIONS_PER_PAGE);
+    let userAnswers = {};
+    let submittedPages = {};
+
+    // ==================== 核心逻辑 ====================
+
+    function renderPage() {
+        const container = document.getElementById('quiz-list');
+        container.innerHTML = '';
+        window.scrollTo(0, 0);
+
+        const start = currentPage * QUESTIONS_PER_PAGE;
+        const end = Math.min(start + QUESTIONS_PER_PAGE, allQuestions.length);
+        const currentQuestions = allQuestions.slice(start, end);
+
+        document.getElementById('pageInfo').innerText = `第 ${currentPage + 1} 页 / 共 ${totalPages} 页 （当前题目: ${start + 1}-${end}）`;
+
+        document.getElementById('prevBtn').disabled = currentPage === 0;
+        document.getElementById('nextBtn').disabled = currentPage === totalPages - 1;
+
+        // 清除分数显示
+        const scoreDisplay = document.getElementById('scoreDisplay');
+        scoreDisplay.style.display = 'none';
+
+        currentQuestions.forEach((q, index) => {
+            const globalIndex = start + index;
+            const card = document.createElement('div');
+            card.className = 'question-card';
+
+            let html = `
+            <div class="question-text">
+                <span class="question-type">多选题</span>
+                ${globalIndex + 1}. ${q.text}
+            </div>
+            <ul class="options-list">
+        `;
+
+            q.options.forEach((opt, optIndex) => {
+                const isSelected = userAnswers[globalIndex] && userAnswers[globalIndex].includes(optIndex);
+                html += `
+                <li class="option-item ${isSelected ? 'selected' : ''}"
+                    onclick="toggleOption(${globalIndex}, ${optIndex}, this)">
+                    ${opt}
+                </li>
+            `;
+            });
+
+            html += `</ul>`;
+
+            html += `
+            <div class="explanation-box" id="exp-${globalIndex}">
+                <span class="knowledge-point">📌 考点：${q.knowledge || '综合'}</span>
+                <strong>解析：</strong> ${q.explanation || '暂无详细解析'}
+            </div>
+        `;
+
+            card.innerHTML = html;
+            container.appendChild(card);
+        });
+
+        if (submittedPages[currentPage]) {
+            applySubmissionStyles();
+            // 重新显示分数（如果切回来查看）
+            const score = calculateScore(currentPage);
+            scoreDisplay.innerText = `本页正确率：${score.percentage}%`;
+            scoreDisplay.style.display = 'block';
+        }
+    }
+
+    function toggleOption(globalIndex, optIndex, element) {
+        if (submittedPages[currentPage]) return;
+
+        if (!userAnswers[globalIndex]) {
+            userAnswers[globalIndex] = [];
+        }
+
+        const arr = userAnswers[globalIndex];
+        const idx = arr.indexOf(optIndex);
+
+        if (idx > -1) {
+            arr.splice(idx, 1);
+            element.classList.remove('selected');
+        } else {
+            arr.push(optIndex);
+            element.classList.add('selected');
+        }
+    }
+
+    // 判分逻辑：多选题必须全对才算对
+    function checkAnswerCorrect(userAns, correctAns) {
+        if (!userAns) return false;
+        if (userAns.length !== correctAns.length) return false;
+
+        // 排序后比较
+        const sortedUser = [...userAns].sort((a, b) => a - b);
+        const sortedCorrect = [...correctAns].sort((a, b) => a - b);
+        return JSON.stringify(sortedUser) === JSON.stringify(sortedCorrect);
+    }
+
+    function calculateScore(pageIndex) {
+        const start = pageIndex * QUESTIONS_PER_PAGE;
+        const end = Math.min(start + QUESTIONS_PER_PAGE, allQuestions.length);
+        const currentQuestions = allQuestions.slice(start, end);
+        let correctCount = 0;
+
+        currentQuestions.forEach((q, idx) => {
+            const globalIndex = start + idx;
+            const userAns = userAnswers[globalIndex];
+            const correctAns = q.answer;
+            if (checkAnswerCorrect(userAns, correctAns)) {
+                correctCount++;
+            }
+        });
+
+        return {
+            count: correctCount,
+            total: currentQuestions.length,
+            percentage: Math.round((correctCount / currentQuestions.length) * 100)
+        };
+    }
+
+    function submitCurrentPage() {
+        if (submittedPages[currentPage]) return;
+
+        submittedPages[currentPage] = true;
+
+        // 计算并弹窗
+        const res = calculateScore(currentPage);
+
+        // 更新底部栏文字
+        const scoreDisplay = document.getElementById('scoreDisplay');
+        scoreDisplay.innerText = `本页正确率：${res.percentage}%`;
+        scoreDisplay.style.display = 'block';
+
+        applySubmissionStyles();
+
+        // 弹窗提示
+        setTimeout(() => {
+            alert(`🎉 本页提交完成！\n\n✅ 答对：${res.count} / ${res.total} 题\n📊 正确率：${res.percentage}%`);
+        }, 100);
+    }
+
+    function applySubmissionStyles() {
+        const start = currentPage * QUESTIONS_PER_PAGE;
+        const end = Math.min(start + QUESTIONS_PER_PAGE, allQuestions.length);
+        const currentQuestions = allQuestions.slice(start, end);
+
+        const cards = document.getElementsByClassName('question-card');
+
+        currentQuestions.forEach((q, idx) => {
+            const globalIndex = start + idx;
+            const card = cards[idx];
+            const options = card.getElementsByClassName('option-item');
+            const explanation = card.getElementsByClassName('explanation-box')[0];
+
+            explanation.style.display = 'block';
+
+            const userAns = userAnswers[globalIndex] || [];
+            const correctAns = q.answer;
+
+            for (let i = 0; i < options.length; i++) {
+                const optEl = options[i];
+                optEl.classList.remove('selected');
+
+                const isUserSelected = userAns.includes(i);
+                const isCorrect = correctAns.includes(i);
+
+                if (isCorrect) {
+                    if (isUserSelected) {
+                        optEl.classList.add('correct-answer');
+                    } else {
+                        optEl.classList.add('missed-answer');
+                    }
+                } else {
+                    if (isUserSelected) {
+                        optEl.classList.add('wrong-choice');
+                    }
+                }
+            }
+        });
+    }
+
+    function resetCurrentPage() {
+        const start = currentPage * QUESTIONS_PER_PAGE;
+        const end = Math.min(start + QUESTIONS_PER_PAGE, allQuestions.length);
+
+        for (let i = start; i < end; i++) {
+            delete userAnswers[i];
+        }
+
+        delete submittedPages[currentPage];
+        renderPage();
+    }
+
+    function changePage(delta) {
+        const newPage = currentPage + delta;
+        if (newPage >= 0 && newPage < totalPages) {
+            currentPage = newPage;
+            renderPage();
+        }
+    }
+
+    renderPage();
+
+</script>
+</body>
+</html>

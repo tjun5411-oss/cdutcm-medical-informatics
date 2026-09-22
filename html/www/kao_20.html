@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>DIV 布局</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        div {
+            position: relative;
+            float: left;
+            border: 1px solid red;
+        }
+        #div_1 {
+            width: 300px;
+            overflow: auto;
+        }
+        #div_2 {
+            width: 180px;
+        }
+        #div_3 {
+            width: calc(100% - 182px);
+        }
+    </style>
+</head>
+<body>
+要求如下：<br>
+三个div的id分别是div_1,div_2,div_3。<br>
+所有div相对定位，左浮动,border都为1px,实线,红色。<br>
+div_1的width为300px;div_2的width为180px。<br>
+div_2与div_3要保持在同一水平线，且占满div_1的内部空间。<br>
+<div id="div_1">
+    <div id="div_2">div_2 </div>
+    <div id="div_3">div_3 </div>
+</div>
+
+
+</body>
+</html>

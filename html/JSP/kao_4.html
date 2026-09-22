@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>个人信息表单</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: inline-block;
+            width: 100px;
+            vertical-align: top;
+        }
+
+        input[type="text"],
+        input[type="password"],
+        input[type="file"],
+        select,
+        textarea {
+            width: 300px;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        textarea {
+            height: 100px;
+        }
+
+        .radio-group,
+        .checkbox-group {
+            display: inline-block;
+        }
+
+        /* 方形提交按钮样式 */
+        #ok {
+            margin-top: 20px;
+            margin-left: 100px;
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 0;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        #ok:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+
+<body>
+form的id为form_1,提交方式为post,action为空<br>
+姓名框为text类型，控件的id、name为name,初值为"请输入姓名"。<br>
+电话框为text类型，控件的id、name为phone。<br>
+密码框为password类型，控件的的id、name为password<br>
+性别框为radio类型，控件的的name为gender,id分别为male、famale，默认选中女。<br>
+课程框为checkbox类型，控件的的name为course,id分别为asp,jsp,php,javascript，默认选中javascript。<br>
+籍贯框为select类型，控件的id、name为hometown。选择支的value分别为 北京市：110100000000；成都市：510100000000；重庆市：500100000000，默认选中cd<br>
+照片上传框为file类型，控件的id、name为photo。 。<br>
+保存按钮的id、name、value为ok。<br>
+<form id="form_1" method="post" action="">
+    <div class="form-group">
+        <label for="name">姓名:</label>
+        <input type="text" id="name" name="name" placeholder="请输入姓名">
+    </div>
+
+    <div class="form-group">
+        <label for="phone">电话:</label>
+        <input type="text" id="phone" name="phone">
+    </div>
+
+    <div class="form-group">
+        <label for="password">密码:</label>
+        <input type="password" id="password" name="password">
+    </div>
+
+    <div class="form-group">
+        <label>性别:</label>
+        <div class="radio-group">
+            <input type="radio" name="gender" id="male" value="male">
+            <label for="male">男</label>
+            <input type="radio" name="gender" id="female" value="female" checked>
+            <label for="female">女</label>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label>课程:</label>
+        <div class="checkbox-group">
+            <input type="checkbox" name="course" id="asp" value="asp">
+            <label for="asp">ASP</label>
+            <input type="checkbox" name="course" id="jsp" value="jsp">
+            <label for="jsp">JSP</label>
+            <input type="checkbox" name="course" id="php" value="php">
+            <label for="php">PHP</label>
+            <input type="checkbox" name="course" id="javascript" value="javascript" checked>
+            <label for="javascript">JavaScript</label>
+        </div>
+    </div>
+
+    <!-- 修改后的籍贯选择框 -->
+    <div class="form-group">
+        <label for="hometown">籍贯:</label>
+        <select id="hometown" name="hometown">
+            <option value="510100000000" selected>成都市</option>  <!-- 修正value并保持选中 -->
+            <option value="110100000000">北京市</option>          <!-- 修正value -->
+            <option value="500100000000">重庆市</option>          <!-- 修正value -->
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label for="photo">照片:</label>
+        <input type="file" id="photo" name="photo">
+    </div>
+
+    <input type="submit" id="ok" name="ok" value="保存">
+</form>
+</body>
+
+</html>

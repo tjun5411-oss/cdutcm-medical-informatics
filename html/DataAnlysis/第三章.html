@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>医学数据分析与挖掘 - 第三章</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI','Microsoft YaHei',sans-serif}
+body{background:#f0f5fb;color:#333;line-height:1.6;padding:20px}
+.container{max-width:1400px;margin:0 auto}
+header{text-align:center;padding:20px;background:linear-gradient(135deg,#4A90D9 0%,#5BA0E9 100%);color:white;border-radius:12px;box-shadow:0 6px 15px rgba(74,144,217,0.2);margin-bottom:25px}
+h1{font-size:2.2rem;margin-bottom:10px;letter-spacing:1px}
+.subtitle{font-size:1.1rem;opacity:0.9}
+.section-container{background:white;border-radius:12px;padding:30px;box-shadow:0 5px 15px rgba(0,0,0,0.08);margin-bottom:30px}
+.section-title{font-size:1.5rem;margin-bottom:25px;color:#2C6FBB;padding-bottom:15px;border-bottom:2px solid #e0eaf5}
+.question-item{border:1px solid #e0eaf5;border-radius:10px;padding:20px;margin-bottom:20px;transition:all 0.3s}
+.question-item.correct{border-color:#4CAF50;background:#f9fff9}
+.question-item.incorrect{border-color:#f44336;background:#fff9f9}
+.question-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:15px}
+.question-number{font-size:1.2rem;font-weight:600;color:#2C6FBB}
+.question-type{display:inline-block;padding:4px 12px;border-radius:15px;font-size:0.85rem;font-weight:600}
+.single-choice{background:#e6f2ff;color:#0066cc}
+.multiple-choice{background:#f0e6ff;color:#6600cc}
+.true-false{background:#e6ffe6;color:#2e7d32}
+.question-text{font-size:1.1rem;margin-bottom:20px;line-height:1.6}
+.options-container{margin:15px 0}
+.option{margin-bottom:10px;padding:12px 15px;border:1px solid #dce8f5;border-radius:6px;cursor:pointer;transition:all 0.2s;display:flex;align-items:center}
+.option:hover{border-color:#a3c9f0;background:#f0f6fc}
+.option.selected{border-color:#4A90D9;background:#e6f0fb}
+.option.correct-answer{border-color:#4CAF50;background:#e6ffe6}
+.option.incorrect-answer{border-color:#f44336;background:#ffe6e6}
+.option input{margin-right:10px;cursor:pointer}
+.option label{cursor:pointer;flex:1}
+.feedback{padding:15px;border-radius:6px;margin-top:15px;font-size:0.95rem;display:none}
+.feedback.correct{background:#e6ffe6;border-left:4px solid #4CAF50}
+.feedback.incorrect{background:#ffe6e6;border-left:4px solid #f44336}
+.feedback-title{font-weight:600;margin-bottom:8px}
+.correct-answer{margin-top:10px;padding:8px;background:white;border-radius:4px;border:1px dashed #ccc;font-weight:600}
+.explanation{margin-top:15px;padding:12px;background:#f9f9f9;border-radius:6px;border-left:3px solid #4A90D9;font-size:0.95rem;line-height:1.5}
+.section-buttons{display:flex;gap:15px;margin-top:30px}
+.section-btn{padding:12px 25px;border:none;border-radius:6px;font-size:1rem;font-weight:600;cursor:pointer;transition:all 0.3s}
+.reset-btn{background:#7fb3e0;color:white}
+.reset-btn:hover{background:#5a9fd4}
+.submit-btn{background:#4A90D9;color:white}
+.submit-btn:hover{background:#2C6FBB}
+.nav{display:flex;justify-content:space-between;margin-top:30px}
+.nav-btn{padding:12px 30px;border:none;border-radius:6px;font-size:1.1rem;font-weight:600;cursor:pointer;transition:all 0.3s;display:flex;align-items:center;gap:10px}
+.prev-btn{background:#999;color:white}
+.prev-btn:hover{background:#777}
+.prev-btn:disabled{background:#ccc;cursor:not-allowed}
+.next-btn{background:#4A90D9;color:white}
+.next-btn:hover{background:#2C6FBB}
+.next-btn:disabled{background:#ccc;cursor:not-allowed}
+.footer{text-align:center;padding:20px;color:#999;font-size:0.9rem;margin-top:40px;border-top:1px solid #e0eaf5}
+@media(max-width:768px){.section-buttons,.nav{flex-direction:column}.nav-btn{width:100%;justify-content:center}h1{font-size:1.6rem}}
+</style></head><body><div class="container">
+<header><h1>第三章 数据预处理</h1><p class="subtitle">共20题 | 单选题8题 | 多选题2题 | 判断题10题 | 每题附带解析</p></header>
+<div class="section-container"><h2 class="section-title">第一部分：单项选择题（1-8）</h2><div class="questions-container" id="s0"></div><div class="section-buttons"><button class="section-btn reset-btn" onclick="reset(0)">重置本小节</button><button class="section-btn submit-btn" onclick="sub(0)">提交本小节答案</button></div></div><div class="section-container"><h2 class="section-title">第二部分：多项选择题（9-10）</h2><div class="questions-container" id="s1"></div><div class="section-buttons"><button class="section-btn reset-btn" onclick="reset(1)">重置本小节</button><button class="section-btn submit-btn" onclick="sub(1)">提交本小节答案</button></div></div><div class="section-container"><h2 class="section-title">第三部分：判断题（11-20）</h2><div class="questions-container" id="s2"></div><div class="section-buttons"><button class="section-btn reset-btn" onclick="reset(2)">重置本小节</button><button class="section-btn submit-btn" onclick="sub(2)">提交本小节答案</button></div></div>
+<div class="nav"><button class="nav-btn prev-btn" onclick="gt('第二章')"><i class="fas fa-arrow-left"></i> 上一章</button><button class="nav-btn next-btn" onclick="gt('第四章')">下一章 <i class="fas fa-arrow-right"></i></button></div>
+<div class="footer"><p>医学数据分析与挖掘 - 第三章 | 基于学堂在线课程</p><p style="font-size:0.8rem;margin-top:5px">共20题 | 每题附带解析</p></div></div>
+<script>
+var q=[{"type": "single", "text": "（ ）的目的是缩小数据的取值范围，使其更适合于数据挖掘算法的需要，且能得到和原始数据相同的分析结果。", "options": ["A. 数据清洗", "B. 数据集成", "C. 数据变换", "D. 数据归约"], "answer": 3, "explanation": "数据归约的目的是缩小数据取值范围同时保持分析结果不变。"}, {"type": "single", "text": "将原始数据进行集成、变换、维度规约、数值规约是在以下哪个步骤的任务？", "options": ["A. 频繁模式挖掘", "B. 分类和预测", "C. 数据预处理", "D. 数据流挖掘"], "answer": 2, "explanation": "这些操作都属于数据预处理阶段。"}, {"type": "single", "text": "下面哪种不属于数据预处理的方法？", "options": ["A. 变量代换", "B. 离散化", "C. 聚集", "D. 估计遗漏值"], "answer": 3, "explanation": "估计遗漏值是数据清洗中的方法。"}, {"type": "single", "text": "假设12个销售价格记录已排序：5,10,11,13,15,35,50,55,72,92,204,215。使用等频划分分成四个箱，15在第几个箱？", "options": ["A. 第一个", "B. 第二个", "C. 第三个", "D. 第四个"], "answer": 1, "explanation": "等频每箱3个，箱1:5,10,11；箱2:13,15,35；15在第二箱。"}, {"type": "single", "text": "以下哪种方法不属于特征选择的标准方法？", "options": ["A. 嵌入", "B. 过滤", "C. 包装", "D. 聚类"], "answer": 3, "explanation": "特征选择标准方法包括嵌入、过滤和包装。"}, {"type": "single", "text": "下面哪个属于映射数据到新的空间的方法？", "options": ["A. 傅里叶变换", "B. 特征加权", "C. 渐进抽样", "D. 维归约"], "answer": 0, "explanation": "傅里叶变换将数据从时域映射到频域。"}, {"type": "single", "text": "数据仓库是随着时间变化的，下面的描述不正确的是", "options": ["A. 数据仓库随时间变化不断增加新数据", "B. 捕捉到的新数据会覆盖原来的快照", "C. 数据仓库随时间的推移而发生变化", "D. 数据仓库中综合数据会随时间变化重新综合"], "answer": 1, "explanation": "数据仓库不会覆盖原有快照。"}, {"type": "single", "text": "MapReduce的Map函数产生很多的", "options": ["A. key", "B. value", "C. <key,value>", "D. Hash"], "answer": 2, "explanation": "Map函数产生<key,value>对，供Reduce处理。"}, {"type": "multiple", "text": "噪声数据的产生原因主要有", "options": ["A. 数据采集设备有问题", "B. 录入过程中发生了人为或计算机错误", "C. 数据传输过程中发生错误", "D. 命名规则或数据代码不同而引起的不一致", "E. 数据资料自然产生"], "answer": [0, 1, 2, 3], "explanation": "噪声数据原因包括采集设备问题、录入错误、传输错误和命名不一致。"}, {"type": "multiple", "text": "进行多表合并时，使用pandas库的可以实现横向堆叠和纵向堆叠的是", "options": ["A. concat函数", "B. append()方法", "C. merge函数", "D. join()方法", "E. groupby()"], "answer": [0, 1], "explanation": "concat和append可以实现横向和纵向堆叠。"}, {"type": "true-false", "text": "缺失数据的处理方法主要有忽略该条记录、手工填补、默认值填补、均值填补等。", "options": ["正确", "错误"], "answer": 0, "explanation": "正确。"}, {"type": "true-false", "text": "数据规范化指将数据按比例缩放，使之落入特定区域（如0-1）以提高挖掘效率。", "options": ["正确", "错误"], "answer": 0, "explanation": "正确。"}, {"type": "true-false", "text": "原始业务数据来自多个数据库，结构和规则可能不同，必须进行数据预处理。", "options": ["正确", "错误"], "answer": 0, "explanation": "正确。"}, {"type": "true-false", "text": "孤立点在数据挖掘时总是被视为异常、无用数据而丢弃。", "options": ["正确", "错误"], "answer": 1, "explanation": "错误，孤立点有时包含重要信息。"}, {"type": "true-false", "text": "维归约可以去掉不重要的属性，减少数据立方体维数，提高挖掘效率。", "options": ["正确", "错误"], "answer": 0, "explanation": "正确。"}, {"type": "true-false", "text": "分组是使用特定条件将元数据划分为多个组。", "options": ["正确", "错误"], "answer": 0, "explanation": "正确。"}, {"type": "true-false", "text": "agg()和aggregate()方法都支持对每个分组应用函数，但不包括Python内置函数或自定义函数。", "options": ["正确", "错误"], "answer": 1, "explanation": "错误，它们支持Python内置函数和自定义函数。"}, {"type": "true-false", "text": "特征离散化以后，简化了模型的作用，降低了模型过拟合的风险。", "options": ["正确", "错误"], "answer": 0, "explanation": "正确。"}, {"type": "true-false", "text": "最小-最大标准化也称离差标准化，是对原始数据的线性变换，将数值映射到[0,1]之间。", "options": ["正确", "错误"], "answer": 0, "explanation": "正确。"}, {"type": "true-false", "text": "处理缺失值的方法可分为3类：删除记录、数据插补和不处理。", "options": ["正确", "错误"], "answer": 0, "explanation": "正确。"}];
+var s=[{"name": "第一部分：单项选择题（1-8）", "start": 0, "end": 8, "containerId": "s0"}, {"name": "第二部分：多项选择题（9-10）", "start": 8, "end": 10, "containerId": "s1"}, {"name": "第三部分：判断题（11-20）", "start": 10, "end": 20, "containerId": "s2"}];
+var u=new Array(q.length).fill(null),qs=new Array(q.length).fill(null);
+window.onload=function(){s.forEach(function(si,i){var c=document.getElementById(si.containerId);if(!c)return;for(var j=si.start;j<si.end;j++)c.appendChild(mkQ(q[j],j))})};
+function mkQ(qi,idx){var e=document.createElement('div');e.className='question-item';e.dataset.idx=idx;
+if(qs[idx]===true)e.classList.add('correct');else if(qs[idx]===false)e.classList.add('incorrect');
+var h=document.createElement('div');h.className='question-header';
+var n=document.createElement('div');n.className='question-number';n.textContent='第'+(idx+1)+'题';
+var t=document.createElement('span');var tm={'single':'single-choice','multiple':'multiple-choice','true-false':'true-false'};
+var lm={'single':'单选','multiple':'多选','true-false':'判断'};
+t.className='question-type '+tm[qi.type];t.textContent=lm[qi.type];
+h.appendChild(n);h.appendChild(t);
+var tx=document.createElement('div');tx.className='question-text';tx.textContent=qi.text;
+var oc=mkOpts(qi,idx);var fb=document.createElement('div');fb.className='feedback';fb.id='f'+idx;
+e.appendChild(h);e.appendChild(tx);e.appendChild(oc);e.appendChild(fb);return e;}
+function mkOpts(qi,idx){var c=document.createElement('div');c.className='options-container';
+qi.options.forEach(function(o,oi){var oe=document.createElement('div');oe.className='option';
+var st=(qi.type==='single'||qi.type==='true-false');
+var sel=st?(u[idx]===oi):(u[idx]&&u[idx].includes(oi));
+if(sel)oe.classList.add('selected');
+if(qs[idx]!==null){if(st){if(oi===qi.answer)oe.classList.add('correct-answer');else if(sel)oe.classList.add('incorrect-answer');}
+else{if(qi.answer.includes(oi))oe.classList.add('correct-answer');else if(sel&&!qi.answer.includes(oi))oe.classList.add('incorrect-answer');}}
+oe.dataset.oi=oi;oe.onclick=function(){selOpt(idx,oi,qi.type)};
+var inp=document.createElement('input');inp.type=(qi.type==='multiple')?'checkbox':'radio';
+inp.name='q'+idx;inp.id='q'+idx+'o'+oi;inp.checked=sel;
+var lb=document.createElement('label');lb.htmlFor='q'+idx+'o'+oi;lb.textContent=o;lb.style.cssText='cursor:pointer;flex:1';
+oe.appendChild(inp);oe.appendChild(lb);c.appendChild(oe)});return c}
+function selOpt(idx,oi,qt){var st=(qt==='single'||qt==='true-false');
+if(st){u[idx]=oi;var e=document.querySelector('[data-idx="'+idx+'"]');
+e.querySelectorAll('.option').forEach(function(o){o.classList.remove('selected');var i=o.querySelector('input');if(i)i.checked=false});
+var se=e.querySelector('[data-oi="'+oi+'"]');if(se){se.classList.add('selected');var i=se.querySelector('input');if(i)i.checked=true}}
+else{if(!u[idx])u[idx]=[];var a=u[idx],p=a.indexOf(oi);if(p===-1)a.push(oi);else a.splice(p,1);
+var e=document.querySelector('[data-idx="'+idx+'"]');
+var oe=e.querySelector('[data-oi="'+oi+'"]');var i=oe.querySelector('input');
+if(a.includes(oi)){oe.classList.add('selected');if(i)i.checked=true}else{oe.classList.remove('selected');if(i)i.checked=false}}
+var e2=document.querySelector('[data-idx="'+idx+'"]');if(e2)e2.classList.remove('correct','incorrect')}
+function sub(si){var sec=s[si];var hu=false,ui=[];
+for(var i=sec.start;i<sec.end;i++){var qi=q[i];var ans=(qi.type==='single'||qi.type==='true-false')?(u[i]!==null):(u[i]&&u[i].length>0);if(!ans){hu=true;ui.push(i+1)}}
+if(hu){alert('未完成：第'+ui.join(',')+'题');return}var cc=0;
+for(var i=sec.start;i<sec.end;i++){var qi=q[i],ic=false;
+if(qi.type==='single'||qi.type==='true-false')ic=(u[i]===qi.answer);
+else{var ua=u[i]?u[i].slice().sort():[],ca=qi.answer.slice().sort();ic=JSON.stringify(ua)===JSON.stringify(ca)}
+qs[i]=ic;if(ic)cc++;sf(i,ic,qi);
+var e=document.querySelector('[data-idx="'+i+'"]');if(e)e.classList.add(ic?'correct':'incorrect')}
+alert('正确:'+cc+'\n错误:'+(sec.end-sec.start-cc))}
+function sf(idx,ic,qi){var fe=document.getElementById('f'+idx);if(!fe)return;
+fe.className='feedback '+(ic?'correct':'incorrect');fe.style.display='block';
+var h=ic?'<div class="feedback-title">正确！</div>':'<div class="feedback-title">错误！</div>';
+if(!ic){var cat='';if(qi.type==='single'||qi.type==='true-false')cat=qi.options[qi.answer];
+else cat=qi.answer.map(function(i){return qi.options[i]}).join('<br>');
+h+='<div class="correct-answer">正确答案：<br>'+cat+'</div>'}
+if(qi.explanation)h+='<div class="explanation">解析：'+qi.explanation+'</div>';fe.innerHTML=h}
+function reset(si){if(!confirm('确定重置？'))return;var sec=s[si];
+for(var i=sec.start;i<sec.end;i++){u[i]=null;qs[i]=null;
+var e=document.querySelector('[data-idx="'+i+'"]');
+if(e){e.classList.remove('correct','incorrect');e.querySelectorAll('.option').forEach(function(o){o.classList.remove('selected','correct-answer','incorrect-answer');var i2=o.querySelector('input');if(i2)i2.checked=false})}
+var fe=document.getElementById('f'+i);if(fe)fe.style.display='none'}alert('已重置')}
+function gt(ch){for(var s2=0;s2<s.length;s2++){var sec=s[s2];for(var i=sec.start;i<sec.end;i++){if(qs[i]===null){alert('请先完成所有题目');return}}}
+window.location.href=ch+'.html'}
+</script></body></html>

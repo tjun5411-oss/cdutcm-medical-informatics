@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="GBK">
+    <title>复选框</title>
+</head>
+复选框：全选，全消操作，如下图所示：<br>
+要求如下：<br>
+通过一个复选框来实现选课复选框的全选与全消操作<br>
+其中,全选框的id为sAll<br>
+课程java框的id为java<br>
+课程c框的id为c<br>
+课程python框的id为python<br>
+课程springboot框的id为springboot<br>
+提示span的id为tip，根据实际情况显示全选或全消<br>
+<body>
+<span id="tip"></span><input type="checkbox" id="sAll" onclick="selectAll(),check()"><span>course:</span>
+<input type="checkbox" id="java" onclick="check()"><span>java</span>
+<input type="checkbox" id="python" onclick="check()"><span>python</span>
+<input type="checkbox" id="c" onclick="check()"><span>C</span>
+<input type="checkbox" id="springboot" onclick="check()"><span>SpringBoot</span>
+<script>
+    var java = document.getElementById("java");
+    var c = document.getElementById("c");
+    var python = document.getElementById("python");
+    var springboot = document.getElementById("springboot");
+    var sAll = document.getElementById("sAll");
+    var tip = document.getElementById("tip");
+    function selectAll(){
+        if(sAll.checked){
+            java.checked = true;
+            c.checked = true;
+            python.checked = true;
+            springboot.checked = true;
+        }
+        if(!sAll.checked){
+            java.checked = false;
+            c.checked = false;
+            python.checked = false;
+            springboot.checked = false;
+        }
+    }
+    function check(){
+        if(java.checked==true &&python.checked==true &&c.checked==true &&springboot.checked==true)
+            tip.innerText = "全消";
+        else if(java.checked==false &&python.checked==false &&c.checked==false &&springboot.checked==false)
+            tip.innerText = "全选";
+        else
+            tip.innerText = "";
+    }
+</script>
+</body>
+</html>

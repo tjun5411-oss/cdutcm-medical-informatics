@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>内置对象编程示例</title>
+</head>
+内置对象编程<br>
+要求如下：<br>
+定义div，id为div_1<br>
+定义getTime函数，将得到的当前的时间戳显示在div中<br>
+如：2006年06月12日13点15分16秒的时间戳为1139750637<br>
+<body>
+<div id="div_1"></div>
+<script>
+    function getTime() {
+        const timestamp = new Date().getTime();
+        const div = document.getElementById('div_1');
+        div.textContent = timestamp;
+    }
+</script>
+</body>
+
+</html>

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>定时器编程</title>
+
+</head>
+<body>
+定时器编程<br>
+要求如下：<br>
+定义函数addDiv()动态生成div,id为div_1<br>
+定义函数myTimer(),带一个整数形参，形参名自定义（用于传递给定时间）<br>
+给定时间后，在div中显示字符hello<br>
+<script>
+
+    function addDiv(){
+        let objdiv_1=document.createElement("div");
+        objdiv_1.id="div_1";
+
+        document.body.appendChild(objdiv_1);
+
+    }
+
+    function myTimer(time){
+        function a(){
+            document.getElementById("div_1").innerHTML="hello"
+
+        }
+        window.setTimeout(a(),time);
+    }
+
+
+</script>
+</body>
+</html>

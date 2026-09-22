@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>HIS程序设计专项能力评测 </title>
+    <script>
+        function checkData() {
+            var name = document.getElementById('name').value;
+            var gender = document.querySelector('input[name="gender"]:checked');
+            var city = document.getElementById('city').value;
+            var history = document.querySelectorAll('input[name="history"]:checked');
+
+            // 清空所有提示区信息
+            document.getElementById('span_name').textContent = '';
+            document.getElementById('span_gender').textContent = '';
+            document.getElementById('span_city').textContent = '';
+            document.getElementById('span_history').textContent = '';
+
+            // 检查姓名是否为空
+            if (!name) {
+                document.getElementById('span_name').textContent = '姓名不能为空';
+            }
+
+            // 检查性别是否选择
+            if (!gender) {
+                document.getElementById('span_gender').textContent = '请选择性别';
+            }
+
+            // 检查市是否选中德阳
+            if (city !== '德阳') {
+                document.getElementById('span_city').textContent = '请选择德阳';
+            }
+
+            // 检查既往史是否至少选择一项
+            if (history.length === 0) {
+                document.getElementById('span_history').textContent = '请选择至少一项疾病';
+            }
+        }
+    </script>
+</head>
+HIS程序设计专项能力评测，前端程序设计专用。<br>
+处方。可增加新药输入框<br>
+样式如下：<br>
+渲染前：<br>
+渲染后：<br>
+要求如下：<br>
+form的id为form_1,<br>
+就诊流水号输入框的id,name为biz_id;对应信息提示区span的id为span_biz_id，有初值为biz_0001<br>
+患者姓名下拉框的id,name为patient_name;对应信息提示区span的id为span_patient_name<br>
+患者数据来源于JSON对象，对象格式为[{id:"001",name:"王一"},{id:"002",name:"张二"},{id:"003",name:"李三"}],默认选中李三。如：<option value="001">王一</option><br>
+医生姓名下拉框的id,name为doctor_name;对应信息提示区span的id为span_doctor_name<br>
+医生数据来源于JSON对象，对象格式为[{id:"001",name:"王医生"},{id:"002",name:"张医生"},{id:"003",name:"李医生"}]，默认选中张医生。如：<option value="001">王医生</option><br>
+定义药品字典数组，所有药品下拉框的数据来自于药品字典数组。<br>
+数组为[['d_001','去痛片'],['d_002','维生素B1片'],['d_003','维生素C片'],['d_004','维生素AE胶丸']]<br>
+药品下拉框的id,name为drug_1,默认选中维生素B1片<br>
+药品用法输入框的id,name为drug_usage_1<br>
+页面刚加载时，患者姓名下拉框，医生姓名下拉框，药品下拉框都没有列表数据。<br>
+定义rendering()函数，将数据分别渲染到相应的下拉框中。<br>
+保存按钮的id,name,value为ok，type为button<br>
+<body>
+<form id="form_1">
+    姓名: <input type="text" id="name" name="name"><br>
+    <span id="span_name"></span><br>
+
+    身份证: <input type="text" id="id" name="id"><br>
+    <span id="span_id"></span><br>
+
+    性别:
+    <input type="radio" name="gender" id="male" value="01"> 男
+    <input type="radio" name="gender" id="female" value="02"> 女<br>
+    <span id="span_gender"></span><br>
+
+    家庭地址：
+    <select id="province" name="province">
+        <option value="">请选择省</option>
+        <option value="四川">四川</option>
+        <option value="河北">河北</option>
+        <option value="云南">云南</option>
+    </select><br>
+    <select id="city" name="city">
+        <option value="成都">成都</option>
+        <option value="绵阳">绵阳</option>
+        <option value="德阳" selected>德阳</option>
+    </select><br>
+    <span id="span_province"></span>
+    <span id="span_city"></span><br>
+
+    既往史:
+    <input type="checkbox" name="history" id="hypertension" value="icd_01"> 高血压
+    <input type="checkbox" name="history" id="diabetes" value="icd_02"> 糖尿病
+    <input type="checkbox" name="history" id="psychosis" value="icd_03"> 精神病<br>
+    <span id="span_history"></span><br>
+
+    <button type="button" id="ok" name="ok" onclick="checkData()">保存</button>
+</form>
+</body>
+</html>

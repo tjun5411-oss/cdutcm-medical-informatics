@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>鼠标事件编程</title>
+    <style>
+        body{
+            width: 600px;
+            height: 600px;
+        }
+    </style>
+</head>
+鼠标事件编程。<br>
+要求如下：<br>
+body的区域定义为600*600<br>
+给body添加onmousedown事件<br>
+事件处理函数名为mouseEvent<br>
+在mouseEvent中得到鼠标点击的坐标位置<br>
+以x:y的格式显示在div中(如10:10)<br>
+div的id为tip<br>
+<body onmousedown="down(event)">
+<div id="tip"></div>
+<script>
+    function down(event) {
+        document.getElementById("tip").innerHTML = event.x + ":" + event.y;
+    }
+</script>
+</body>
+</html>

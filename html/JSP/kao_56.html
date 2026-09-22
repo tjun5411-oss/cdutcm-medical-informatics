@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>HIS程序设计专项能力评测，前端程序设计专用</title>
+</head>
+要求如下：<br>
+form的id为form_1,<br>
+就诊流水号输入框的id,name为biz_id;对应信息提示区span的id为span_biz_id，有初值为biz_0001<br>
+患者姓名下拉框的id,name为patient_name;对应信息提示区span的id为span_patient_name<br>
+患者数据来源于JSON对象，对象格式为[{id:"001",name:"王一"},{id:"002",name:"张二"},{id:"003",name:"李三"}],默认选中李三。如：<option value="001">王一</option><br>
+医生姓名下拉框的id,name为doctor_name;对应信息提示区span的id为span_doctor_name<br>
+医生数据来源于JSON对象，对象格式为[{id:"001",name:"王医生"},{id:"002",name:"张医生"},{id:"003",name:"李医生"}]，默认选中张医生。如：<option value="001">王医生</option><br>
+定义药品字典数组，所有药品下拉框的数据来自于药品字典数组。<br>
+数组为[['d_001','去痛片'],['d_002','维生素B1片'],['d_003','维生素C片'],['d_004','维生素AE胶丸']]<br>
+药品下拉框的id,name为drug_1,默认选中维生素B1片<br>
+药品用法输入框的id,name为drug_usage_1<br>
+页面刚加载时，患者姓名下拉框，医生姓名下拉框，药品下拉框都没有列表数据。<br>
+定义rendering()函数，将数据分别渲染到相应的下拉框中。<br>
+保存按钮的id,name,value为ok，type为button<br>
+<body>
+<form action="" id="form_1" method="post">
+    就诊流水号:<input type="text" id="biz_id" name="biz_id" value="biz_0001" ><span id="span_biz_id"></span><br>
+    患者姓名:<select type="text" id="patient_name" name="patient_name" value=""><span id="span_patient_name"></span>
+
+</select><br>
+    医生姓名:<select type="text" id="doctor_name" name="doctor_name" value=""><span id="span_docker_name"></span>
+
+
+</select><br>
+    开具药品:<br>
+    <select type="text" id="drug_1" name="drug_1" value="">
+
+    </select>
+    服用方法:<input type="text" id="drug_usage_1" name="drug_usage_1" value=""><br>
+    <input type="button"id="ok" name="ok" value="ok" >
+</form>
+<script>
+    function rendering(){
+        let objname=document.getElementById("patient_name")
+        objname_1=document.createElement("option");
+        objname_1.value="003";
+        objname_1.checked="True"
+        objname_1.innerHTML="李三"
+        objname.appendChild(objname_1)
+        objname_1=document.createElement("option");
+        objname_1.value="001";
+        objname_1.innerHTML="王一"
+        objname.appendChild(objname_1)
+        objname_1=document.createElement("option");
+        objname_1.value="002";
+        objname_1.innerHTML="张二"
+        objname.appendChild(objname_1)
+
+
+        let objdocker=document.getElementById("doctor_name")
+        objdocker_1=document.createElement("option");
+        objdocker_1.value="002";
+        objdocker_1.checked="True"
+        objdocker_1.innerHTML="张医生"
+        objdocker.appendChild(objdocker_1)
+        objdocker_1=document.createElement("option");
+        objdocker_1.value="001";
+        objdocker_1.innerHTML="王医生"
+        objdocker.appendChild(objdocker_1)
+        objdocker_1=document.createElement("option");
+        objdocker_1.value="003";
+        objdocker_1.innerHTML="李医生"
+        objdocker.appendChild(objdocker_1)
+
+        let objdrug=document.getElementById("drug_1");
+        objdrug_1=document.createElement("option");
+        objdrug_1.value="d_002";
+        objdrug_1.innerHTML="维生素B1片";
+        objdrug.appendChild(objdrug_1);
+
+        objdrug_1=document.createElement("option");
+        objdrug_1.value="d_001";
+        objdrug_1.innerHTML="去痛片";
+        objdrug.appendChild(objdrug_1);
+
+        objdrug_1=document.createElement("option");
+        objdrug_1.value="d_003";
+        objdrug_1.innerHTML="维生素C片";
+        objdrug.appendChild(objdrug_1);
+
+        objdrug_1=document.createElement("option");
+        objdrug_1.value="d_004";
+        objdrug_1.innerHTML="维生素AE胶丸";
+        objdrug.appendChild(objdrug_1);
+    }
+
+</script>
+
+</body>
+</html>

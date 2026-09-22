@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>JavaScript 事件处理示例</title>
+    <style>
+        div {
+            width: 100px;
+            height: 50px;
+            border: 1px solid black;
+            margin: 10px;
+            padding: 10px;
+        }
+        button {
+            padding: 10px 20px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+定义两个div，id分别为div_1,div_2，内容为空。<br>
+定义一个button按钮，id为button_1。<br>
+给button添加两个click事件监听处理程序。<br>
+其中第一个事件处理程序修改div_1的内容为"click"字符串（不要引号）。<br>
+其中第二个事件处理程序修改div_2的内容为"click"字符串（不要引号）。<br>
+<!-- 定义两个 div -->
+<div id="div_1"></div>
+<div id="div_2"></div>
+
+<!-- 定义一个 button -->
+<button id="button_1">点击我</button>
+
+<script>
+
+    var button = document.getElementById("button_1");
+    var div1 = document.getElementById("div_1");
+    var div2 = document.getElementById("div_2");
+
+    button.addEventListener("click", function() {
+        div1.textContent = "click";
+    });
+
+    button.addEventListener("click", function() {
+        div2.textContent = "click";
+    });
+</script>
+</body>
+</html>

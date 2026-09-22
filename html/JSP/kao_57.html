@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>医院网站布局</title>
+    <style>
+        div {
+            position: relative;
+            float: left;
+            border: 1px solid red;
+            margin: 10px;
+            padding: 10px;
+        }
+        #main {
+            width: 400px;
+            height: 270px;
+        }
+        #top {
+            width: 358px;
+            height: 20px;
+        }
+        #menu {
+            width: 358px;
+            height: 20px;
+        }
+        #left {
+            width: 110px;
+        }
+        #right_1 {
+            width: 206px;
+        }
+        #right_2 {
+            width: 206px;
+        }
+        #footer {
+            width: 358px;
+            height: 15px;
+            clear: both;
+        }
+    </style>
+</head>
+div+CSS编程<br>
+样式如下<br>
+要求如下：<br>
+各div的id如图所示。<br>
+所有的div相对定位，左浮动，border都为实线,1px,红色。<br>
+所有的div的外边距为10px，内边距为10px。<br>
+main的宽为400px，高为270px;<br>
+top的宽为358px,高为20px。<br>
+menu的宽为358px,高为20px。<br>
+footer的宽为358px，高为15px。<br>
+left的宽为110px。<br>
+<body>
+<div id="main">
+    <div id="top">
+        # 首页 | 党建工作 | 医院新闻 | 求医问药 | 预约挂号
+    </div>
+    <div id="menu">
+    </div>
+    <div id="left">
+        内科<br>
+        外科<br>
+        儿科<br>
+        妇产科<br>
+        精神科<br>
+        院办科<br>
+        人事科<br>
+        保卫科
+    </div>
+    <div id="right_1">
+        春季防病知识专栏<br>
+        冬季防病知识专栏
+    </div>
+    <div id="right_2">
+        张医生 坐诊时间 周一<br>
+        李医生 坐诊时间 周二
+    </div>
+    <div id="footer">
+        版权所有©软件公司
+    </div>
+</div>
+</body>
+</html>

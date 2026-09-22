@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>动态添加div</title>
+</head>
+<body>
+要求如下：<br>
+定义父div，id为div_1。（此div直接写html代码实现，无样式要求)<br>
+通过appendDiv函数实现div的添加。<br>
+appendDiv提供一个形参，形参名自定，div的id通过形参传入。<br>
+div的定位方式为相对定位，高与宽都是50px。<br>
+div的边框样式为solid，1个像素，红色。<br>
+注：此题在提交时，请把自行测试时调用函数的代码行注释掉或是删除<br>
+<div id="div_1"></div>
+<button onclick="appendDiv('newDiv')">添加Div</button>
+
+<script>
+    function appendDiv(id) {
+        const parentDiv = document.getElementById('div_1');
+        const newDiv = document.createElement('div');
+
+        newDiv.id = id;
+        newDiv.style.position = 'relative';
+        newDiv.style.width = '50px';
+        newDiv.style.height = '50px';
+        newDiv.style.border = '1px solid red';
+
+        parentDiv.appendChild(newDiv);
+    }
+</script>
+</body>
+</html>

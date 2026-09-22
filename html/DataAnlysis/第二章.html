@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>医学数据分析与挖掘 - 第二章</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI','Microsoft YaHei',sans-serif}
+body{background:#f0f5fb;color:#333;line-height:1.6;padding:20px}
+.container{max-width:1400px;margin:0 auto}
+header{text-align:center;padding:20px;background:linear-gradient(135deg,#4A90D9 0%,#5BA0E9 100%);color:white;border-radius:12px;box-shadow:0 6px 15px rgba(74,144,217,0.2);margin-bottom:25px}
+h1{font-size:2.2rem;margin-bottom:10px;letter-spacing:1px}
+.subtitle{font-size:1.1rem;opacity:0.9}
+.section-container{background:white;border-radius:12px;padding:30px;box-shadow:0 5px 15px rgba(0,0,0,0.08);margin-bottom:30px}
+.section-title{font-size:1.5rem;margin-bottom:25px;color:#2C6FBB;padding-bottom:15px;border-bottom:2px solid #e0eaf5}
+.question-item{border:1px solid #e0eaf5;border-radius:10px;padding:20px;margin-bottom:20px;transition:all 0.3s}
+.question-item.correct{border-color:#4CAF50;background:#f9fff9}
+.question-item.incorrect{border-color:#f44336;background:#fff9f9}
+.question-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:15px}
+.question-number{font-size:1.2rem;font-weight:600;color:#2C6FBB}
+.question-type{display:inline-block;padding:4px 12px;border-radius:15px;font-size:0.85rem;font-weight:600}
+.single-choice{background:#e6f2ff;color:#0066cc}
+.multiple-choice{background:#f0e6ff;color:#6600cc}
+.true-false{background:#e6ffe6;color:#2e7d32}
+.question-text{font-size:1.1rem;margin-bottom:20px;line-height:1.6}
+.options-container{margin:15px 0}
+.option{margin-bottom:10px;padding:12px 15px;border:1px solid #dce8f5;border-radius:6px;cursor:pointer;transition:all 0.2s;display:flex;align-items:center}
+.option:hover{border-color:#a3c9f0;background:#f0f6fc}
+.option.selected{border-color:#4A90D9;background:#e6f0fb}
+.option.correct-answer{border-color:#4CAF50;background:#e6ffe6}
+.option.incorrect-answer{border-color:#f44336;background:#ffe6e6}
+.option input{margin-right:10px;cursor:pointer}
+.option label{cursor:pointer;flex:1}
+.feedback{padding:15px;border-radius:6px;margin-top:15px;font-size:0.95rem;display:none}
+.feedback.correct{background:#e6ffe6;border-left:4px solid #4CAF50}
+.feedback.incorrect{background:#ffe6e6;border-left:4px solid #f44336}
+.feedback-title{font-weight:600;margin-bottom:8px}
+.correct-answer{margin-top:10px;padding:8px;background:white;border-radius:4px;border:1px dashed #ccc;font-weight:600}
+.explanation{margin-top:15px;padding:12px;background:#f9f9f9;border-radius:6px;border-left:3px solid #4A90D9;font-size:0.95rem;line-height:1.5}
+.section-buttons{display:flex;gap:15px;margin-top:30px}
+.section-btn{padding:12px 25px;border:none;border-radius:6px;font-size:1rem;font-weight:600;cursor:pointer;transition:all 0.3s}
+.reset-btn{background:#7fb3e0;color:white}
+.reset-btn:hover{background:#5a9fd4}
+.submit-btn{background:#4A90D9;color:white}
+.submit-btn:hover{background:#2C6FBB}
+.nav{display:flex;justify-content:space-between;margin-top:30px}
+.nav-btn{padding:12px 30px;border:none;border-radius:6px;font-size:1.1rem;font-weight:600;cursor:pointer;transition:all 0.3s;display:flex;align-items:center;gap:10px}
+.prev-btn{background:#999;color:white}
+.prev-btn:hover{background:#777}
+.prev-btn:disabled{background:#ccc;cursor:not-allowed}
+.next-btn{background:#4A90D9;color:white}
+.next-btn:hover{background:#2C6FBB}
+.next-btn:disabled{background:#ccc;cursor:not-allowed}
+.footer{text-align:center;padding:20px;color:#999;font-size:0.9rem;margin-top:40px;border-top:1px solid #e0eaf5}
+@media(max-width:768px){.section-buttons,.nav{flex-direction:column}.nav-btn{width:100%;justify-content:center}h1{font-size:1.6rem}}
+</style></head><body><div class="container">
+<header><h1>第二章 数据属性与统计描述</h1><p class="subtitle">共20题 | 单选题8题 | 多选题2题 | 判断题10题 | 每题附带解析</p></header>
+<div class="section-container"><h2 class="section-title">第一部分：单项选择题（1-8）</h2><div class="questions-container" id="s0"></div><div class="section-buttons"><button class="section-btn reset-btn" onclick="reset(0)">重置本小节</button><button class="section-btn submit-btn" onclick="sub(0)">提交本小节答案</button></div></div><div class="section-container"><h2 class="section-title">第二部分：多项选择题（9-10）</h2><div class="questions-container" id="s1"></div><div class="section-buttons"><button class="section-btn reset-btn" onclick="reset(1)">重置本小节</button><button class="section-btn submit-btn" onclick="sub(1)">提交本小节答案</button></div></div><div class="section-container"><h2 class="section-title">第三部分：判断题（11-20）</h2><div class="questions-container" id="s2"></div><div class="section-buttons"><button class="section-btn reset-btn" onclick="reset(2)">重置本小节</button><button class="section-btn submit-btn" onclick="sub(2)">提交本小节答案</button></div></div>
+<div class="nav"><button class="nav-btn prev-btn" onclick="gt('第一章')"><i class="fas fa-arrow-left"></i> 上一章</button><button class="nav-btn next-btn" onclick="gt('第三章')">下一章 <i class="fas fa-arrow-right"></i></button></div>
+<div class="footer"><p>医学数据分析与挖掘 - 第二章 | 基于学堂在线课程</p><p style="font-size:0.8rem;margin-top:5px">共20题 | 每题附带解析</p></div></div>
+<script>
+var q=[{"type": "single", "text": "下列有关个人信息的指标，属于序数属性的是", "options": ["A. 学历", "B. 民族", "C. 职业", "D. 考试成绩"], "answer": 0, "explanation": "学历有等级顺序关系，属于序数属性。"}, {"type": "single", "text": "下列说法错误的是", "options": ["A. 有时为了数据分析方便可将高级属性转化为低级属性，一般不能做相反方向转化", "B. 标称属性→序数属性→区间标度属性→比率属性", "C. 数据属性类型大的来说分为定性和定量两种", "D. 实际工作中，首选比率属性，其次是区间标度属性，再次是序数属性，最后是标称属性"], "answer": 1, "explanation": "属性转化没有固定的顺序方向。"}, {"type": "single", "text": "下列属于二元属性的是", "options": ["A. 血压值", "B. 流感病毒检测结果", "C. 身高", "D. 血型"], "answer": 1, "explanation": "流感病毒检测结果（阳性/阴性）只有两个取值。"}, {"type": "single", "text": "肝炎病人的住院天数是", "options": ["A. 区间标度属性", "B. 比率属性", "C. 标称属性", "D. 序数属性"], "answer": 1, "explanation": "住院天数有真正零值，属于比率属性。"}, {"type": "single", "text": "一组数据中出现次数最多的变量值称为", "options": ["A. 算术平均值", "B. 众数", "C. 中位数", "D. 方差"], "answer": 1, "explanation": "众数指数据中出现次数最多的值。"}, {"type": "single", "text": "离散趋势是指", "options": ["A. 变量值的离散程度", "B. 变量值的平均水平", "C. 变量值的分配", "D. 变量值的大小"], "answer": 0, "explanation": "离散趋势描述变量值的离散程度。"}, {"type": "single", "text": "主成分分析后每一个新的变量可以表示为", "options": ["A. 某个原变量", "B. 新变量的线性组合", "C. 原来所有变量的线性组合", "D. 原始变量的线性组合"], "answer": 3, "explanation": "主成分是原始变量的线性组合。"}, {"type": "single", "text": "标准差数值越小则", "options": ["A. 反映变量值越集中，算术平均值代表性越好", "B. 反映变量值越分散，算术平均值代表性越差", "C. 反映变量值越集中，算术平均值代表性越差", "D. 反映变量值越分散，算术平均值代表性越好"], "answer": 0, "explanation": "标准差越小，变量值越集中，均值代表性越好。"}, {"type": "multiple", "text": "当两组或多组资料的变异度进行比较时，应采用离散系数的情况是", "options": ["A. 均数相差悬殊", "B. 标准差相差悬殊", "C. 度量单位不同", "D. 资料来自不同地区", "E. 资料来自不同时期"], "answer": [0, 2], "explanation": "均数相差悬殊或度量单位不同时应用离散系数。"}, {"type": "multiple", "text": "下列指标中属于集中趋势指标的有", "options": ["A. 算术平均值", "B. 方差", "C. 中位数", "D. 百分位数", "E. 极差"], "answer": [0, 1, 2, 3], "explanation": "集中趋势指标包括算术平均值、方差、中位数和百分位数。"}, {"type": "true-false", "text": "比率标度属性能提供关于顺序、差异以及比率关系的信息，关键之处在于真正零值能够被定义。", "options": ["正确", "错误"], "answer": 0, "explanation": "正确。"}, {"type": "true-false", "text": "当资料分布的末端无确切数据时不能计算算术平均值。", "options": ["正确", "错误"], "answer": 0, "explanation": "正确。"}, {"type": "true-false", "text": "样本量增大时，极差可能会增大。", "options": ["正确", "错误"], "answer": 0, "explanation": "正确。"}, {"type": "true-false", "text": "方差的单位与原始数据的单位相同。", "options": ["正确", "错误"], "answer": 1, "explanation": "错误，方差单位是原始数据单位的平方。"}, {"type": "true-false", "text": "卡方检验中，卡方统计量用来衡量所有单元格的观测值与理论值的差异大小。", "options": ["正确", "错误"], "answer": 0, "explanation": "正确。"}, {"type": "true-false", "text": "卡方检验中，卡方统计量越大，越有理由拒绝H0。", "options": ["正确", "错误"], "answer": 0, "explanation": "正确。"}, {"type": "true-false", "text": "相关系数|r|越接近于0，说明相关的密切程度越强。", "options": ["正确", "错误"], "answer": 1, "explanation": "错误，|r|越接近1说明相关越强。"}, {"type": "true-false", "text": "在选定主成分后，还需要结合应用对主成分进行解释，给出主成分的实际意义。", "options": ["正确", "错误"], "answer": 0, "explanation": "正确。"}, {"type": "true-false", "text": "主成分分析是一种统计方法，通过正交变换将可能存在相关性的变量转换为线性无关的变量。", "options": ["正确", "错误"], "answer": 0, "explanation": "正确。"}, {"type": "true-false", "text": "主成分分析方法是一种数据降维的方法。", "options": ["正确", "错误"], "answer": 0, "explanation": "正确。"}];
+var s=[{"name": "第一部分：单项选择题（1-8）", "start": 0, "end": 8, "containerId": "s0"}, {"name": "第二部分：多项选择题（9-10）", "start": 8, "end": 10, "containerId": "s1"}, {"name": "第三部分：判断题（11-20）", "start": 10, "end": 20, "containerId": "s2"}];
+var u=new Array(q.length).fill(null),qs=new Array(q.length).fill(null);
+window.onload=function(){s.forEach(function(si,i){var c=document.getElementById(si.containerId);if(!c)return;for(var j=si.start;j<si.end;j++)c.appendChild(mkQ(q[j],j))})};
+function mkQ(qi,idx){var e=document.createElement('div');e.className='question-item';e.dataset.idx=idx;
+if(qs[idx]===true)e.classList.add('correct');else if(qs[idx]===false)e.classList.add('incorrect');
+var h=document.createElement('div');h.className='question-header';
+var n=document.createElement('div');n.className='question-number';n.textContent='第'+(idx+1)+'题';
+var t=document.createElement('span');var tm={'single':'single-choice','multiple':'multiple-choice','true-false':'true-false'};
+var lm={'single':'单选','multiple':'多选','true-false':'判断'};
+t.className='question-type '+tm[qi.type];t.textContent=lm[qi.type];
+h.appendChild(n);h.appendChild(t);
+var tx=document.createElement('div');tx.className='question-text';tx.textContent=qi.text;
+var oc=mkOpts(qi,idx);var fb=document.createElement('div');fb.className='feedback';fb.id='f'+idx;
+e.appendChild(h);e.appendChild(tx);e.appendChild(oc);e.appendChild(fb);return e;}
+function mkOpts(qi,idx){var c=document.createElement('div');c.className='options-container';
+qi.options.forEach(function(o,oi){var oe=document.createElement('div');oe.className='option';
+var st=(qi.type==='single'||qi.type==='true-false');
+var sel=st?(u[idx]===oi):(u[idx]&&u[idx].includes(oi));
+if(sel)oe.classList.add('selected');
+if(qs[idx]!==null){if(st){if(oi===qi.answer)oe.classList.add('correct-answer');else if(sel)oe.classList.add('incorrect-answer');}
+else{if(qi.answer.includes(oi))oe.classList.add('correct-answer');else if(sel&&!qi.answer.includes(oi))oe.classList.add('incorrect-answer');}}
+oe.dataset.oi=oi;oe.onclick=function(){selOpt(idx,oi,qi.type)};
+var inp=document.createElement('input');inp.type=(qi.type==='multiple')?'checkbox':'radio';
+inp.name='q'+idx;inp.id='q'+idx+'o'+oi;inp.checked=sel;
+var lb=document.createElement('label');lb.htmlFor='q'+idx+'o'+oi;lb.textContent=o;lb.style.cssText='cursor:pointer;flex:1';
+oe.appendChild(inp);oe.appendChild(lb);c.appendChild(oe)});return c}
+function selOpt(idx,oi,qt){var st=(qt==='single'||qt==='true-false');
+if(st){u[idx]=oi;var e=document.querySelector('[data-idx="'+idx+'"]');
+e.querySelectorAll('.option').forEach(function(o){o.classList.remove('selected');var i=o.querySelector('input');if(i)i.checked=false});
+var se=e.querySelector('[data-oi="'+oi+'"]');if(se){se.classList.add('selected');var i=se.querySelector('input');if(i)i.checked=true}}
+else{if(!u[idx])u[idx]=[];var a=u[idx],p=a.indexOf(oi);if(p===-1)a.push(oi);else a.splice(p,1);
+var e=document.querySelector('[data-idx="'+idx+'"]');
+var oe=e.querySelector('[data-oi="'+oi+'"]');var i=oe.querySelector('input');
+if(a.includes(oi)){oe.classList.add('selected');if(i)i.checked=true}else{oe.classList.remove('selected');if(i)i.checked=false}}
+var e2=document.querySelector('[data-idx="'+idx+'"]');if(e2)e2.classList.remove('correct','incorrect')}
+function sub(si){var sec=s[si];var hu=false,ui=[];
+for(var i=sec.start;i<sec.end;i++){var qi=q[i];var ans=(qi.type==='single'||qi.type==='true-false')?(u[i]!==null):(u[i]&&u[i].length>0);if(!ans){hu=true;ui.push(i+1)}}
+if(hu){alert('未完成：第'+ui.join(',')+'题');return}var cc=0;
+for(var i=sec.start;i<sec.end;i++){var qi=q[i],ic=false;
+if(qi.type==='single'||qi.type==='true-false')ic=(u[i]===qi.answer);
+else{var ua=u[i]?u[i].slice().sort():[],ca=qi.answer.slice().sort();ic=JSON.stringify(ua)===JSON.stringify(ca)}
+qs[i]=ic;if(ic)cc++;sf(i,ic,qi);
+var e=document.querySelector('[data-idx="'+i+'"]');if(e)e.classList.add(ic?'correct':'incorrect')}
+alert('正确:'+cc+'\n错误:'+(sec.end-sec.start-cc))}
+function sf(idx,ic,qi){var fe=document.getElementById('f'+idx);if(!fe)return;
+fe.className='feedback '+(ic?'correct':'incorrect');fe.style.display='block';
+var h=ic?'<div class="feedback-title">正确！</div>':'<div class="feedback-title">错误！</div>';
+if(!ic){var cat='';if(qi.type==='single'||qi.type==='true-false')cat=qi.options[qi.answer];
+else cat=qi.answer.map(function(i){return qi.options[i]}).join('<br>');
+h+='<div class="correct-answer">正确答案：<br>'+cat+'</div>'}
+if(qi.explanation)h+='<div class="explanation">解析：'+qi.explanation+'</div>';fe.innerHTML=h}
+function reset(si){if(!confirm('确定重置？'))return;var sec=s[si];
+for(var i=sec.start;i<sec.end;i++){u[i]=null;qs[i]=null;
+var e=document.querySelector('[data-idx="'+i+'"]');
+if(e){e.classList.remove('correct','incorrect');e.querySelectorAll('.option').forEach(function(o){o.classList.remove('selected','correct-answer','incorrect-answer');var i2=o.querySelector('input');if(i2)i2.checked=false})}
+var fe=document.getElementById('f'+i);if(fe)fe.style.display='none'}alert('已重置')}
+function gt(ch){for(var s2=0;s2<s.length;s2++){var sec=s[s2];for(var i=sec.start;i<sec.end;i++){if(qs[i]===null){alert('请先完成所有题目');return}}}
+window.location.href=ch+'.html'}
+</script></body></html>

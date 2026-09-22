@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>中国近现代史纲要 - 第八章</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif; }
+        body { background-color: #f0f7f4; color: #333; line-height: 1.6; padding: 20px; }
+        .container { max-width: 1400px; margin: 0 auto; }
+        header { text-align: center; padding: 35px; background: linear-gradient(135deg, #004d40 0%, #00796b 100%); color: white; border-radius: 15px; box-shadow: 0 10px 25px rgba(0, 77, 64, 0.2); margin-bottom: 30px; }
+        h1 { font-size: 2.2rem; margin-bottom: 10px; }
+        .subtitle { font-size: 1.1rem; opacity: 0.9; }
+        .section-container { background: white; border-radius: 15px; padding: 30px; box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05); margin-bottom: 35px; border-top: 6px solid #004d40; }
+        .section-title { font-size: 1.4rem; margin-bottom: 25px; color: #004d40; padding-bottom: 15px; border-bottom: 2px solid #eee; display: flex; align-items: center; gap: 10px; }
+        .question-item { border: 1px solid #e0e0e0; border-radius: 12px; padding: 20px; margin-bottom: 25px; background-color: #fff; transition: 0.3s; }
+        .question-item.correct { border-color: #4CAF50; background-color: #f9fff9; }
+        .question-item.incorrect { border-color: #f44336; background-color: #fff9f9; }
+        .question-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+        .question-number { font-weight: 700; color: #004d40; }
+        .question-type { padding: 3px 10px; border-radius: 15px; font-size: 0.8rem; }
+        .single-choice { background-color: #e0f2f1; color: #00695c; }
+        .multiple-choice { background-color: #e8eaf6; color: #3f51b5; }
+        .option { margin-bottom: 10px; padding: 12px; border: 1px solid #eee; border-radius: 8px; cursor: pointer; transition: 0.2s; display: flex; align-items: flex-start; gap: 10px; }
+        .option:hover { background-color: #f1f8e9; }
+        .option.selected { border-color: #004d40; background-color: #e0f2f1; }
+        .feedback { padding: 15px; border-radius: 8px; margin-top: 15px; display: none; }
+        .feedback.correct { background-color: #e8f5e9; color: #2e7d32; border-left: 5px solid #4CAF50; }
+        .feedback.incorrect { background-color: #ffebee; color: #c62828; border-left: 5px solid #f44336; }
+        .btn-group { display: flex; gap: 15px; margin-top: 15px; }
+        .btn { padding: 10px 25px; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; }
+        .btn-submit { background-color: #004d40; color: white; }
+        .btn-reset { background-color: #78909c; color: white; }
+        .chapter-nav { display: flex; justify-content: space-between; margin-top: 40px; padding: 25px 0; border-top: 2px solid #ddd; }
+        .nav-btn { text-decoration: none; padding: 12px 25px; border-radius: 8px; font-weight: bold; color: white; background: #546e7a; transition: 0.3s; display: flex; align-items: center; gap: 8px; }
+        .nav-btn.next { background: #004d40; }
+        footer { text-align: center; margin-top: 50px; color: #888; padding-bottom: 30px; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>第八章 社会主义基本制度在中国的确立</h1>
+        <p class="subtitle">从新民主主义向社会主义的伟大过渡与探索</p>
+    </header>
+
+    <div id="quiz-app"></div>
+
+    <div class="chapter-nav">
+        <a href="第七章.html" class="nav-btn">
+            <i class="fas fa-arrow-left"></i> 上一章：第七章
+        </a>
+        <a href="第九、十章.html" class="nav-btn next">
+            下一章：第九、十章 <i class="fas fa-arrow-right"></i>
+        </a>
+    </div>
+
+    <footer>
+        <p>自学刷题系统 &copy; 2025 - 迈向社会主义现代化</p>
+    </footer>
+</div>
+
+<script>
+    const questions = [
+        // 单项选择题
+        { q: "2. 新中国初期，毛泽东评价某场战争“打得一拳开，免得百拳来”，这场战争是", a: 1, type: "single", opts: ["A. 中印边境自卫反击战", "B. 抗美援朝战争", "C. 援越抗法战争", "D. 西沙海战"] },
+        { q: "3. 新中国成立后，为巩固政权和恢复国民经济，中共中央决定优先完成的首要任务是", a: 2, type: "single", opts: ["A. 完成新解放区的土地改革", "B. 进行大规模的工业化建设", "C. 追歼残敌，解放全中国", "D. 进行“三反”、“五反”运动"] },
+        { q: "5. “三反”运动主要在国家机关人员中开展，其内容不包括", a: 2, type: "single", opts: ["A. 反贪污", "B. 反浪费", "C. 反偷工减料", "D. 反官僚主义"] },
+        { q: "6. 新中国初期，通过“银元之战”和“米棉之战”稳定了物价，其本质是", a: 0, type: "single", opts: ["A. 无产阶级与资产阶级争夺市场领导权的斗争", "B. 中央政府与地方政府争夺财政权的斗争", "C. 社会主义经济与帝国主义经济的斗争", "D. 计划经济与自然经济的斗争"] },
+        { q: "7. 中国共产党在过渡时期总路线的最显著特点是", a: 0, type: "single", opts: ["A. 社会主义建设和社会主义改造同时并举", "B. 优先发展重工业", "C. 对资本主义工商业实行和平赎买", "D. 实行农业合作化"] },
+        { q: "8. 新中国第一届中央人民政府的组成体现了", a: 1, type: "single", opts: ["A. 无产阶级专政的单一阶级政权性质", "B. 多党合作和民主联合政府的特色", "C. 完全由中共党员组成的执政模式", "D. 仿效苏联苏维埃模式"] },
+        { q: "9. 抗美援朝战争胜利对新中国最主要的影响是", a: 1, type: "single", opts: ["A. 赢得了苏联全面的经济援助", "B. 为中国赢得了长期稳定的和平建设环境", "C. 使台湾问题得到彻底解决", "D. 促使美国改变对华政策"] },
+        { q: "10. 新中国成立初期，旨在破除封建婚姻制度的法律是", a: 1, type: "single", opts: ["A. 《中华苏维埃共和国婚姻法》", "B. 《中华人民共和国婚姻法》", "C. 《中华人民共和国宪法》", "D. 《共同纲领》相关条款"] },
+        { q: "11. 过渡时期总路线中，对农业进行社会主义改造的根本目的是", a: 2, type: "single", opts: ["A. 防止农村两极分化", "B. 转变为集体所有制", "C. 适应国家工业化建设对粮食和原料的需求", "D. 走集体化道路"] },
+        { q: "12. 农业社会主义改造过程中，具有社会主义萌芽性质的组织形式是", a: 0, type: "single", opts: ["A. 互助组", "B. 初级农业生产合作社", "C. 高级农业生产合作社", "D. 人民公社"] },
+        { q: "13. 资本主义工商业改造中，初级形式与高级形式（公私合营）的主要区别在于", a: 2, type: "single", opts: ["A. 是否接受公方代表领导", "B. 是否实行“四马分肥”", "C. 社会主义成分是否深入到企业内部", "D. 是否接受国家计划指导"] },
+        { q: "14. 全行业公私合营后对资本家生产资料实行的“赎买”具体方式是", a: 1, type: "single", opts: ["A. 一次性付清", "B. 在一定时期内每年付给固定的股息（定息）", "C. 保留高薪", "D. 按比例分配利润"] },
+        { q: "15. 对资本主义工商业的社会主义改造基本完成的主要标志是", a: 1, type: "single", opts: ["A. 个别企业公私合营实现", "B. 全行业公私合营的基本实现", "C. “四马分肥”普遍推行", "D. 占比降至零"] },
+        { q: "16. 手工业社会主义改造的途径是", a: 0, type: "single", opts: ["A. 走合作化道路", "B. 实行公私合营", "C. 转为国营", "D. 纳入国家资本主义"] },
+        { q: "17. 对农业进行社会主义改造的基本原则是", a: 0, type: "single", opts: ["A. 自愿互利、典型示范和国家帮助", "B. 积极领导、稳步前进", "C. 先合作化、后机械化", "D. 依靠贫下中农"] },
+        { q: "18. 初级农业生产合作社与互助组最主要的区别在于", a: 0, type: "single", opts: ["A. 实行土地入股和统一经营", "B. 实行集体劳动", "C. 规模更大", "D. 有公共积累"] },
+        { q: "19. 对资本主义工商业的政策，实现了马克思和列宁曾经设想过的", a: 1, type: "single", opts: ["A. 暴力剥夺", "B. 和平赎买", "C. 合作经营", "D. 教育改造"] },
+        { q: "20. 全行业公私合营后，企业的性质基本上转变为", a: 1, type: "single", opts: ["A. 完全的资本主义", "B. 完全的社会主义", "C. 半社会主义", "D. 国家资本主义"] },
+        { q: "22. 我国社会主义改造过程中的一项创举是", a: 2, type: "single", opts: ["A. 农业合作化", "B. 手工业合作化", "C. 对资本主义工商业实行和平赎买", "D. 工业化与改造并举"] },
+        { q: "23. 到1956年，随着三大改造的基本完成，我国", a: 0, type: "single", opts: ["A. 确立了社会主义基本制度", "B. 恢复了国民经济", "C. 完成一五计划", "D. 实现了工业化"] },
+        { q: "24. 农业合作化运动中急躁冒进问题的思想根源主要在于", a: 1, type: "single", opts: ["A. 重要性认识不足", "B. 对改造的长期性和艰巨性认识不足", "C. 保护中农不够", "D. 工业化需求高估"] },
+        { q: "25. 社会主义改造基本完成后，我国社会的主要矛盾转变为", a: 0, type: "single", opts: ["A. 先进工业国要求同落后农业国现实之间的矛盾", "B. 无产阶级与资产阶级矛盾", "C. 道路矛盾", "D. 物质文化需要同落后生产力矛盾"] },
+        { q: "26. 对农业改造战略考量中，最深层的内在张力在于", a: 0, type: "single", opts: ["A. 工业化资本积累与保护农民生产积极性之间的矛盾", "B. 苏联模式与小农传统", "C. 政治激进与经济稳妥", "D. 消灭残余与利用富农"] },
+        { q: "28. 从个别公私合营发展到全行业公私合营的关键驱动力是", a: 2, type: "single", opts: ["A. 资本家要求", "B. 个别合营局限性", "C. 应对“一五”计划对经济计划性要求的提升", "D. 五反运动后果"] },
+        { q: "29. 高级农业生产合作社成为“完全社会主义性质”的决定性标志是", a: 1, type: "single", opts: ["A. 实行集体劳动", "B. 取消了土地分红，完全实行按劳分配", "C. 规模化", "D. 公共积累"] },
+        { q: "30. 全行业公私合营后实行的“定息”制度，其最微妙的历史作用在于", a: 1, type: "single", opts: ["A. 减轻财政负担", "B. 在法理上和政治上实现了和平赎买", "C. 彻底脱离联系", "D. 分配方式优越"] },
+        { q: "31. 手工业社会主义改造面临的最大内在挑战是", a: 1, type: "single", opts: ["A. 行会思想", "B. 保持传统工艺特色与机械化生产之间的矛盾", "C. 资金匮乏", "D. 需求对接"] },
+        { q: "32. 1955年后农业合作化骤然加速最具长期性的后果是", a: 1, type: "single", opts: ["A. 人民公社基础", "B. 强化了国家对农村资源和劳动力的控制能力", "C. 干部膨胀", "D. 中断商品经济"] },
+        { q: "33. 成功实现“和平赎买”最关键的“中国条件”是", a: 1, type: "single", opts: ["A. 历史合作", "B. 人民民主专政下资产阶级处于“弱势可塑”地位", "C. 国际形势", "D. 切断农村联系"] },
+        { q: "34. 陈云提出“三个主体、三个补充”实质上是反思了", a: 1, type: "single", opts: ["A. 改造过慢", "B. 经济体制趋向过于单一和集中", "C. 手工业改造", "D. 精神激励"] },
+        { q: "35. 全行业公私合营后企业性质发生质变的关节点在于", a: 2, type: "single", opts: ["A. 公方进驻", "B. 资本家退出管理", "C. 剩余价值的分配权与控制权转移到国家手中", "D. 纳入计划"] },
+        { q: "36. 评价三大改造“预设了路径”最准确的解释是", a: 1, type: "single", opts: ["A. 阶级斗争路径", "B. 预设了单一公有制和高度集中计划经济的路径", "C. 工业化路径", "D. 群众运动路径"] },
+        { q: "38. 国家资本主义理论与实践的创造性发展在于", a: 1, type: "single", opts: ["A. 延长寿命", "B. 将资本主义经济纳入无产阶级国家管理控制下", "C. 和平共处", "D. 照搬苏联"] },
+        { q: "39. 三大改造后期“要求过急”等问题的思想根源是", a: 1, type: "single", opts: ["A. 误解方针", "B. 对生产关系变革能否超越生产力发展水平的认识偏差", "C. 估计错误", "D. 国际影响"] },
+        { q: "40. 1978年后改革与当年农业改造的关系准确表述为", a: 1, type: "single", opts: ["A. 根本否定", "B. 对前者僵化模式的修正和在更高层次上的回归", "C. 无联系", "D. 简单复归"] },
+        { q: "41. 《论十大关系》报告根本的指导思想与核心目标是", a: 1, type: "single", opts: ["A. 总结苏联教训", "B. 调动国内外一切积极因素为社会主义事业服务", "C. 阶级斗争核心", "D. 制定总路线"] },
+        { q: "42. 中共八大关于国内主要矛盾论断的革命性意义在于", a: 2, type: "single", opts: ["A. 重申矛盾", "B. 明确阶级矛盾", "C. 指出是先进工业国要求同落后农业国现实的矛盾", "D. 阶级斗争路线"] },
+        { q: "43. 《关于正确处理人民内部矛盾的问题》的政治前提是", a: 1, type: "single", opts: ["A. 依然存在斗争", "B. 大规模急风暴雨式的群众阶级斗争已基本结束", "C. 对抗性转化", "D. 知识分子代言"] },
+        { q: "44. “双百”方针最初设想的适用范围主要是", a: 1, type: "single", opts: ["A. 全领域", "B. 自然科学、文学艺术及哲学社会科学研究", "C. 党内争论", "D. 批评建议"] },
+        { q: "45. 1957年整风运动初始阶段的核心内容是", a: 0, type: "single", opts: ["A. 反对官僚主义、宗派主义和主观主义", "B. 反击右派", "C. 社会主义教育", "D. 整顿基层"] },
+        { q: "48. “三个主体、三个补充”的核心价值在于", a: 1, type: "single", opts: ["A. 强化计划经济", "B. 尝试突破苏联模式束缚，探索中国特色路径", "C. 恢复资本主义", "D. 包产到户依据"] },
+        { q: "49. 1956-1957年探索思想方法上最宝贵的遗产是", a: 0, type: "single", opts: ["A. 提出“以苏为鉴”，开始独立自主探索道路", "B. 建设方针", "C. 矛盾学说", "D. 处理方法"] },
+        { q: "50. “长期共存，互相监督”主要针对", a: 0, type: "single", opts: ["A. 中共与各民主党派关系", "B. 国际关系", "C. 民族关系", "D. 党内派别"] },
+        { q: "51. 判断言论和行动是非六条标准的中心是", a: 3, type: "single", opts: ["A. 团结人民", "B. 建设有利", "C. 民主集中制", "D. 有利于巩固共产党的领导"] },
+        { q: "52. 1957年“开门整风”的初衷是", a: 1, type: "single", opts: ["A. 揭露右倾", "B. 邀请党外人士帮助共产党克服缺点", "C. 制造舆论", "D. 检验忠诚度"] },
+        { q: "53. 反右派斗争扩大化理论上的严重后果是", a: 2, type: "single", opts: ["A. 否定成果", "B. 知识无用论", "C. 为“左”倾错误发展提供了依据并埋下伏笔", "D. 中断方针"] },
+        { q: "54. 中共八大制定的经济建设方针是", a: 0, type: "single", opts: ["A. 既反保守又反冒进，在综合平衡中稳步前进", "B. 多快好省", "C. 调整巩固", "D. 以粮为纲"] },
+        { q: "55. 1956-1957年探索的历史地位在于它是", a: 1, type: "single", opts: ["A. 完全适合的道路", "B. 改革开放和现代化建设新时期许多政策和理论的先声", "C. 防止左倾", "D. 终结标志"] },
+
+        // 多项选择题
+        { q: "1. 新中国初期巩固政权的重大斗争包括", a: [0, 1, 2, 3], type: "multiple", opts: ["A. 土地改革", "B. 抗美援朝", "C. “三反”“五反”", "D. 镇反运动", "E. 和平共处五项原则"] },
+        { q: "2. 资本主义工商业改造“和平赎买”得以实现的条件包括", a: [0, 1, 2, 4], type: "multiple", opts: ["A. 政治经济保障", "B. 民族资产阶级两面性", "C. 农业合作化切断联系", "D. 苏联援助", "E. 低级到高级的过渡形式"] },
+        { q: "3. 1950-1953年土地改革运动深远影响体现在", a: [0, 1, 2, 3], type: "multiple", opts: ["A. 摧毁封建根基", "B. 为工业化开路", "C. 解放生产力", "D. 巩固工农联盟", "E. 彻底完成任务"] },
+        { q: "4. “三反”与“五反”运动的内在关联性在于", a: [0, 1, 2, 3], type: "multiple", opts: ["A. 巩固政权", "B. 针对内部腐败与外部不法", "C. 线索关联", "D. 共同打击侵蚀", "E. 矛盾激化"] },
+        { q: "5. 外交“一边倒”方针的含义和依据包括", a: [0, 2, 3], type: "multiple", opts: ["A. 站在社会主义阵营一边", "B. 听命于苏联", "C. 必然选择", "D. 打破封锁", "E. 与独立自主相悖"] },
+        { q: "6. 对个体农业进行社会主义改造的成功经验包括", a: [0, 1, 2, 4], type: "multiple", opts: ["A. 趁热打铁引导合作", "B. 逐步过渡形式", "C. 稳步前进方针", "D. 阶级路线", "E. 自愿互利典型示范"] },
+        { q: "7. 能够对民族资本主义经济实行和平赎买是由于", a: [0, 1, 2, 3, 4], type: "multiple", opts: ["A. 两面性", "B. 强大政权", "C. 国家机器", "D. 掌握命脉", "E. 割断联系"] },
+        { q: "8. 社会主义改造过程中出现的偏差和遗留问题包括", a: [0, 1, 2, 3], type: "multiple", opts: ["A. 所有制结构单一", "B. 计划体制扩大", "C. 排斥市场", "D. 四过（急、快、粗、单）", "E. 阶级斗争动力"] },
+        { q: "9. 高级社与初级社相比，“完全社会主义性质”体现在", a: [1, 3], type: "multiple", opts: ["A. 个人所有", "B. 集体所有", "C. 统一经营", "D. 按劳分配", "E. 自留地"] },
+        { q: "10. “三大改造”胜利完成的深远历史意义在于", a: [0, 1, 2, 3], type: "multiple", opts: ["A. 制度初步确立", "B. 深刻变革", "C. 奠定政治制度基础", "D. 赎买范例", "E. 照搬苏联模式"] },
+        { q: "12. “和平赎买”政策的复杂性体现在", a: [0, 1, 2, 4], type: "multiple", opts: ["A. 伴随斗争", "B. 非等价交换", "C. 包含思想改造", "D. 排除强制手段", "E. 形式随深入而演变"] },
+        { q: "13. 三大改造完成标志社会主义制度确立，具体涵义包括", a: [0, 1, 2, 3], type: "multiple", opts: ["A. 公有制主体", "B. 按劳分配建立", "C. 计划配置资源", "D. 阶级结构变化", "E. 法律确认地位"] },
+        { q: "14. “四过”问题的成因分析合理的包括", a: [0, 1, 2, 3, 4], type: "multiple", opts: ["A. 缺乏充分认识", "B. 赶超驱动", "C. 群众运动习惯", "D. 苏联模式局限", "E. 低估复杂性"] },
+        { q: "16. 中共八大在探索道路方面的重要成果有", a: [0, 1, 2, 3], type: "multiple", opts: ["A. 分析主要矛盾", "B. 建设方针", "C. 民主法制", "D. 民主集中制", "E. 双百方针（此为毛提出，八大确认，选ABCD较稳）"] },
+        { q: "17. 《关于正确处理人民内部矛盾的问题》基本观点包括", a: [0, 1, 2, 3, 4], type: "multiple", opts: ["A. 社会充满矛盾", "B. 基本矛盾论述", "C. 两类矛盾划分", "&nbsp;D. 性质区分", "E. 政治生活主题"] },
+        { q: "18. 1957年整风逆转并扩大化的原因包括", a: [0, 1, 2, 3, 4], type: "multiple", opts: ["A. 右派进攻事实", "B. 严重估计形势", "C. 习惯运动方法", "D. 群众不满", "E. 缺乏法制甄别"] },
+        { q: "19. 1956-1957年经济管理体制方面富有创见的思想包括", a: [0, 1, 2, 4], type: "multiple", opts: ["A. 三个主体三个补充", "B. 中央地方积极性", "C. 私营补充", "D. 知识分子论述", "E. 农业生产责任制构想"] },
+        { q: "20. 探索成果未能坚持的深层原因在于", a: [0, 1, 2, 3, 4], type: "multiple", opts: ["A. 认识不深刻", "B. 左倾偏差", "C. 革命思维惯性", "D. 国际影响", "E. 缺乏保障"] }
+    ];
+
+    const sections = [
+        { title: "单选 2-25：巩固政权与三大改造启动", start: 0, end: 20 },
+        { title: "单选 26-55：改造深化与初步探索", start: 20, end: 47 },
+        { title: "多项选择题：历史意义与经验总结", start: 47, end: 65 }
+    ];
+
+    let userAnswers = new Array(questions.length).fill(null);
+
+    function init() {
+        const container = document.getElementById('quiz-app');
+        sections.forEach((sec, sIdx) => {
+            const secDiv = document.createElement('div');
+            secDiv.className = 'section-container';
+            secDiv.innerHTML = `<h2 class="section-title"><i class="fas fa-hammer"></i> ${sec.title}</h2><div id="sec-${sIdx}"></div>`;
+
+            const btnDiv = document.createElement('div');
+            btnDiv.className = 'btn-group';
+            btnDiv.innerHTML = `
+                <button class="btn btn-reset" onclick="resetSection(${sIdx})">重置本节</button>
+                <button class="btn btn-submit" onclick="submitSection(${sIdx})">校对本节</button>
+            `;
+            secDiv.appendChild(btnDiv);
+            container.appendChild(secDiv);
+
+            const qBox = secDiv.querySelector(`#sec-${sIdx}`);
+            for (let i = sec.start; i < sec.end; i++) {
+                if(questions[i]) qBox.appendChild(createQ(i));
+            }
+        });
+    }
+
+    function createQ(idx) {
+        const q = questions[idx];
+        const div = document.createElement('div');
+        div.className = 'question-item';
+        div.id = `q-box-${idx}`;
+
+        div.innerHTML = `
+            <div class="question-header">
+                <span class="question-number">第 ${q.q.split('.')[0]} 题</span>
+                <span class="question-type ${q.type}-choice">${q.type === 'single' ? '单选' : '多选'}</span>
+            </div>
+            <div class="question-text">${q.q.includes('.') ? q.q.split('.')[1] : q.q}</div>
+            <div class="options-container">
+                ${q.opts.map((o, oi) => `
+                    <div class="option" onclick="handleSel(${idx}, ${oi})">
+                        <input type="${q.type === 'single' ? 'radio' : 'checkbox'}" name="q${idx}" id="q${idx}o${oi}">
+                        <label>${o}</label>
+                    </div>
+                `).join('')}
+            </div>
+            <div class="feedback" id="fb-${idx}"></div>
+        `;
+        return div;
+    }
+
+    function handleSel(qi, oi) {
+        const q = questions[qi];
+        const container = document.getElementById(`q-box-${qi}`);
+        const inputs = container.querySelectorAll('input');
+        const opts = container.querySelectorAll('.option');
+
+        if (q.type === 'single') {
+            userAnswers[qi] = oi;
+            opts.forEach(o => o.classList.remove('selected'));
+            opts[oi].classList.add('selected');
+            inputs[oi].checked = true;
+        } else {
+            if (!userAnswers[qi]) userAnswers[qi] = [];
+            const pos = userAnswers[qi].indexOf(oi);
+            if (pos > -1) {
+                userAnswers[qi].splice(pos, 1);
+                opts[oi].classList.remove('selected');
+                inputs[oi].checked = false;
+            } else {
+                userAnswers[qi].push(oi);
+                opts[oi].classList.add('selected');
+                inputs[oi].checked = true;
+            }
+        }
+    }
+
+    function submitSection(sIdx) {
+        const sec = sections[sIdx];
+        let score = 0;
+        let total = 0;
+        for (let i = sec.start; i < sec.end; i++) {
+            if(!questions[i]) continue;
+            total++;
+            const q = questions[i];
+            const uAns = userAnswers[i];
+            let isCorrect = false;
+
+            if (q.type === 'single') {
+                isCorrect = (uAns === q.a);
+            } else {
+                if (uAns && Array.isArray(uAns)) {
+                    isCorrect = uAns.length === q.a.length && uAns.every(v => q.a.includes(v));
+                }
+            }
+
+            if (isCorrect) score++;
+            const fb = document.getElementById(`fb-${i}`);
+            const item = document.getElementById(`q-box-${i}`);
+
+            item.className = `question-item ${isCorrect ? 'correct' : 'incorrect'}`;
+            fb.style.display = 'block';
+            fb.className = `feedback ${isCorrect ? 'correct' : 'incorrect'}`;
+
+            const correctStr = q.type === 'single' ?
+                q.opts[q.a] :
+                q.a.map(aIdx => String.fromCharCode(65 + aIdx)).join(', ');
+
+            fb.innerHTML = `<strong>${isCorrect ? '正确' : '错误'}</strong> | 正确答案：${correctStr}`;
+        }
+        alert(`校对完成！得分：${score}/${total}`);
+    }
+
+    function resetSection(sIdx) {
+        const sec = sections[sIdx];
+        for (let i = sec.start; i < sec.end; i++) {
+            if(!questions[i]) continue;
+            userAnswers[i] = null;
+            const item = document.getElementById(`q-box-${i}`);
+            item.className = 'question-item';
+            item.querySelectorAll('.option').forEach(o => o.classList.remove('selected'));
+            item.querySelectorAll('input').forEach(input => input.checked = false);
+            document.getElementById(`fb-${i}`).style.display = 'none';
+        }
+    }
+
+    window.onload = init;
+</script>
+
+</body>
+</html>

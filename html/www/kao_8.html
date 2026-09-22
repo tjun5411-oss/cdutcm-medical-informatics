@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>表单示例</title>
+</head>
+<body>
+form的id为form_1,姓名输入框的id为name<br>
+性别按钮的name为gender，id男为male女为female<br>
+专业的name为major，id分别为jsp、asp、php(全小写),默认选中jsp。<br>
+<form id="form_1">
+    <div>
+        <label for="name">姓名：</label>
+        <input type="text" id="name" name="name">
+    </div>
+
+    <div>
+        <label>性别：</label>
+        <input type="radio" name="gender" id="male" value="男">
+        <label for="male">男</label>
+        <input type="radio" name="gender" id="female" value="女">
+        <label for="female">女</label>
+    </div>
+
+    <div>
+        <label>专业：</label>
+        <input type="radio" name="major" id="jsp" value="JSP" checked>
+        <label for="jsp">JSP</label>
+        <input type="radio" name="major" id="asp" value="ASP">
+        <label for="asp">ASP</label>
+        <input type="radio" name="major" id="php" value="PHP">
+        <label for="php">PHP</label>
+    </div>
+</form>
+</body>
+</html>

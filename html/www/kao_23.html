@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>回调函数示例</title>
+</head>
+<body>
+要求如下：<br>
+定义函数main，实现回调。<br>
+main函数接受一个回调参数实现回调功能。<br>
+回调时传"callback"字符串参数给回调函数。<br>
+注：此题在提交时，请把自行测试时调用函数的代码行注释掉或是删除<br>
+<button onclick="executeCallback()">触发回调</button>
+<div id="output"></div>
+
+<script>
+    function main(callback) {
+        if (typeof callback === 'function') {
+            callback('callback');
+        }
+    }
+
+    function executeCallback() {
+        main(function(message) {
+            document.getElementById('output').textContent = '回调参数: ' + message;
+        });
+    }
+</script>
+</body>
+</html>

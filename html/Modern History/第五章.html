@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>中国近现代史纲要 - 第五章</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif; }
+        body { background-color: #fdf2f2; color: #333; line-height: 1.6; padding: 20px; }
+        .container { max-width: 1400px; margin: 0 auto; }
+        header { text-align: center; padding: 25px; background: linear-gradient(135deg, #8B0000 0%, #B22222 100%); color: white; border-radius: 12px; box-shadow: 0 6px 15px rgba(139, 0, 0, 0.3); margin-bottom: 25px; }
+        h1 { font-size: 2.2rem; margin-bottom: 10px; }
+        .subtitle { font-size: 1.1rem; opacity: 0.9; }
+        .section-container { background: white; border-radius: 12px; padding: 30px; box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08); margin-bottom: 30px; border-top: 5px solid #8B0000; }
+        .section-title { font-size: 1.4rem; margin-bottom: 25px; color: #8B0000; padding-bottom: 15px; border-bottom: 1px solid #eee; }
+        .question-item { border: 1px solid #f0f0f0; border-radius: 10px; padding: 20px; margin-bottom: 20px; transition: all 0.3s ease; background-color: #fff; }
+        .question-item.correct { border-color: #4CAF50; background-color: #f9fff9; }
+        .question-item.incorrect { border-color: #f44336; background-color: #fff9f9; }
+        .question-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+        .question-number { font-size: 1.1rem; font-weight: 600; color: #8B0000; }
+        .question-type { display: inline-block; padding: 3px 10px; border-radius: 15px; font-size: 0.8rem; font-weight: 600; }
+        .single-choice { background-color: #fff0f0; color: #d32f2f; }
+        .multiple-choice { background-color: #f3e5f5; color: #7b1fa2; }
+        .question-text { font-size: 1.05rem; margin-bottom: 15px; font-weight: 500; }
+        .options-container { margin-left: 5px; }
+        .option { margin-bottom: 10px; padding: 12px 15px; border: 1px solid #eee; border-radius: 8px; cursor: pointer; transition: all 0.2s; display: flex; align-items: flex-start; }
+        .option:hover { background-color: #fff5f5; border-color: #ffcdd2; }
+        .option.selected { border-color: #d32f2f; background-color: #ffebee; }
+        .option input { margin-right: 12px; margin-top: 5px; }
+        .feedback { padding: 15px; border-radius: 8px; margin-top: 15px; display: none; }
+        .feedback.correct { background-color: #e8f5e9; color: #2e7d32; border-left: 5px solid #4CAF50; }
+        .feedback.incorrect { background-color: #ffebee; color: #c62828; border-left: 5px solid #f44336; }
+        .correct-answer-box { font-weight: bold; margin-bottom: 5px; }
+        .explanation { font-size: 0.95rem; border-top: 1px dashed #ccc; padding-top: 10px; margin-top: 10px; color: #555; }
+        .section-buttons { display: flex; gap: 15px; margin-top: 20px; }
+        .btn { padding: 10px 25px; border: none; border-radius: 6px; font-size: 1rem; font-weight: 600; cursor: pointer; transition: 0.3s; }
+        .btn-submit { background-color: #8B0000; color: white; }
+        .btn-reset { background-color: #757575; color: white; }
+
+        /* 修正后的导航栏样式 */
+        .chapter-nav { display: flex; justify-content: space-between; margin-top: 40px; padding: 20px 0; border-top: 2px solid #eee; }
+        .nav-btn { padding: 12px 30px; border-radius: 8px; text-decoration: none; font-weight: bold; color: white; background: #555; transition: 0.3s; display: flex; align-items: center; gap: 10px; border: none; cursor: pointer; }
+        .nav-btn:hover { background: #333; transform: translateY(-2px); }
+        .nav-btn.next { background: #8B0000; }
+        .nav-btn.next:hover { background: #660000; }
+
+        footer { text-align: center; margin-top: 50px; color: #999; padding-bottom: 30px; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <header>
+        <h1>中国近现代史纲要 - 第五章</h1>
+        <p class="subtitle">中国革命的新道路 | 40道单选 + 10道多选</p>
+    </header>
+
+    <div id="quiz-app"></div>
+
+    <div class="chapter-nav">
+        <a href="第四章.html" class="nav-btn">
+            <i class="fas fa-arrow-left"></i> 上一章：第四章
+        </a>
+        <a href="第六章.html" class="nav-btn next">
+            下一章：第六章 <i class="fas fa-arrow-right"></i>
+        </a>
+    </div>
+
+    <footer>
+        <p>自学刷题系统 &copy; 2025 - 坚持就是胜利</p>
+    </footer>
+</div>
+
+<script>
+    const questions = [
+        // 单项选择题 1-40
+        { type: "single", text: "1. 1927年大革命失败后，中国共产党在汉口召开的“八七会议”所确定的总方针，其核心要义是", options: ["A. 建立工农民主统一战线", "B. 将党的工作重心由城市转向农村", "C. 实行土地革命和武装反抗国民党反动派", "D. 放手发动群众，壮大人民力量"], answer: 2, explanation: "八七会议确定了土地革命和武装反抗国民党反动派的总方针。" },
+        { type: "single", text: "2. 毛泽东在《中国的红色政权为什么能够存在？》一文中，系统论证了红色政权能够长期存在和发展的根本原因是", options: ["A. 中国是一个政治经济发展极不平衡的半殖民地半封建大国", "B. 有相当力量的正式红军的存在", "C. 共产党组织的有力量和它的政策的不错误", "D. 全国革命形势的继续向前发展"], answer: 0, explanation: "这是红色政权存在的最根本的客观原因。" },
+        { type: "single", text: "3. “工农武装割据”思想的核心内涵是三者有机结合，这三者不包括", options: ["A. 土地革命", "B. 武装斗争", "C. 统一战线", "D. 根据地建设"], answer: 2, explanation: "三位一体是土地革命（内容）、武装斗争（形式）、根据地建设（基地）。" },
+        { type: "single", text: "4. 1927年，毛泽东在领导湘赣边界秋收起义后，毅然决定引兵井冈山，这一决策最重要的历史意义在于", options: ["A. 保存了革命的有生力量", "B. 实践了从城市到农村的战略转变，开启了革命新道路的探索", "C. 建立了第一个农村革命根据地", "D. 成功粉碎了国民党军队的“会剿”"], answer: 1, explanation: "这是中国革命从城市转向农村的伟大开端。" },
+        { type: "single", text: "5. 古田会议决议的核心贡献在于", options: ["A. 制定了中国共产党的土地革命路线", "B. 确立了“思想建党、政治建军”的根本原则", "C. 提出了“农村包围城市”的革命道路理论", "D. 解决了党和红军的战略战术问题"], answer: 1, explanation: "古田会议规定了红军必须服从党的绝对领导。" },
+        { type: "single", text: "6. 中国共产党在土地革命战争时期制定的土地革命路线，对富农的政策是", options: ["A. 消灭富农", "B. 限制富农", "C. 依靠富农", "D. 中立富农（后调整为限制富农）"], answer: 1, explanation: "土地革命战争时期的路线是：依靠贫雇农，联合中农，限制富农。" },
+        { type: "single", text: "7. 20世纪30年代，党内连续出现三次“左”倾错误，尤其是以王明为代表的“左”倾教条主义，其产生的思想根源主要在于", options: ["A. 对中国国情缺乏深刻认识，将马克思主义理论和共产国际决议神圣化", "B. 革命热情高涨", "C. 镇压激化情绪", "D. 民主制度不健全"], answer: 0, explanation: "教条主义的根本错误就是不顾中国实际，盲目迷信国外经验。" },
+        { type: "single", text: "8. 第五次反“围剿”失败，中央红军被迫实施战略转移，其最根本的教训是", options: ["A. 敌我对比悬殊", "B. 经济困难", "C. 放弃积极防御方针，实行军事冒险主义", "D. 敌方战术提高"], answer: 2, explanation: "由于王明“左”倾错误领导，军事指挥上犯了极大的错误。" },
+        { type: "single", text: "9. 遵义会议是中国共产党历史上一个生死攸关的转折点，其主要成就在于", options: ["A. 彻底清算了王明路线", "B. 确立了毛泽东在党和红军中的核心领导地位", "C. 解决了政治思想路线问题", "D. 制定了抗日方针"], answer: 1, explanation: "遵义会议在红军长征危急关头解决了军事和组织问题。" },
+        { type: "single", text: "10. 红军长征胜利到达陕北后，中国共产党为适应民族矛盾上升为主要矛盾的新形势，制定的关键策略方针是", options: ["A. “反蒋抗日”", "B. “逼蒋抗日”", "C. “联蒋抗日”", "D. “拥蒋抗日”"], answer: 1, explanation: "随后发生的西安事变推动了“逼蒋抗日”的实现。" },
+        { type: "single", text: "11. 毛泽东在《星星之火，可以燎原》一文中，主要针对当时党内存在的哪一种悲观情绪进行了批判？", options: ["A. “红旗到底打得多久”的疑问", "B. 对城市中心论的迷恋", "C. 对土地革命的怀疑", "D. 对统一战线的否定"], answer: 0, explanation: "此文论证了红色政权发展的必然性。" },
+        { type: "single", text: "12. 中华苏维埃共和国临时中央政府的成立，其最重要的历史作用是", options: ["A. 标志彻底决裂", "B. 是中国共产党领导和管理国家的一次局部性、尝试性预演", "C. 得到国际承认", "D. 巩固根据地"], answer: 1, explanation: "为后来新中国的建设提供了宝贵的经验。" },
+        { type: "single", text: "13. 中国共产党在延安时期开展的“整风运动”，其主要内容不包括", options: ["A. 反对主观主义以整顿学风", "B. 反对宗派主义以整顿党风", "C. 反对官僚主义以整顿作风", "D. 反对党八股以整顿文风"], answer: 2, explanation: "延安整风的三大内容是学风、党风、文风。" },
+        { type: "single", text: "14. 西安事变的和平解决，其关键历史作用在于", options: ["A. 统一战线正式形成", "B. 为国共两党实现第二次合作创造了必要的前提", "C. 促使蒋介石放弃攘外必先安内", "D. 确立中共领导权"], answer: 1, explanation: "它是十年内战结束、全国抗战兴起的枢纽。" },
+        { type: "single", text: "15. 毛泽东在《中国革命战争的战略问题》中，总结提出的红军作战的基本指导思想是", options: ["A. 诱敌深入，集中优势兵力，各个歼灭敌人", "B. 阵地战与运动战结合", "C. 全线出击", "D. 正规战与游击战并重"], answer: 0, explanation: "这是红军在战略防御阶段的基本作战法则。" },
+        { type: "single", text: "16. 土地革命时期，中国共产党在革命根据地开展的土地革命，其根本目的在于", options: ["A. 平均分配财富", "B. 消灭地主阶级，解放和发展农村生产力", "C. 满足农民土地要求，争取支持", "D. 积累工业资本"], answer: 1, explanation: "根本目的是通过变革生产关系来解放生产力。" },
+        { type: "single", text: "17. 相较于俄国十月革命的“城市中心论”，中国新民主主义革命道路最显著的特点是", options: ["A. 无产阶级领导", "B. 武装斗争", "C. 以农村包围城市，最后夺取全国政权", "D. 统一战线"], answer: 2, explanation: "这是中国革命对马克思主义的重大发展。" },
+        { type: "single", text: "18. 王明“左”倾错误在统一战线问题上的主要表现是", options: ["A. 放弃独立自主", "B. 把反资产阶级和反帝反封建并列，排斥一切中间势力", "C. 无条件合作", "D. 认为资产阶级是主要敌人"], answer: 1, explanation: "由于实行“关门主义”，导致革命处于孤立地位。" },
+        { type: "single", text: "19. 1935年，中国共产党在《八一宣言》中提出的著名口号是", options: ["A. 打倒蒋介石", "B. “停止内战，一致抗日”", "C. 武装保卫苏联", "D. 反蒋抗日"], answer: 1, explanation: "宣言呼吁建立广泛的抗日民族统一战线。" },
+        { type: "single", text: "20. 红军长征的胜利，对中国革命而言，其最宝贵的遗产是", options: ["A. 保存了力量", "B. 扩大了影响", "C. 铸就了伟大的长征精神", "D. 巩固了陕北根据地"], answer: 2, explanation: "长征精神是中华民族自强不息的体现。" },
+        { type: "single", text: "21. 大革命失败后，从“城市中心论”到“农村包围城市”的转变，其最根本的驱动力来自于：", options: ["A. 国际指示", "B. 个人远见", "C. 多次城市起义失败后的实践教训", "D. 资本主义发展要求"], answer: 2, explanation: "实践证明城市道路走不通，逼迫革命转向农村。" },
+        { type: "single", text: "22. 以下哪一项不属于毛泽东分析红色政权能够存在的核心客观条件？", options: ["A. 经济发展不平衡", "B. 革命形势向前发展", "C. 有正式红军存在", "D. 城市工人总罢工响应"], answer: 3, explanation: "D项不属于当时分析的基本条件。" },
+        { type: "single", text: "23. “工农武装割据”思想中“主要斗争形式”是：", options: ["A. 土地革命", "B. 武装斗争", "C. 根据地建设", "D. 党的建设"], answer: 1, explanation: "武装斗争是主要形式。" },
+        { type: "single", text: "24. 古田会议决议的核心历史贡献在于：", options: ["A. 第一个土地法", "B. 确立了“党指挥枪”的根本原则", "C. 明确提出农村包围城市", "D. 巩固毛泽东领导"], answer: 1, explanation: "确立了党对军队绝对领导原则。" },
+        { type: "single", text: "25. 20世纪30年代三次“左”倾错误的一个共同且根本性的理论错误在于：", options: ["A. 排斥毛泽东", "B. 过于乐观", "C. 坚持城市中心", "D. 混淆了民主革命与社会主义革命的界限"], answer: 3, explanation: "这是导致“左”倾冒险主义的理论根源。" },
+        { type: "single", text: "26. 王明“左”倾教条主义错误在军事斗争指导上的主要特征是：", options: ["A. 军事保守主义，打阵地战", "B. 轻视红军力量", "C. 要求工人总罢工", "D. 缩减任务"], answer: 0, explanation: "表现为“御敌于国门之外”。" },
+        { type: "single", text: "27. 中央红军第五次反“围剿”失败的根本原因是：", options: ["A. 敌我对比悬殊", "B. 博古李德逃跑主义", "C. 以王明为代表的“左”倾教条主义错误路线", "D. 补给困难"], answer: 2, explanation: "由于领导人推行错误的军事和政治路线导致失败。" },
+        { type: "single", text: "28. 遵义会议“转折性”最主要体现在：", options: ["A. 彻底清算路线错误", "B. 事实上确立了毛泽东在红军和党中央的领导地位", "C. 决定北上会师", "D. 批评军事错误"], answer: 1, explanation: "从此中国革命开始在毛泽东思想指导下走向胜利。" },
+        { type: "single", text: "29. 红军长征胜利最深远历史意义的概括是：", options: ["A. 保存力量", "B. 宣告不可战胜", "C. 播撒火种", "D. 锤炼长征精神并奠定全国胜利基础"], answer: 3, explanation: "长征精神是推动后续革命发展的强大精神源泉。" },
+        { type: "single", text: "30. 毛泽东用“星星之火，可以燎原”来比喻：", options: ["A. 城市工人运动", "B. 农村革命根据地的创建和发展", "C. 党员人数", "D. 红军实力"], answer: 1, explanation: "寓意农村根据地虽然起步小，但前途广阔。" },
+        { type: "single", text: "31. 与俄国十月革命相比，中国走“农村包围城市”道路的决定性客观因素是：", options: ["A. 领导坚强", "B. 农民觉悟高", "C. 政治经济发展极端不平衡的半殖民地大国", "D. 敌人强大"], answer: 2, explanation: "中国国情的特殊性决定了道路的特殊性。" },
+        { type: "single", text: "32. 在土地革命战争时期，土地革命的核心内容是：", options: ["A. 土地国有", "B. 没收地主土地分配给农民，变封建所有制为农民所有制", "C. 保存富农", "D. 平均分配"], answer: 1, explanation: "彻底废除封建地主土地所有制。" },
+        { type: "single", text: "33. 中华苏维埃共和国临时中央政府成立的最重要历史作用是：", options: ["A. 标志两个中国诞生", "B. 是领导和管理国家的局部、初步的尝试", "C. 鼓舞志气", "D. 确立领导地位"], answer: 1, explanation: "积累了政权建设的初步经验。" },
+        { type: "single", text: "34. “地主不分田，富农分坏田”的思想根源是：", options: ["A. 仇恨心理", "B. 企图超前进行社会主义革命", "C. 缺乏认识", "D. 照搬苏联"], answer: 1, explanation: "这属于极左政策，违反了团结大多数的原则。" },
+        { type: "single", text: "35. 《反对资本主义》针对的主要问题是：", options: ["A. 贪污腐败", "B. 单纯军事观点", "C. 将国际决议和苏联经验神圣化的教条主义", "D. 命令主义"], answer: 2, explanation: "提出了“没有调查，就没有发言权”。" },
+        { type: "single", text: "36. 中共中央同张国焘分裂主义错误进行斗争的性质是：", options: ["A. 战略方向争论", "B. 路线之争", "C. 关于党中央领导权和红军指挥权，关乎团结统一", "D. 评价分歧"], answer: 2, explanation: "这是维护党和红军统一的核心斗争。" },
+        { type: "single", text: "37. 西安事变的和平解决主要因为：", options: ["A. 逮捕蒋介石", "B. 促成国共两党合作，标志抗日民族统一战线初步形成", "C. 停止剿共", "D. 政治智慧"], answer: 1, explanation: "实现了国内和平，开启了合作抗日的新局。" },
+        { type: "single", text: "38. 从大革命失败到抗日战争前夕，中共“政治上成熟”的关键标志是：", options: ["A. 拥有红军", "B. 形成核心领导", "C. 系统总结经验，实现马克思主义同中国实际相结合的飞跃", "D. 反围剿成功"], answer: 2, explanation: "遵义会议标志着党在政治上、思想上的成熟。" },
+        { type: "single", text: "39. 中国革命新道路探索给我们的核心启示是", options: ["A. 武装斗争唯一", "B. 工人发动", "C. 坚持独立自主，走自己的路", "D. 领袖才能"], answer: 2, explanation: "必须将理论与本国具体实际结合。" },
+        { type: "single", text: "40. 中国革命之所以必须走“农村包围城市”道路的深层历史依据是：", options: ["A. 农民多", "B. 敌人强大", "C. 社会性质决定了革命实质是农民革命，武装斗争是共产党领导的农民战争", "D. 起义失败"], answer: 2, explanation: "从社会本质结构层面解释了道路选择的必然。" },
+
+        // 多项选择题 1-10
+        { type: "multiple", text: "1. 毛泽东关于“工农武装割据”的思想，其完整内涵包括", options: ["A. 在中国共产党领导下的土地革命", "B. 以根据地为依托的武装斗争", "C. 以统一战线为策略", "D. 以土地革命为基本内容", "E. 以农村革命根据地建设为战略基地"], answer: [0, 1, 3, 4], explanation: "统一战线在当时并非工农武装割据定义的三大支柱内容。" },
+        { type: "multiple", text: "2. 1927年大革命失败后，中共发动武装起义的历史意义在于", options: ["A. 开创独立领导武装新时期", "B. 成功探索出完整道路", "C. 打击了反动派", "D. 开始从城市到农村转移的初步实践", "E. 建立稳固政权"], answer: [0, 2, 3], explanation: "B完整道路在当时尚未形成，E早期政权并不稳固。" },
+        { type: "multiple", text: "3. 土地革命时期在根据地开展土地革命的核心内容和作用包括", options: ["A. 实行农民土地所有制", "B. 解放农村生产力", "C. 为红军壮大提供物质基础", "D. 彻底完成革命任务", "E. 形成完整的路线方法"], answer: [0, 1, 2, 4], explanation: "民主革命任务直到1949年才彻底完成。" },
+        { type: "multiple", text: "4. 党内三次“左”倾错误共同的思想根源和主要表现是", options: ["A. 经验神圣化", "B. 坚持“城市中心论”", "C. 关门主义", "D. 军事冒险/保守/逃跑主义", "E. 残酷斗争，无情打击"], answer: [0, 1, 2, 3, 4], explanation: "这些是王明左倾教条主义的全方位表现。" },
+        { type: "multiple", text: "5. 遵义会议的历史贡献体现在", options: ["A. 解决军事组织问题", "B. 结束左倾统治", "C. 确立毛泽东领导地位", "D. 标志政治上开始走向成熟", "E. 制定抗日统一战线方针"], answer: [0, 1, 2, 3], explanation: "抗日策略主要是在后来的瓦窑堡会议制定的。" },
+        { type: "multiple", text: "6. 中国红军长征胜利的伟大意义在于", options: ["A. 转危为安", "B. 实现团结形成核心", "C. 扩大影响", "D. 推动统一战线形成", "E. 铸就长征精神"], answer: [0, 1, 2, 3, 4], explanation: "长征胜利是革命历史的伟大里程碑。" },
+        { type: "multiple", text: "7. 1935年华北事变后，中共进行的政策调整和斗争包括", options: ["A. 发表《八一宣言》", "B. 召开瓦窑堡会议", "C. 调整为“逼蒋抗日”", "D. 领导一二九运动", "E. 和平解决西安事变"], answer: [0, 1, 2, 3, 4], explanation: "这一系列行动促成了全民族抗日的局面。" },
+        { type: "multiple", text: "8. 延安时期整风运动的主要内容和影响是", options: ["A. 反主观主义", "B. 反宗派主义", "C. 反官僚主义", "D. 思想教育运动", "E. 奠定胜利基础"], answer: [0, 1, 3, 4], explanation: "整风三大内容为：学风、党风、文风。" },
+        { type: "multiple", text: "9. 古田会议决议的核心思想是", options: ["A. 思想建党、政治建军", "B. 规定红军性质任务", "C. 绝对领导原则", "D. 战争理念", "E. 解决在农村建设无产阶级政党问题"], answer: [0, 1, 2, 4], explanation: "古田会议主要是为了克服非无产阶级思想的影响。" },
+        { type: "multiple", text: "10. 毛泽东探索新道路中形成的马克思主义中国化成果体现包括", options: ["A. 工农武装割据思想", "B. 农村包围城市道路", "C. 人民战争战术原则", "D. 总路线总政策", "E. 实事求是思想路线"], answer: [0, 1, 2], explanation: "D和E主要在抗战后期成熟并在七大系统确立。" }
+    ];
+
+    const sections = [
+        { start: 0, end: 10, title: "第一部分：单项选择题 (1-10)" },
+        { start: 10, end: 20, title: "第二部分：单项选择题 (11-20)" },
+        { start: 20, end: 30, title: "第三部分：单项选择题 (21-30)" },
+        { start: 30, end: 40, title: "第四部分：单项选择题 (31-40)" },
+        { start: 40, end: 50, title: "第五部分：多项选择题 (1-10)" }
+    ];
+
+    let userAnswers = new Array(questions.length).fill(null);
+
+    function initQuiz() {
+        const app = document.getElementById('quiz-app');
+        sections.forEach((sec, sIdx) => {
+            const secDiv = document.createElement('div');
+            secDiv.className = 'section-container';
+            secDiv.innerHTML = `<h2 class="section-title"><i class="fas fa-bookmark"></i> ${sec.title}</h2><div id="qs-${sIdx}"></div>`;
+
+            const btnDiv = document.createElement('div');
+            btnDiv.className = 'section-buttons';
+            btnDiv.innerHTML = `
+                <button class="btn btn-reset" onclick="resetSection(${sIdx})">重置本节</button>
+                <button class="btn btn-submit" onclick="submitSection(${sIdx})">提交本节校对</button>
+            `;
+            secDiv.appendChild(btnDiv);
+            app.appendChild(secDiv);
+
+            const qsDiv = secDiv.querySelector(`#qs-${sIdx}`);
+            for (let i = sec.start; i < sec.end; i++) {
+                qsDiv.appendChild(createQuestionEl(questions[i], i));
+            }
+        });
+    }
+
+    function createQuestionEl(q, idx) {
+        const div = document.createElement('div');
+        div.className = 'question-item';
+        div.id = `q-container-${idx}`;
+
+        div.innerHTML = `
+            <div class="question-header">
+                <span class="question-number">考题 ${idx < 40 ? idx + 1 : idx - 39}</span>
+                <span class="question-type ${q.type==='single'?'single-choice':'multiple-choice'}">${q.type==='single'?'单选题':'多选题'}</span>
+            </div>
+            <div class="question-text">${q.text}</div>
+            <div class="options-container">
+                ${q.options.map((opt, oIdx) => `
+                    <div class="option" onclick="handleSelect(${idx}, ${oIdx})">
+                        <input type="${q.type==='single'?'radio':'checkbox'}" name="q${idx}" id="q${idx}o${oIdx}" ${q.type==='single'?'':'onclick="event.stopPropagation()" '}>
+                        <label>${opt}</label>
+                    </div>
+                `).join('')}
+            </div>
+            <div class="feedback" id="feedback-${idx}"></div>
+        `;
+        return div;
+    }
+
+    function handleSelect(qIdx, oIdx) {
+        const q = questions[qIdx];
+        const container = document.getElementById(`q-container-${qIdx}`);
+        const options = container.querySelectorAll('.option');
+
+        if (q.type === 'single') {
+            userAnswers[qIdx] = oIdx;
+            options.forEach(o => o.classList.remove('selected'));
+            options[oIdx].classList.add('selected');
+            options[oIdx].querySelector('input').checked = true;
+        } else {
+            if (!userAnswers[qIdx]) userAnswers[qIdx] = [];
+            const pos = userAnswers[qIdx].indexOf(oIdx);
+            if (pos > -1) {
+                userAnswers[qIdx].splice(pos, 1);
+                options[oIdx].classList.remove('selected');
+                options[oIdx].querySelector('input').checked = false;
+            } else {
+                userAnswers[qIdx].push(oIdx);
+                options[oIdx].classList.add('selected');
+                options[oIdx].querySelector('input').checked = true;
+            }
+        }
+    }
+
+    function submitSection(sIdx) {
+        const sec = sections[sIdx];
+        let correctCount = 0;
+        for (let i = sec.start; i < sec.end; i++) {
+            const q = questions[i];
+            const uAns = userAnswers[i];
+            let isCorrect = false;
+
+            if (q.type === 'single') {
+                isCorrect = (uAns === q.answer);
+            } else {
+                if (uAns && Array.isArray(uAns)) {
+                    isCorrect = uAns.length === q.answer.length && uAns.every(val => q.answer.includes(val));
+                }
+            }
+
+            if(isCorrect) correctCount++;
+
+            const feedback = document.getElementById(`feedback-${i}`);
+            const container = document.getElementById(`q-container-${i}`);
+
+            container.className = `question-item ${isCorrect ? 'correct' : 'incorrect'}`;
+            feedback.style.display = 'block';
+            feedback.className = `feedback ${isCorrect ? 'correct' : 'incorrect'}`;
+
+            const correctStr = q.type === 'single' ?
+                q.options[q.answer] :
+                q.answer.map(a => String.fromCharCode(65 + a)).join(', ');
+
+            feedback.innerHTML = `
+                <div class="correct-answer-box">${isCorrect ? '✔ 正确' : '✘ 错误'}</div>
+                <div>正确答案是：${correctStr}</div>
+                <div class="explanation">解析：${q.explanation}</div>
+            `;
+        }
+        alert(`校对完成！本节正确数：${correctCount} / ${sec.end - sec.start}`);
+    }
+
+    function resetSection(sIdx) {
+        const sec = sections[sIdx];
+        for (let i = sec.start; i < sec.end; i++) {
+            userAnswers[i] = null;
+            const container = document.getElementById(`q-container-${i}`);
+            container.className = 'question-item';
+            container.querySelectorAll('.option').forEach(o => o.classList.remove('selected'));
+            container.querySelectorAll('input').forEach(input => input.checked = false);
+            document.getElementById(`feedback-${i}`).style.display = 'none';
+        }
+    }
+
+    window.onload = initQuiz;
+</script>
+</body>
+</html>

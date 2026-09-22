@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JavaScript变量定义示例</title>
+</head>
+<body>
+定义变量name，值为"mike"(字符型)。<br>
+定义变量score，值为95(数值型)。<br>
+定义变量today，值为当天日期（格式为 yyyy-m-d）。<br>
+定义变量course，值为"english,computer,math"(数组)。<br>
+所有变量都请用var修饰。<br>
+<script>
+    var name = "mike";
+    var score = 95;
+    var now = new Date();
+    var today = now.getFullYear() + "-" + (now.getMonth() + 1) + "-" + now.getDate();
+    var course = ["english", "computer", "math"];
+</script>
+</body>
+</html>

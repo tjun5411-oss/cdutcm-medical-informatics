@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Javascript函数式编程</title>
+</head>
+Javascript函数式编程<br>
+要求如下：<br>
+定义函数capsLetter(args)。<br>
+在函数体中，实现传入的英语语句单词尾字母大写。<br>
+可用常规方式或函数式编程实现。<br>
+返回此处理后的句子。<br>
+如"i am a teacher"，则调用此函数后，返回 "I aM A teacheR"。<br>
+注：此题在提交时，请把自行测试时调用函数的代码行注释掉或是删除<br>
+<body>
+<script>
+    let mystring="i love xss";//I Love Xss
+    function capsLetter(args){
+        let upperstring=args.split(" ").map(
+            v=>v.slice(0,-1)+v.slice(-1).toUpperCase()
+        ).join(" ")
+        console.log(upperstring)
+        return upperstring
+    }
+    capsLetter("i am a hacker")
+
+</script>
+
+
+</body>
+</html>

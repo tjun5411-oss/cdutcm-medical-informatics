@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>中国近现代史纲要 - 第二章</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* 页面基础样式 */
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif; }
+        body { background-color: #f5f7fa; color: #333; line-height: 1.6; padding: 20px; }
+        .container { max-width: 1400px; margin: 0 auto; }
+        header { text-align: center; padding: 20px; background: linear-gradient(135deg, #cc0000 0%, #ff4444 100%); color: white; border-radius: 12px; box-shadow: 0 6px 15px rgba(204, 0, 0, 0.2); margin-bottom: 25px; }
+        h1 { font-size: 2.4rem; margin-bottom: 10px; letter-spacing: 1px; }
+        .subtitle { font-size: 1.1rem; opacity: 0.9; }
+
+        /* 题目容器样式 */
+        .section-container { background: white; border-radius: 12px; padding: 30px; box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08); margin-bottom: 30px; }
+        .section-title { font-size: 1.5rem; margin-bottom: 25px; color: #cc0000; padding-bottom: 15px; border-bottom: 2px solid #eee; }
+        .question-item { border: 1px solid #eaeaea; border-radius: 10px; padding: 20px; margin-bottom: 20px; transition: all 0.3s ease; }
+        .question-item.correct { border-color: #4CAF50; background-color: #f9fff9; }
+        .question-item.incorrect { border-color: #f44336; background-color: #fff9f9; }
+
+        .question-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+        .question-number { font-size: 1.2rem; font-weight: 600; color: #cc0000; }
+        .question-type { display: inline-block; padding: 4px 12px; border-radius: 15px; font-size: 0.85rem; font-weight: 600; }
+        .single-choice { background-color: #ffe6e6; color: #cc0000; }
+        .multiple-choice { background-color: #f0e6ff; color: #6600cc; }
+
+        /* 选项样式 */
+        .option { margin-bottom: 10px; padding: 12px 15px; border: 1px solid #eaeaea; border-radius: 6px; cursor: pointer; transition: all 0.2s ease; display: flex; align-items: center; }
+        .option:hover { border-color: #ffb3b3; background-color: #fffafa; }
+        .option.selected { border-color: #ff6666; background-color: #ffe6e6; }
+        .option input { margin-right: 10px; }
+
+        /* 反馈与解析 */
+        .feedback { padding: 15px; border-radius: 6px; margin-top: 15px; font-size: 0.95rem; display: none; }
+        .feedback.correct { background-color: #e6ffe6; border-left: 4px solid #4CAF50; display: block; }
+        .feedback.incorrect { background-color: #ffe6e6; border-left: 4px solid #f44336; display: block; }
+        .correct-answer-text { margin-top: 10px; padding: 8px; background-color: white; border-radius: 4px; border: 1px dashed #ccc; font-weight: 600; }
+        .explanation { margin-top: 15px; padding: 12px; background-color: #f9f9f9; border-radius: 6px; border-left: 3px solid #ff6666; font-size: 0.95rem; }
+
+        /* 按钮样式 */
+        .section-buttons { display: flex; gap: 15px; margin-top: 30px; }
+        .section-btn { padding: 12px 25px; border: none; border-radius: 6px; font-size: 1rem; font-weight: 600; cursor: pointer; transition: all 0.3s; }
+        .reset-section-btn { background-color: #666; color: white; }
+        .submit-section-btn { background-color: #cc0000; color: white; }
+        .chapter-navigation { display: flex; justify-content: space-between; margin-top: 30px; }
+        .chapter-btn { padding: 12px 30px; border: none; border-radius: 6px; font-size: 1.1rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 10px; }
+        .next-chapter-btn { background-color: #cc0000; color: white; }
+        .footer { text-align: center; padding: 20px; color: #777; margin-top: 40px; border-top: 1px solid #eee; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <header>
+        <h1>中国近现代史纲要 - 第二章</h1>
+        <p class="subtitle">共50题 | 每10题一组 | 实时统计对错及详细解析</p>
+    </header>
+
+    <div id="sections-wrapper"></div>
+
+    <div class="chapter-navigation">
+        <button class="chapter-btn" style="background-color:#666; color:white;" onclick="window.location.href='第一章.html'">
+            <i class="fas fa-arrow-left"></i> 上一章
+        </button>
+        <button class="chapter-btn next-chapter-btn" onclick="window.location.href='第三章.html'">
+            下一章 <i class="fas fa-arrow-right"></i>
+        </button>
+    </div>
+
+    <div class="footer">
+        <p>中国近现代史纲要 - 第二章 &copy; 2025</p>
+    </div>
+</div>
+
+<script>
+    const questions = [
+// ==================== 第一部分：单项选择题 (1-20) ====================
+        {
+            type: "single",
+            text: "太平天国的意识形态'拜上帝教'与中国传统儒家思想及民间信仰产生了激烈冲突。这一冲突最能说明",
+            options: [
+                "A. 洪秀全个人对西方宗教的虔诚信仰",
+                "B. 农民阶级在思想上的落后性与盲目排外性",
+                "C. 太平天国企图用一种全新的异质文化秩序取代传统秩序",
+                "D. 西方列强对太平天国进行了彻底的文化渗透"
+            ],
+            answer: 2,
+            knowledge: "太平天国的意识形态冲突",
+            explanation: "太平天国的'拜上帝教'与中国传统儒家思想及民间信仰的冲突，最能说明太平天国企图用一种全新的异质文化秩序取代传统秩序，这是其革命性的体现，但也导致了与中国传统文化的尖锐对立。"
+        },
+        {
+            type: "single",
+            text: "《资政新篇》与《天朝田亩制度》在核心主张上存在根本性差异。这种差异本质上反映了",
+            options: [
+                "A. 洪仁玕与洪秀全个人权力的斗争",
+                "B. 太平天国领导集团从理想主义向现实主义的转变",
+                "C. 农民政权内部资本主义倾向与绝对平均主义空想的内在矛盾",
+                "D. 太平天国在后期全面放弃了反封建的纲领"
+            ],
+            answer: 2,
+            knowledge: "太平天国两个纲领的差异",
+            explanation: "《资政新篇》主张发展资本主义，《天朝田亩制度》主张绝对平均主义，这种差异本质上反映了农民政权内部资本主义倾向与绝对平均主义空想的内在矛盾。"
+        },
+        {
+            type: "single",
+            text: "曾国藩在《讨粤匪檄》中攻击太平天国'举中国数千年礼义人伦诗书典则，一旦扫地荡尽'，此举的主要目的在于",
+            options: [
+                "A. 维护中华传统文化的纯洁性",
+                "B. 争取汉族地主知识分子和士绅的支持",
+                "C. 揭露洪秀全宗教思想的虚伪性",
+                "D. 表达对孔孟之道的坚定信仰"
+            ],
+            answer: 1,
+            knowledge: "曾国藩的《讨粤匪檄》",
+            explanation: "曾国藩在《讨粤匪檄》中攻击太平天国破坏传统文化，主要目的是争取汉族地主知识分子和士绅的支持，因为这些人是传统文化的主要维护者，也是清政府统治的社会基础。"
+        },
+        {
+            type: "single",
+            text: "与历史上的旧式农民战争相比，太平天国运动遇到了一个新的、强大的对手，即'中外反动势力的联合绞杀'。这深刻地表明",
+            options: [
+                "A. 太平天国的军事力量远超历代农民起义",
+                "B. 外国侵略者已成为阻碍中国社会进步的巨大障碍",
+                "C. 清政府的实力已不足以镇压内部叛乱",
+                "D. 农民阶级无法独立完成反帝反封建的任务"
+            ],
+            answer: 1,
+            knowledge: "太平天国运动的新特点",
+            explanation: "太平天国遇到了'中外反动势力的联合绞杀'，这深刻地表明外国侵略者已成为阻碍中国社会进步的巨大障碍，中国社会的主要矛盾增加了帝国主义与中华民族的矛盾。"
+        },
+        {
+            type: "single",
+            text: "有学者认为，太平天国运动在破坏旧秩序方面的影响力，远超其在建设新秩序方面的贡献。以下史实最能支持这一观点的是",
+            options: [
+                "A. 颁布了《天朝田亩制度》",
+                "B. 与清王朝对峙十余年",
+                "C. 沉重打击了清王朝的统治根基，但未能建立稳固的新政权",
+                "D. 提出了发展资本主义的《资政新篇》"
+            ],
+            answer: 2,
+            knowledge: "太平天国运动的历史作用",
+            explanation: "太平天国运动沉重打击了清王朝的统治根基（破坏旧秩序），但未能建立稳固的新政权（建设新秩序不足），这一史实最能支持题干观点。"
+        },
+        {
+            type: "single",
+            text: "洋务派倡导的'中体西用'思想，其内在的根本性矛盾在于",
+            options: [
+                "A. 军事工业与民用工业发展的不平衡",
+                "B. 中央与地方在办洋务问题上的权力争夺",
+                "C. 企图用西方资本主义的'用'来维护中国封建主义的'体'",
+                "D. 对西方技术的依赖与自主研发能力薄弱之间的矛盾"
+            ],
+            answer: 2,
+            knowledge: "'中体西用'的内在矛盾",
+            explanation: "'中体西用'思想的内在根本性矛盾在于企图用西方资本主义的'用'（技术、器物）来维护中国封建主义的'体'（政治制度、伦理纲常），这在逻辑和实践上都难以协调。"
+        },
+        {
+            type: "single",
+            text: "洋务企业（如江南制造总局）普遍采用'官办'或'官督商办'模式，其带来的最严重后果是",
+            options: [
+                "A. 企业生产效率低下",
+                "B. 企业无法摆脱封建衙门式的管理，滋生腐败，制约其发展",
+                "C. 产品价格高昂，缺乏市场竞争力",
+                "D. 技术更新换代缓慢"
+            ],
+            answer: 1,
+            knowledge: "洋务企业的管理模式",
+            explanation: "洋务企业普遍采用'官办'或'官督商办'模式，最严重的后果是企业无法摆脱封建衙门式的管理，滋生腐败，严重制约了企业的健康发展。"
+        },
+        {
+            type: "single",
+            text: "甲午战争的失败，通常被视为洋务运动破产的标志。其最深刻的寓意在于",
+            options: [
+                "A. 证明了中国在武器装备上全面落后于日本",
+                "B. 单纯引进军事和技术，而不进行政治制度变革，无法实现国家富强",
+                "C. 北洋海军的将领贪生怕死，指挥失误",
+                "D. 洋务派在战略上犯了'重海防、轻塞防'的错误"
+            ],
+            answer: 1,
+            knowledge: "洋务运动破产的启示",
+            explanation: "甲午战争失败标志着洋务运动破产，其最深刻的寓意在于单纯引进军事和技术，而不进行政治制度变革，无法实现国家富强。"
+        },
+        {
+            type: "single",
+            text: "早期维新思想家（如郑观应、王韬）大多是从洋务派阵营中分化出来的。他们的思想超越洋务派之处主要在于",
+            options: [
+                "A. 更加强调学习西方的军事技术",
+                "B. 开始主张在政治制度层面进行改革，要求实行君主立宪",
+                "C. 更加注重发展民用工商业",
+                "D. 彻底否定中国的传统文化"
+            ],
+            answer: 1,
+            knowledge: "早期维新思想的特点",
+            explanation: "早期维新思想家超越洋务派之处主要在于他们开始主张在政治制度层面进行改革，要求实行君主立宪，而洋务派只停留在学习西方技术的层面。"
+        },
+        {
+            type: "single",
+            text: "戊戌维新运动期间，康有为撰写《新学伪经考》和《孔子改制考》，其核心策略是",
+            options: [
+                "A. 全面复兴孔子的原始儒家思想",
+                "B. 利用孔子的权威为变法维新提供理论依据，减少改革阻力",
+                "C. 证明所有儒家经典都是伪造的",
+                "D. 为建立资产阶级共和国制造舆论"
+            ],
+            answer: 1,
+            knowledge: "康有为的变法策略",
+            explanation: "康有为撰写《新学伪经考》和《孔子改制考》的核心策略是利用孔子的权威为变法维新提供理论依据，减少改革阻力，即'托古改制'。"
+        },
+        {
+            type: "single",
+            text: "戊戌变法时期，光绪皇帝与维新派的关系，从本质上讲是",
+            options: [
+                "A. 完全志同道合的亲密同盟",
+                "B. 相互利用的权宜之计：皇帝借维新派夺权，维新派借皇帝推行新政",
+                "C. 资产阶级与封建皇权的彻底决裂",
+                "D. 地方实力派与中央皇权的结合"
+            ],
+            answer: 1,
+            knowledge: "光绪皇帝与维新派的关系",
+            explanation: "光绪皇帝与维新派的关系从本质上是相互利用的权宜之计：光绪皇帝借维新派从慈禧太后手中夺权，维新派借光绪皇帝的权力推行新政。"
+        },
+        {
+            type: "single",
+            text: "戊戌变法中关于'废八股、改科举、兴学堂'的措施，触动了整个传统士绅阶层的根本利益。这主要是因为",
+            options: [
+                "A. 八股文是优秀的文学形式",
+                "B. 科举制度是当时最公平的选官制度",
+                "C. 科举是他们安身立命、获取政治特权和社会地位的唯一途径",
+                "D. 新式学堂的教学内容全部是西方的异端邪说"
+            ],
+            answer: 2,
+            knowledge: "戊戌变法触及的利益集团",
+            explanation: "'废八股、改科举、兴学堂'的措施触动了传统士绅阶层的根本利益，因为科举是他们安身立命、获取政治特权和社会地位的唯一途径。"
+        },
+        {
+            type: "single",
+            text: "与日本的明治维新相比，中国的戊戌变法失败得更快、更彻底。其最关键的差异性因素在于",
+            options: [
+                "A. 变法内容是否全面",
+                "B. 领导变法的皇帝是否有实权，以及改革派与保守派的力量对比",
+                "C. 是否得到了广大农民的支持",
+                "D. 西方列强对变法的态度是支持还是反对"
+            ],
+            answer: 1,
+            knowledge: "戊戌变法与明治维新的比较",
+            explanation: "与明治维新相比，戊戌变法失败的关键差异性因素在于领导变法的光绪皇帝没有实权，且改革派与保守派的力量对比悬殊。"
+        },
+        {
+            type: "single",
+            text: "谭嗣同'我自横刀向天笑'的壮烈牺牲，其行为所象征的意义更多的是",
+            options: [
+                "A. 证明了改良道路在中国具有可行性",
+                "B. 体现了资产阶级维新派的软弱性和妥协性",
+                "C. 以个人的殉道精神来唤醒国民，标志着和平改良梦想的破灭",
+                "D. 说明维新派缺乏必要的军事准备"
+            ],
+            answer: 2,
+            knowledge: "谭嗣同牺牲的意义",
+            explanation: "谭嗣同的壮烈牺牲，其象征意义更多的是以个人的殉道精神来唤醒国民，标志着和平改良梦想的破灭。"
+        },
+        {
+            type: "single",
+            text: "慈禧太后发动政变镇压戊戌变法，其最根本的动机是",
+            options: [
+                "A. 个人权力欲望，不容许光绪皇帝和维新派挑战其最高权威",
+                "B. 她是一个极端顽固、反对任何变化的保守派",
+                "C. 她认为变法措施会危及清王朝的统治",
+                "D. 她得到了列强支持变法的秘密保证"
+            ],
+            answer: 0,
+            knowledge: "戊戌政变的动机",
+            explanation: "慈禧太后发动政变镇压戊戌变法，最根本的动机是个人权力欲望，不容许光绪皇帝和维新派挑战其最高权威。"
+        },
+        {
+            type: "single",
+            text: "太平天国运动与义和团运动都体现了强烈的民族主义色彩，但其对待西方文明的态度却截然不同。这种不同根源于",
+            options: [
+                "A. 领导者个人素质的差异",
+                "B. 二者所处的历史阶段和主要斗争对象的差异",
+                "C. 南方与北方地域文化的差异",
+                "D. 是否得到清政府支持的差异"
+            ],
+            answer: 1,
+            knowledge: "太平天国与义和团的比较",
+            explanation: "太平天国与义和团对待西方文明态度的不同，根源于二者所处的历史阶段和主要斗争对象的差异：太平天国主要反清，同时反对外国侵略；义和团主要反帝，同时反对与帝国主义勾结的清政府。"
+        },
+        {
+            type: "single",
+            text: "洋务运动时期创办的民用企业（如轮船招商局），其历史作用中，最具近代性意义的是",
+            options: [
+                "A. 一定程度上抵制了外国资本主义的经济侵略",
+                "B. 引进了西方先进的生产技术",
+                "C. 在客观上诱导和刺激了中国民族资本主义的产生",
+                "D. 培养了第一批近代产业工人和科技人才"
+            ],
+            answer: 2,
+            knowledge: "洋务民用企业的历史作用",
+            explanation: "洋务运动时期创办的民用企业，最具近代性意义的是在客观上诱导和刺激了中国民族资本主义的产生。"
+        },
+        {
+            type: "single",
+            text: "康有为的'托古改制'策略，在当时的思想界引起了巨大震动和争议。从历史效果来看，这一策略",
+            options: [
+                "A. 成功地减少了变法的阻力，团结了所有士大夫",
+                "B. 因其牵强附会和今文经学的晦涩，反而增加了思想混乱和反对声音",
+                "C. 彻底动摇了封建思想的基础",
+                "D. 为后来的新文化运动全面反孔奠定了基础"
+            ],
+            answer: 1,
+            knowledge: "康有为'托古改制'的效果",
+            explanation: "康有为的'托古改制'策略，因其牵强附会和今文经学的晦涩，反而增加了思想混乱和反对声音，未能达到预期的减少阻力的效果。"
+        },
+        {
+            type: "single",
+            text: "在戊戌变法的诸多措施中，各省督抚大多持观望、拖延甚至抵制的态度。这最深刻地反映了",
+            options: [
+                "A. 光绪皇帝圣旨的权威性不足",
+                "B. 中央集权体制的衰落和地方势力（如湘淮系）的坐大",
+                "C. 变法措施本身不切实际",
+                "D. 维新派缺乏地方治理的经验"
+            ],
+            answer: 1,
+            knowledge: "戊戌变法中的地方阻力",
+            explanation: "各省督抚对戊戌变法的观望、拖延甚至抵制，最深刻地反映了中央集权体制的衰落和地方势力（如湘淮系）的坐大。"
+        },
+        {
+            type: "single",
+            text: "纵观太平天国、洋务运动、戊戌变法，三者共同的悲剧性命运说明了，在近代中国，任何改革或革命要想成功，都必须首先解决",
+            options: [
+                "A. 资金和技术问题",
+                "B. 帝国主义和中华民族、封建主义和人民大众这两大社会矛盾",
+                "C. 领导集团的团结问题",
+                "D. 广大人民群众的觉悟问题"
+            ],
+            answer: 1,
+            knowledge: "近代改革运动的共同教训",
+            explanation: "太平天国、洋务运动、戊戌变法三者的共同悲剧性命运说明，在近代中国，任何改革或革命要想成功，都必须首先解决帝国主义和中华民族、封建主义和人民大众这两大社会矛盾。"
+        },
+
+// ==================== 第二部分：单项选择题 (21-40) ====================
+        {
+            type: "single",
+            text: "《天朝田亩制度》所描绘的理想社会蓝图本质上是",
+            options: [
+                "A. 资产阶级共和国方案",
+                "B. 空想农业社会主义方案",
+                "C. 封建皇权主义方案",
+                "D. 宗教神权政治方案"
+            ],
+            answer: 1,
+            knowledge: "《天朝田亩制度》的性质",
+            explanation: "《天朝田亩制度》所描绘的理想社会蓝图本质上是空想农业社会主义方案，它主张绝对平均分配土地，建立'有田同耕，有饭同食，有衣同穿，有钱同使'的理想社会。"
+        },
+        {
+            type: "single",
+            text: "太平天国运动时期，曾国藩组建湘军的显著特点是",
+            options: [
+                "A. 全部使用西洋武器装备",
+                "B. 以地域和封建宗法关系为纽带",
+                "C. 得到了列强的直接帮助",
+                "D. 实行了民主化的管理"
+            ],
+            answer: 1,
+            knowledge: "湘军的特点",
+            explanation: "曾国藩组建湘军的显著特点是以地域和封建宗法关系为纽带，兵为将有，将领与士兵之间多系同乡、师生、亲友关系。"
+        },
+        {
+            type: "single",
+            text: "洋务派创办的军事工业的性质主要是",
+            options: [
+                "A. 资本主义性质",
+                "B. 封建主义性质",
+                "C. 买办性质",
+                "D. 社会主义性质"
+            ],
+            answer: 1,
+            knowledge: "洋务军事工业的性质",
+            explanation: "洋务派创办的军事工业（如江南制造总局）主要是封建主义性质，它们采用官办形式，产品不进入市场，由清政府调拨，企业管理采用封建衙门方式。"
+        },
+        {
+            type: "single",
+            text: "由李鸿章创办的，被视为洋务派办的第一个民用企业是",
+            options: [
+                "A. 轮船招商局",
+                "B. 开平矿务局",
+                "C. 上海机器织布局",
+                "D. 湖北织布局"
+            ],
+            answer: 0,
+            knowledge: "洋务民用企业的开端",
+            explanation: "1872年李鸿章创办的轮船招商局，被视为洋务派办的第一个民用企业，标志着洋务运动从'求强'到'求富'的转变。"
+        },
+        {
+            type: "single",
+            text: "19世纪70年代，清政府内部发生'海防'与'塞防'之争。争论的双方主要代表是",
+            options: [
+                "A. 曾国藩与左宗棠",
+                "B. 李鸿章与左宗棠",
+                "C. 奕䜣与曾国藩",
+                "D. 张之洞与李鸿章"
+            ],
+            answer: 1,
+            knowledge: "海防与塞防之争",
+            explanation: "19世纪70年代，清政府内部发生'海防'与'塞防'之争，李鸿章主张重点加强海防，左宗棠主张同时加强塞防，优先收复新疆。"
+        },
+        {
+            type: "single",
+            text: "甲午战争后，洋务派创办的官督商办企业开始式微，主要原因是",
+            options: [
+                "A. 外国资本的排挤",
+                "B. 商人不愿投资",
+                "C. 官府勒索加剧，商人纷纷退出",
+                "D. 技术落后，管理混乱"
+            ],
+            answer: 2,
+            knowledge: "官督商办企业的衰落",
+            explanation: "甲午战争后，洋务派创办的官督商办企业开始式微，主要原因是官府勒索加剧，商人纷纷退出，'官督商办'模式弊端暴露无遗。"
+        },
+        {
+            type: "single",
+            text: "严复翻译的《天演论》所宣传的核心思想是",
+            options: [
+                "A. 民主与科学",
+                "B. 物竞天择，适者生存",
+                "C. 君主立宪",
+                "D. 中体西用"
+            ],
+            answer: 1,
+            knowledge: "严复与《天演论》",
+            explanation: "严复翻译的《天演论》所宣传的核心思想是'物竞天择，适者生存'的进化论思想，旨在唤醒国人变法图强的危机意识。"
+        },
+        {
+            type: "single",
+            text: "戊戌变法期间，湖南巡抚陈宝箴是少数支持变法的地方督抚之一，他在湖南推行新政的主要助手是",
+            options: [
+                "A. 谭嗣同、梁启超",
+                "B. 康有为、梁启超",
+                "C. 梁启超、黄遵宪",
+                "D. 谭嗣同、唐才常"
+            ],
+            answer: 2,
+            knowledge: "湖南新政",
+            explanation: "戊戌变法期间，湖南巡抚陈宝箴推行新政的主要助手是梁启超（时任时务学堂总教习）和黄遵宪（时任湖南按察使）。"
+        },
+        {
+            type: "single",
+            text: "戊戌变法时期，作为维新派重要舆论阵地的是",
+            options: [
+                "A. 《时务报》",
+                "B. 《民报》",
+                "C. 《新青年》",
+                "D. 《万国公报》"
+            ],
+            answer: 0,
+            knowledge: "维新派的舆论阵地",
+            explanation: "戊戌变法时期，维新派的重要舆论阵地是《时务报》（梁启超主编），它在宣传维新思想方面发挥了巨大作用。"
+        },
+        {
+            type: "single",
+            text: "慈禧太后发动戊戌政变，重新'训政'，其直接借口是",
+            options: [
+                "A. 光绪皇帝罢免礼部六堂官",
+                "B. 维新派建议迁都上海",
+                "C. 维新派勾结日本前首相伊藤博文，企图危害太后",
+                "D. 光绪皇帝任命军机四卿"
+            ],
+            answer: 2,
+            knowledge: "戊戌政变的借口",
+            explanation: "慈禧太后发动戊戌政变的直接借口是维新派勾结日本前首相伊藤博文，企图危害太后，这是一个虚构的罪名。"
+        },
+        {
+            type: "single",
+            text: "太平天国运动对清朝统治造成的最沉重打击是",
+            options: [
+                "A. 动摇了其财政基础",
+                "B. 破坏了其地方行政体系",
+                "C. 削弱了其军事力量",
+                "D. 冲击了其意识形态合法性"
+            ],
+            answer: 0,
+            knowledge: "太平天国对清政府的打击",
+            explanation: "太平天国运动对清朝统治造成的最沉重打击是动摇了其财政基础，清政府为镇压太平天国耗费巨额军费，并丧失了对江南富庶地区的控制。"
+        },
+        {
+            type: "single",
+            text: "洋务派创办的福州船政局的创办者是",
+            options: [
+                "A. 曾国藩",
+                "B. 李鸿章",
+                "C. 左宗棠",
+                "D. 张之洞"
+            ],
+            answer: 2,
+            knowledge: "福州船政局",
+            explanation: "福州船政局是左宗棠于1866年在福建马尾创办的，是当时最大的船舶修造厂。"
+        },
+        {
+            type: "single",
+            text: "洋务运动时期，清政府建立的新式海军中实力最强的是",
+            options: [
+                "A. 福建水师",
+                "B. 广东水师",
+                "C. 南洋水师",
+                "D. 北洋水师"
+            ],
+            answer: 3,
+            knowledge: "新式海军",
+            explanation: "洋务运动时期，清政府建立的新式海军中实力最强的是北洋水师，由李鸿章主持建设，是当时亚洲最强大的海军之一。"
+        },
+        {
+            type: "single",
+            text: "早期维新思想家郑观应在其所著《盛世危言》中提出的重要思想是",
+            options: [
+                "A. '师夷长技以制夷'",
+                "B. '商战'",
+                "C. '变法维新'",
+                "D. '实业救国'"
+            ],
+            answer: 1,
+            knowledge: "郑观应的思想",
+            explanation: "郑观应在《盛世危言》中提出的重要思想是'商战'，主张发展民族工商业，与外国进行商业竞争。"
+        },
+        {
+            type: "single",
+            text: "康有为宣传维新变法的主要著作是",
+            options: [
+                "A. 《新学伪经考》和《孔子改制考》",
+                "B. 《仁学》和《革命军》",
+                "C. 《天演论》和《原富》",
+                "D. 《劝学篇》和《变法通议》"
+            ],
+            answer: 0,
+            knowledge: "康有为的主要著作",
+            explanation: "康有为宣传维新变法的主要著作是《新学伪经考》和《孔子改制考》，这两部书为变法维新提供了理论基础。"
+        },
+        {
+            type: "single",
+            text: "在戊戌变法的短短103天中，光绪皇帝颁布了上百道变法谕令，但各省督抚大多持观望态度，拒不执行。这反映了",
+            options: [
+                "A. 中央集权体制已经崩溃",
+                "B. 地方督抚已形成割据势力",
+                "C. 变法缺乏有力的组织保障",
+                "D. 光绪皇帝没有实权"
+            ],
+            answer: 2,
+            knowledge: "戊戌变法的执行困境",
+            explanation: "各省督抚对变法谕令观望、拒不执行，反映了变法缺乏有力的组织保障，维新派未能掌握地方实权。"
+        },
+        {
+            type: "single",
+            text: "与洋务派相比，维新派在思想上的一个重大突破是",
+            options: [
+                "A. 认识到学习西方技术的重要性",
+                "B. 认识到学习西方经济制度的重要性",
+                "C. 认识到学习西方政治制度的重要性",
+                "D. 认识到发展军事工业的重要性"
+            ],
+            answer: 2,
+            knowledge: "维新派的思想突破",
+            explanation: "与洋务派相比，维新派在思想上的重大突破是认识到学习西方政治制度的重要性，主张实行君主立宪。"
+        },
+        {
+            type: "single",
+            text: "太平天国定都天京后，洪秀全颁布的、体现了其社会理想和农民要求的纲领性文件是",
+            options: [
+                "A. 《原道觉世训》",
+                "B. 《资政新篇》",
+                "C. 《天朝田亩制度》",
+                "D. 《奉天讨胡檄布四方谕》"
+            ],
+            answer: 2,
+            knowledge: "太平天国的纲领文件",
+            explanation: "太平天国定都天京后，洪秀全颁布的、体现了其社会理想和农民要求的纲领性文件是《天朝田亩制度》。"
+        },
+        {
+            type: "single",
+            text: "洋务派创办的民用企业，其客观进步作用主要体现在",
+            options: [
+                "A. 巩固了清政府的统治",
+                "B. 吸引了部分官僚、地主、商人投资于近代企业",
+                "C. 有效地抵御了外国的经济侵略",
+                "D. 培养了大批技术工人和科技人才"
+            ],
+            answer: 1,
+            knowledge: "洋务民用企业的进步作用",
+            explanation: "洋务派创办的民用企业，其客观进步作用主要体现在吸引了部分官僚、地主、商人投资于近代企业，促进了中国民族资本主义的产生。"
+        },
+        {
+            type: "single",
+            text: "戊戌变法失败后，得以保留下来并成为中国近代国立高等教育开端的是",
+            options: [
+                "A. 京师同文馆",
+                "B. 时务学堂",
+                "C. 京师大学堂",
+                "D. 万木草堂"
+            ],
+            answer: 2,
+            knowledge: "戊戌变法的遗产",
+            explanation: "戊戌变法失败后，得以保留下来并成为中国近代国立高等教育开端的是京师大学堂（北京大学的前身）。"
+        },
+
+// ==================== 第三部分：多项选择题 (41-50) ====================
+        {
+            type: "multiple",
+            text: "关于《天朝田亩制度》与《资政新篇》，下列表述中正确的有",
+            options: [
+                "A. 两者都反映了太平天国领袖改造社会的理想蓝图",
+                "B. 前者主张在小农经济基础上废除私有制，后者主张学习西方，发展资本主义",
+                "C. 前者体现了农民阶级的革命性，后者符合当时中国社会发展的客观要求",
+                "D. 两者都得到了广大军民的热烈拥护并得以全面推行",
+                "E. 两者的内容存在巨大差异，甚至相互矛盾，反映了农民政权内部的思想混乱"
+            ],
+            answer: [0, 1, 2, 4],
+            knowledge: "《天朝田亩制度》与《资政新篇》比较",
+            explanation: "D选项错误，《天朝田亩制度》虽得到农民拥护但未能全面推行，《资政新篇》则缺乏实施的社会基础。其他选项均正确。"
+        },
+        {
+            type: "multiple",
+            text: "太平天国运动的历史意义在于它",
+            options: [
+                "A. 沉重打击了封建统治阶级，强烈撼动了清政府的统治根基",
+                "B. 正式提出了在中国发展资本主义的完整方案",
+                "C. 拒绝了西方列强的拉拢，有力地打击了外国侵略势力",
+                "D. 颁布了《天朝田亩制度》，表达了农民对土地的渴望",
+                "E. 为后来的反帝反封建的农民运动提供了宝贵的经验教训"
+            ],
+            answer: [0, 2, 3, 4],
+            knowledge: "太平天国运动的历史意义",
+            explanation: "B选项错误，太平天国虽然提出了《资政新篇》，但这不是一个完整的发展资本主义方案，也未正式实施。其他选项均正确。"
+        },
+        {
+            type: "multiple",
+            text: "洋务运动时期创办的民用企业（如轮船招商局、上海机器织布局等）具有的主要特点是",
+            options: [
+                "A. 基本属于资本主义性质的企业",
+                "B. 主要采取'官督商办'的经营方式",
+                "C. 其产品大部分用于调拨，不具有商品性质",
+                "D. 在客观上对外国资本主义的经济侵略起到了一定的抵制作用",
+                "E. 在客观上对中国民族资本主义的产生起了诱导作用"
+            ],
+            answer: [0, 1, 3, 4],
+            knowledge: "洋务民用企业的特点",
+            explanation: "C选项错误，洋务民用企业的产品具有商品性质，进入市场销售。其他选项均正确。"
+        },
+        {
+            type: "multiple",
+            text: "洋务运动最终未能使中国走上富强道路的根本原因在于",
+            options: [
+                "A. 其指导思想是'中学为体，西学为用'，企图在维护封建制度的前提下学习西方技术",
+                "B. 洋务派内部存在严重的派系之争，难以形成合力",
+                "C. 洋务企业受到封建衙门式管理的严重束缚，生产效率低下",
+                "D. 清政府中央政府对兴办洋务态度消极，甚至多方阻挠",
+                "E. 西方列强并不希望中国真正富强，在技术和设备上进行封锁和刁难"
+            ],
+            answer: [0, 1, 2, 3, 4],
+            knowledge: "洋务运动失败的原因",
+            explanation: "以上所有选项都是洋务运动未能使中国走上富强道路的原因。"
+        },
+        {
+            type: "multiple",
+            text: "早期维新思想家（如王韬、薛福成、郑观应）的思想主张主要包括",
+            options: [
+                "A. 大力批判封建专制制度，主张实行民主共和",
+                "B. 主张发展民族工商业，与外国进行'商战'",
+                "C. 主张变革政治，实行君主立宪制度",
+                "D. 主张废八股、改科举，兴办新式学校",
+                "E. 其思想为后来的戊戌维新运动作了必要的思想准备"
+            ],
+            answer: [1, 2, 3, 4],
+            knowledge: "早期维新思想",
+            explanation: "A选项错误，早期维新思想家主张君主立宪，而非民主共和。其他选项均正确。"
+        },
+        {
+            type: "multiple",
+            text: "戊戌维新运动作为一场政治改革运动，其主要内容包括",
+            options: [
+                "A. 改革行政机构，裁撤闲散重叠机构，裁汰冗员",
+                "B. 设立议院，制定宪法，实行完全的议会政治",
+                "C. 保护和奖励农工商业，提倡开办实业",
+                "D. 裁撤旧式绿营兵，改练新式陆军",
+                "E. 创办京师大学堂，提倡西学，废除八股"
+            ],
+            answer: [0, 2, 3, 4],
+            knowledge: "戊戌变法的主要内容",
+            explanation: "B选项错误，戊戌变法并未设立议院、制定宪法，康有为等人虽然提出过开议院的主张，但在变法措施中并未实施。其他选项均正确。"
+        },
+        {
+            type: "multiple",
+            text: "戊戌维新运动之所以迅速失败，是由于维新派自身存在着以下致命的弱点和局限",
+            options: [
+                "A. 不敢否定封建主义，在政治上企图依靠并无实权的皇帝",
+                "B. 对帝国主义抱有幻想，企图依靠列强的支持来实现改革",
+                "C. 惧怕人民群众，脱离人民群众，把运动局限于士大夫阶层",
+                "D. 在策略上急于求成，变法措施过于激进，树敌过多",
+                "E. 缺乏可靠的军事后盾，当顽固派反扑时毫无招架之力"
+            ],
+            answer: [0, 1, 2, 3, 4],
+            knowledge: "戊戌变法失败的原因",
+            explanation: "以上所有选项都是戊戌维新运动迅速失败的原因。"
+        },
+        {
+            type: "multiple",
+            text: "与太平天国运动相比，戊戌维新运动作为一次资产阶级性质的改良运动，其'新'主要体现在",
+            options: [
+                "A. 它是由新兴的民族资产阶级领导和发动的",
+                "B. 它的目标是在中国建立君主立宪的资本主义制度",
+                "C. 它拥有广泛而坚实的群众基础，得到了农民和工人的支持",
+                "D. 它系统地介绍了西方资产阶级的社会政治学说和自然科学知识",
+                "E. 它采取了和平请愿、上书言事等非暴力的斗争方式"
+            ],
+            answer: [0, 1, 3, 4],
+            knowledge: "戊戌维新运动的'新'特点",
+            explanation: "C选项错误，戊戌维新运动缺乏广泛而坚实的群众基础，主要局限于士大夫阶层。其他选项均正确。"
+        },
+        {
+            type: "multiple",
+            text: "曾国藩、李鸿章等洋务派代表人物，他们兴办洋务事业的复杂动机包括",
+            options: [
+                "A. '剿发逆'（镇压太平天国），维护清王朝的封建统治",
+                "B. '勤远略'（抵御外侮），实现国家的自强自立",
+                "C. 在地方扩张本集团的政治、军事和经济实力",
+                "D. 顺应历史潮流，推动中国社会向资本主义过渡",
+                "E. 在'千古变局'中，为封建统治找到新的出路"
+            ],
+            answer: [0, 1, 2, 4],
+            knowledge: "洋务派的动机",
+            explanation: "D选项错误，洋务派并不想推动中国社会向资本主义过渡，他们的根本目的是维护封建统治。其他选项均正确。"
+        },
+        {
+            type: "multiple",
+            text: "从太平天国到洋务运动，再到戊戌变法，这三场运动相继失败说明了",
+            options: [
+                "A. 农民阶级和资产阶级改良派都不能领导中国革命取得胜利",
+                "B. 不触动封建根基的自强运动和改良主义，无法改变中国的命运",
+                "C. 帝国主义与中国的封建势力相结合，严重阻碍了中国的现代化",
+                "D. 中国进行彻底的反帝反封建的民族民主革命具有必然性",
+                "E. 学习西方必须从制度层面入手，仅学习技术或进行局部改良是远远不够的"
+            ],
+            answer: [0, 1, 2, 3, 4],
+            knowledge: "近代改革运动的共同教训",
+            explanation: "以上所有选项都是从太平天国到洋务运动再到戊戌变法失败所说明的历史教训。"
+        }
+    ];
+
+    const itemsPerPage = 10;
+    const totalSections = Math.ceil(questions.length / itemsPerPage);
+
+    function init() {
+        const wrapper = document.getElementById('sections-wrapper');
+        wrapper.innerHTML = '';
+
+        for (let s = 0; s < totalSections; s++) {
+            const start = s * itemsPerPage;
+            const end = Math.min(start + itemsPerPage, questions.length);
+            const sectionContainer = document.createElement('div');
+            sectionContainer.className = 'section-container';
+
+            const title = document.createElement('h2');
+            title.className = 'section-title';
+            title.textContent = `第 ${s + 1} 组题目 (${start + 1}-${end})`;
+            sectionContainer.appendChild(title);
+
+            for (let i = start; i < end; i++) {
+                sectionContainer.appendChild(createQuestionElement(questions[i], i));
+            }
+
+            const btnGroup = document.createElement('div');
+            btnGroup.className = 'section-buttons';
+            btnGroup.innerHTML = `
+                <button class="section-btn reset-section-btn" onclick="resetGroup(${s}, ${start}, ${end})">重置本组</button>
+                <button class="section-btn submit-section-btn" onclick="submitGroup(${s}, ${start}, ${end})">提交本组答案</button>
+            `;
+            sectionContainer.appendChild(btnGroup);
+            wrapper.appendChild(sectionContainer);
+        }
+    }
+
+    function createQuestionElement(q, index) {
+        const div = document.createElement('div');
+        div.className = 'question-item';
+        div.id = `q-item-${index}`;
+        const optionsHtml = q.options.map((opt, optIdx) => `
+            <label class="option" id="label-${index}-${optIdx}">
+                <input type="${q.type === 'single' ? 'radio' : 'checkbox'}" name="q-${index}" value="${optIdx}">
+                ${opt}
+            </label>
+        `).join('');
+        div.innerHTML = `
+            <div class="question-header">
+                <div class="question-number">第${index + 1}题</div>
+                <span class="question-type ${q.type === 'single' ? 'single-choice' : 'multiple-choice'}">${q.type === 'single' ? '单选题' : '多选题'}</span>
+            </div>
+            <div class="question-text">${q.text}</div>
+            <div class="options-container">${optionsHtml}</div>
+            <div class="feedback" id="feedback-${index}"></div>
+        `;
+        div.querySelectorAll('input').forEach(input => {
+            input.onchange = function() {
+                if(q.type === 'single') div.querySelectorAll('.option').forEach(el => el.classList.remove('selected'));
+                this.checked ? this.parentElement.classList.add('selected') : this.parentElement.classList.remove('selected');
+            };
+        });
+        return div;
+    }
+
+    window.submitGroup = function(sIdx, start, end) {
+        let correct = 0;
+        for (let i = start; i < end; i++) {
+            const q = questions[i];
+            const feedback = document.getElementById(`feedback-${i}`);
+            const item = document.getElementById(`q-item-${i}`);
+            const selected = Array.from(document.getElementsByName(`q-${i}`)).filter(n => n.checked).map(n => parseInt(n.value));
+
+            const isCorrect = q.type === 'single' ? (selected[0] === q.answer) : (JSON.stringify(selected.sort()) === JSON.stringify(q.answer.sort()));
+            if(isCorrect) correct++;
+
+            item.classList.remove('correct', 'incorrect');
+            item.classList.add(isCorrect ? 'correct' : 'incorrect');
+            feedback.style.display = 'block';
+            feedback.className = `feedback ${isCorrect ? 'correct' : 'incorrect'}`;
+            const ansTxt = Array.isArray(q.answer) ? q.answer.map(a => String.fromCharCode(65+a)).join(',') : String.fromCharCode(65+q.answer);
+            feedback.innerHTML = `<div style="font-weight:600">${isCorrect ? '回答正确！' : '回答错误'}</div><div class="correct-answer-text">正确答案：${ansTxt}</div><div class="explanation"><strong>解析：</strong>${q.explanation}</div>`;
+        }
+        alert(`第 ${sIdx + 1} 组统计：\n总数：${end-start} 题\n正确：${correct} 题\n错误：${(end-start)-correct} 题`);
+    };
+
+    window.resetGroup = function(sIdx, start, end) {
+        if(!confirm('确定重置本组吗？')) return;
+        for (let i = start; i < end; i++) {
+            const item = document.getElementById(`q-item-${i}`);
+            item.classList.remove('correct', 'incorrect');
+            document.getElementsByName(`q-${i}`).forEach(n => { n.checked = false; n.parentElement.classList.remove('selected'); });
+            document.getElementById(`feedback-${i}`).style.display = 'none';
+        }
+    };
+
+    document.addEventListener('DOMContentLoaded', init);
+</script>
+</body>
+</html>

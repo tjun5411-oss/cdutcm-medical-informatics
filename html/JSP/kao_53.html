@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>BMI健康指标计算器</title>
+</head>
+要求如下：<br>
+完成对BMI指数的计算，计算公式为：<br>
+体质指数（BMI）=体重（kg）÷（身高*身高）（m）<br>
+身高输入框的id与name为height<br>
+体重输入框的id与name为weight<br>
+确定按钮的id、name与value属性值为ok。<br>
+点击确定按钮计算BMI指数，。<br>
+点击确定后，计算此人的BMI指数并显示在div中。<br>
+显示BMI指数的div的id为div_1。<br>
+显示格式为“BMI:xx.xx”,计算结果用round保留到小数点后2位(四舍五入）。<br>
+<body>
+<br>
+身高:<input type="text" id="height" name="height" value="">(m)<br>
+体重:<input type="text" id="weight" name="weight" value="">(kg)<br>
+<input type="button" id="ok" name="ok" value="ok" onclick="bmi()"><br>
+<div id="div_1"></div>
+<script>
+    function bmi(){
+        let height=document.getElementById("height").value
+        let weight=document.getElementById("weight").value
+        let bmivalue=Math.round(weight/(height*height)*100)/100;
+
+        document.getElementById("div_1").innerHTML="BMI:"+bmivalue;
+
+
+    }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+要求如下：<br>
+1：函数名为mySort(),带一个数组形参，按由大到小的顺序排<br>
+（如果是要求按由小到大排序则把if (intArray[j] < intArray[j + 1])中的'<'改为'>')<br>
+2：排序完成后，返回最大值<br>
+<body>
+
+<script>
+    function mySort(intArray) {
+        for (let i = 0; i < intArray.length - 1; i++) {
+            for (let j = 0; j < intArray.length - 1 - i; j++) {
+                if (intArray[j] < intArray[j + 1]) {
+                    let temp = intArray[j];
+                    intArray[j] = intArray[j + 1];
+                    intArray[j + 1] = temp;
+                }
+            }
+        }
+        return intArray[0];
+    }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>title</title>
+    <script src="/public_libs/vue.3.0.js"></script>
+    <script src="/public_libs/axios.min.1.js"></script>
+</head>
+要求如下：<br>
+定义div，id为app_1。<br>
+定义table,table的id为table_1<br>
+定义vue的data元素包含students与url<br>
+students的数据结构为[{name:"mike",gender:"男",age:18,score:98},
+{name:"rose",gender:"女",age:19,score:88},{name:"tom",gender:"男",age:18,score:78}]<br>
+url的值为空串<br>
+定义vue的getData方法，在getData方法中<br>
+使用axios采用get方式访问服务器()<br>
+get的url参数的值为data的url<br>
+vue的对象名为app1。(注意请使用var定义此对象)<br>
+库地址："/public_libs/vue.3.0.js"<br>
+库地址："/public_libs/axios.min.1.js"<br>
+注：本题采用CDN方式引入vue，非CLI模式。<br>
+<body>
+<div id="app_1">
+    <table id="table_1" border="1">
+        <thead>
+        <tr>
+            <th>姓名</th>
+            <th>性别</th>
+            <th>年龄</th>
+            <th>成绩</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr v-for="item in students">
+            <td>{{item.name}}</td>
+            <td>{{item.gender}}</td>
+            <td>{{item.age}}</td>
+            <td>{{item.score}}</td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<script>
+    var app1 = Vue.createApp({
+        data(){
+            return {
+                students:[
+                    {name:"mike",gender:"男",age:18,score:98},
+                    {name:"rose",gender:"女",age:19,score:88},
+                    {name:"tom",gender:"男",age:18,score:78}
+                ],
+                url:""
+            }
+        },
+        methods:{
+            async getData(){
+                let res = await axios.get(this.url)
+                this.students = res.data
+            }
+        }
+    }).mount('#app_1')
+</script>
+</body>
+</html>

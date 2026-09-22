@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>中国近现代史纲要 - 第七章</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif; }
+    body { background-color: #fff9f0; color: #333; line-height: 1.6; padding: 20px; }
+    .container { max-width: 1400px; margin: 0 auto; }
+    header { text-align: center; padding: 35px; background: linear-gradient(135deg, #a30000 0%, #d32f2f 100%); color: white; border-radius: 15px; box-shadow: 0 10px 25px rgba(163, 0, 0, 0.3); margin-bottom: 30px; }
+    h1 { font-size: 2.5rem; margin-bottom: 10px; }
+    .subtitle { font-size: 1.2rem; opacity: 0.9; }
+    .section-container { background: white; border-radius: 15px; padding: 30px; box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08); margin-bottom: 35px; border-top: 6px solid #a30000; }
+    .section-title { font-size: 1.5rem; margin-bottom: 25px; color: #a30000; padding-bottom: 15px; border-bottom: 2px solid #eee; display: flex; align-items: center; gap: 10px; }
+    .question-item { border: 1px solid #f0f0f0; border-radius: 12px; padding: 20px; margin-bottom: 25px; background-color: #fff; transition: all 0.3s ease; }
+    .question-item.correct { border-color: #4CAF50; background-color: #f9fff9; }
+    .question-item.incorrect { border-color: #f44336; background-color: #fff9f9; }
+    .question-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+    .question-number { font-size: 1.1rem; font-weight: 700; color: #a30000; }
+    .question-type { padding: 3px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: 600; }
+    .single-choice { background-color: #ffebee; color: #c62828; }
+    .multiple-choice { background-color: #e8eaf6; color: #3f51b5; }
+    .question-text { font-size: 1.1rem; margin-bottom: 15px; font-weight: 500; color: #2c3e50; }
+    .option { margin-bottom: 10px; padding: 12px 18px; border: 1px solid #eee; border-radius: 8px; cursor: pointer; transition: 0.2s; display: flex; align-items: flex-start; gap: 12px; }
+    .option:hover { background-color: #fff5f5; border-color: #ffcdd2; }
+    .option.selected { border-color: #a30000; background-color: #fff0f0; }
+    .feedback { padding: 18px; border-radius: 8px; margin-top: 15px; display: none; }
+    .feedback.correct { background-color: #e8f5e9; color: #2e7d32; border-left: 5px solid #4CAF50; }
+    .feedback.incorrect { background-color: #ffebee; color: #c62828; border-left: 5px solid #f44336; }
+    .btn-group { display: flex; gap: 15px; margin-top: 20px; }
+    .btn { padding: 12px 28px; border: none; border-radius: 8px; font-size: 1rem; font-weight: 600; cursor: pointer; transition: 0.3s; }
+    .btn-submit { background-color: #a30000; color: white; }
+    .btn-reset { background-color: #9e9e9e; color: white; }
+
+    /* 导航栏 */
+    .chapter-nav { display: flex; justify-content: space-between; margin-top: 50px; padding: 30px 0; border-top: 2px solid #eee; }
+    .nav-btn { text-decoration: none; padding: 15px 30px; border-radius: 10px; font-weight: bold; color: white; background: #5d4037; transition: 0.3s; display: flex; align-items: center; gap: 10px; }
+    .nav-btn:hover { background: #3e2723; transform: translateY(-3px); }
+    .nav-btn.next { background: #a30000; }
+    .nav-btn.next:hover { background: #820000; }
+
+    footer { text-align: center; margin-top: 60px; color: #777; padding-bottom: 40px; }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <header>
+    <h1>第七章 为新中国而奋斗</h1>
+    <p class="subtitle">解放战争与新民主主义革命的伟大胜利</p>
+  </header>
+
+  <div id="quiz-app"></div>
+
+  <div class="chapter-nav">
+    <a href="第六章.html" class="nav-btn">
+      <i class="fas fa-arrow-left"></i> 上一章：第六章
+    </a>
+    <a href="第八章.html" class="nav-btn next">
+      下一章：第八章 <i class="fas fa-arrow-right"></i>
+    </a>
+  </div>
+
+  <footer>
+    <p>自学刷题系统 &copy; 2025 - 迎接新中国的曙光</p>
+  </footer>
+</div>
+
+<script>
+  const questions = [
+    // 单选 1-60
+    { q: "1. 抗日战争胜利后，中国社会的主要矛盾转变为", a: 2, type: "single", opts: ["A. 中华民族与日本帝国主义的矛盾", "B. 农民阶级与地主阶级的矛盾", "C. 中国人民同美国支持的国民党反动派的矛盾", "D. 无产阶级与资产阶级的矛盾"] },
+    { q: "2. 1945年8月，中共中央在《对目前时局的宣言》中明确提出的核心口号是", a: 2, type: "single", opts: ["A. “武装保卫华北”", "B. “北上抗日”", "C. “和平、民主、团结”", "D. “打倒蒋介石，解放全中国”"] },
+    { q: "3. 1945年8月，蒋介石三次电邀毛泽东赴重庆谈判，其首要目的是", a: 1, type: "single", opts: ["A. 真心谋求国内和平与民主建设", "B. 为发动内战争取准备时间并嫁祸于共产党", "C. 响应国内外要求和平的舆论压力", "D. 试探中国共产党的真实意图"] },
+    { q: "4. 重庆谈判期间，签署了《双十协定》。其最具积极意义的成果是", a: 3, type: "single", opts: ["A. 国民党承认了解放区政权的合法地位", "B. 国民党同意公平合理地整编全国军队", "C. 双方一致同意避免内战、实行宪政", "D. 国民党被迫承认了和平建国的基本方针"] },
+    { q: "5. 1946年，国民党军队围攻（ ），标志着全面内战的爆发", a: 2, type: "single", opts: ["A. 陕甘宁边区", "B. 东北解放区", "C. 中原解放区", "D. 山东解放区"] },
+    { q: "6. 面对进攻，毛泽东提出“一切反动派都是纸老虎”，其核心意义在于", a: 1, type: "single", opts: ["A. 分析了敌我武器水平", "B. 从本质上、战略上藐视敌人，树立必胜信念", "C. 鼓舞我军进行阵地战", "D. 表明胜负取决于援助"] },
+    { q: "7. 解放战争初期，人民解放军采取的军事原则是", a: 1, type: "single", opts: ["A. 全线出击，御敌于解放区之外", "B. 以歼灭敌人有生力量为主要目标", "C. 进行战略决战", "D. 固守重要城市"] },
+    { q: "8. 1947年6月底，刘邓大军（ ），揭开了人民解放战争战略进攻的序幕", a: 2, type: "single", opts: ["A. 转战陕北", "B. 发起淮海战役", "C. 千里跃进大别山", "D. 发动辽沈战役"] },
+    { q: "9. 1947年10月10日，中国人民解放军总部发表宣言提出的口号是", a: 2, type: "single", opts: ["A. “和平、民主、团结”", "B. “向北发展，向南防御”", "C. “打倒蒋介石，解放全中国”", "D. “将革命进行到底”"] },
+    { q: "10. 解放战争时期，解放区土地改革颁布的纲领性文件是", a: 2, type: "single", opts: ["A. 《井冈山土地法》", "B. 《兴国土地法》", "C. 《中国土地法大纲》", "D. 《中华人民共和国土地改革法》"] },
+    { q: "11. 土地改革对解放战争胜利起到的最直接、最重要的作用是", a: 2, type: "single", opts: ["A. 消灭封建制度", "B. 为工业化开辟道路", "C. 极大调动农民支援战争的积极性", "D. 促进农业生产变革"] },
+    { q: "12. 1947年，国民党当局残酷镇压台湾人民反抗的事件是", a: 1, type: "single", opts: ["A. 一·二八事变", "B. 二二八事件", "C. 五二〇惨案", "D. 下关惨案"] },
+    { q: "13. 1948年9月，华东野战军发起的（ ），揭开了战略决战的序幕", a: 0, type: "single", opts: ["A. 济南战役", "B. 辽沈战役", "C. 平津战役", "D. 淮海战役"] },
+    { q: "14. 三大战役中，人民解放军在兵力总数上首次超过国民党的战役是", a: 0, type: "single", opts: ["A. 辽沈战役", "B. 淮海战役", "C. 平津战役", "D. 渡江战役"] },
+    { q: "15. 毛泽东为新华社撰写的1949年新年献词是", a: 2, type: "single", opts: ["A. 《论人民民主专政》", "B. 《丢掉幻想》", "C. 《将革命进行到底》", "D. 《唯心历史观的破产》"] },
+    { q: "16. 1949年4月21日，毛泽东和朱德发布的战役命令是", a: 1, type: "single", opts: ["A. 平津战役", "B. 渡江战役", "C. 淮海战役", "D. 辽沈战役"] },
+    { q: "17. 1949年4月23日，人民解放军占领（ ），宣告了国民党反动统治的覆灭", a: 2, type: "single", opts: ["A. 北平", "B. 上海", "C. 南京", "D. 武汉"] },
+    { q: "18. 1949年6月30日，毛泽东发表（ ），系统阐述了人民民主专政的理论", a: 2, type: "single", opts: ["A. 《新民主主义论》", "B. 《论联合政府》", "C. 《论人民民主专政》", "D. 《目前形势和我们的任务》"] },
+    { q: "19. 政协第一届会议通过的起临时宪法作用的文件是", a: 1, type: "single", opts: ["A. 《宪法大纲》", "B. 《中国人民政治协商会议共同纲领》", "C. 《中华人民共和国宪法》", "D. 《论人民民主专政》"] },
+    { q: "20. 标志着中国新民主主义革命取得基本胜利的历史事件是", a: 1, type: "single", opts: ["A. 抗日战争的胜利", "B. 中华人民共和国的成立", "C. 《共同纲领》的通过", "D. 占领南京"] },
+    { q: "21. 抗战胜利后，美国对华政策的基本目标是", a: 3, type: "single", opts: ["A. 促成联合政府", "B. 帮助中共政权", "C. 帮助国民党消灭共产党", "D. 扶蒋反共，将中国变为其附庸"] },
+    { q: "22. 1947年，国民党宣布民盟为“非法团体”，其造成的政治后果是", a: 3, type: "single", opts: ["A. 放弃中间路线", "B. 接受中共领导", "C. 政治上更孤立", "D. 促使民主党派与中共并肩战斗，加速第二条战线形成"] },
+    { q: "23. 解放战争时期，构成反蒋第二条战线的是", a: 0, type: "single", opts: ["A. 国统区以学生运动为先导的人民民主运动", "B. 解放区土地改革", "C. 国民党军队起义", "D. 民主党派武装"] },
+    { q: "24. 1947年，国民党为挽救财政崩溃进行的币制改革是发行", a: 1, type: "single", opts: ["A. 法币", "B. 金圆券", "C. 银元券", "D. 关金券"] },
+    { q: "25. 中共在新民主主义革命阶段土地改革的总路线是", a: 0, type: "single", opts: ["A. 依靠贫农，团结中农，有步骤、有分别地消灭封建剥削制度", "B. 依靠贫雇农，消灭富农", "C. 平均地权", "D. 没收一切土地"] },
+    { q: "26. 1949年3月，中共中央在西柏坡召开的重要会议是", a: 2, type: "single", opts: ["A. 遵义会议", "B. 瓦窑堡会议", "C. 七届二中全会", "D. 洛川会议"] },
+    { q: "27. 在七届二中全会上，毛泽东提出的执政党建设问题是", a: 3, type: "single", opts: ["A. 保持艰苦奋斗", "B. 反对官僚主义", "C. 开展整风", "D. 务必保持谦虚、谨慎、不骄、不躁的作风（及艰苦奋斗）"] },
+    { q: "28. 人民解放战争战略决战的三大战役中，最先发起的是", a: 1, type: "single", opts: ["A. 淮海战役", "B. 辽沈战役", "C. 平津战役", "D. 渡江战役"] },
+    { q: "29. 在淮海战役中，总前委书记是", a: 1, type: "single", opts: ["A. 刘伯承", "B. 邓小平", "C. 陈毅", "D. 粟裕"] },
+    { q: "30. 解放战争期间，使华北地区基本获得解放的战役是", a: 2, type: "single", opts: ["A. 辽沈战役", "B. 淮海战役", "C. 平津战役", "D. 太原战役"] },
+    { q: "31. 1949年9月，中国人民政治协商会议的召开，标志着", a: 1, type: "single", opts: ["A. 社会主义制度确立", "B. 领导的多党合作和政治协商制度正式确立", "C. 人代会确立", "D. 民族区域自治确立"] },
+    { q: "32. 国民党政权在大陆统治覆灭的根本原因是", a: 2, type: "single", opts: ["A. 军事失误", "B. 失去美援", "C. 代表大地主大资产阶级利益，违背历史潮流和人民意愿", "D. 经济失败"] },
+    { q: "33. 战略决战阶段创造的首个歼灭国民党军重兵集团的战役是", a: 2, type: "single", opts: ["A. 平津战役", "B. 淮海战役", "C. 辽沈战役", "D. 孟良崮战役"] },
+    { q: "34. 1949年，三大外交方针中的“一边倒”是指", a: 2, type: "single", opts: ["A. 倒向美国", "B. 保持中立", "C. 倒向苏联为首的社会主义阵营", "D. 不结盟"] },
+    { q: "35. 人民民主统一战线空前巩固和扩大的重要标志是", a: 1, type: "single", opts: ["A. 土地改革", "B. 中国人民政治协商会议的召开", "C. 各党派拥护中共", "D. 第二条战线形成"] },
+    { q: "36. 解放战争期间，毛泽东提出的“十大军事原则”的核心是", a: 3, type: "single", opts: ["A. 先打弱敌", "B. 歼灭有生力量", "C. 运动战", "D. 集中优势兵力，各个歼灭敌人"] },
+    { q: "37. 1948年，中共中央发布“五一口号”，其主要内容是", a: 0, type: "single", opts: ["A. 号召召开新的政协讨论成立民主联合政府", "B. 打倒蒋介石", "C. 进行土改", "D. 将革命进行到底"] },
+    { q: "38. 国统区经济陷入崩溃的根源在于", a: 1, type: "single", opts: ["A. 战争消耗", "B. 官僚资本的恶性膨胀和美国资本的侵略", "C. 自然灾害", "D. 基础薄弱"] },
+    { q: "39. 解放区土地改革最重要的历史作用是", a: 1, type: "single", opts: ["A. 摧毁封建根基", "B. 赢得农民支持，为胜利提供人力物力保障", "C. 改造基础", "D. 耕者有其田"] },
+    { q: "40. 中国新民主主义革命胜利的最基本经验是", a: 1, type: "single", opts: ["A. 建立统一战线", "B. 坚持中国共产党的正确领导", "C. 武装斗争", "D. 走社会主义道路"] },
+    { q: "41. “向北发展，向南防御”最核心的地缘政治考量是", a: 0, type: "single", opts: ["A. 背靠苏蒙，寻求可靠外部依托和战略纵深", "B. 东北工业基础", "C. 避免正面冲突", "D. 执行布局指示"] },
+    { q: "42. 毛泽东毅然赴重庆谈判，这一决策展现的政治智慧在于", a: 1, type: "single", opts: ["A. 摸清底牌", "B. 用实际行动揭露假和平真内战，赢得政治主动", "C. 说服蒋介石", "D. 争取部署时间"] },
+    { q: "43. 1946年旧政协决议最重要的历史遗产是", a: 1, type: "single", opts: ["A. 和谈框架", "B. 在民众面前确立了“和平民主新阶段”的合法性与道义标准", "C. 组建联合政府", "D. 承认解放区"] },
+    { q: "44. “歼灭敌人有生力量”而非固守城池蕴含的哲学是", a: 1, type: "single", opts: ["A. 空间换时间", "B. 存人失地，人地皆存；存地失人，人地皆失", "C. 各个击破", "D. 你打你的"] },
+    { q: "45. 千里跃进大别山战略行动最大的价值体现在", a: 1, type: "single", opts: ["A. 突然性", "B. 直接威胁统治心脏地区，迫使敌人调整全局部署", "C. 建立解放区", "D. 群众基础"] },
+    { q: "46. 实行“耕者有其田”政策转变最深刻的意义在于", a: 1, type: "single", opts: ["A. 完成革命任务", "B. 满足农民最根本土地要求，提供取之不竭的人力物力", "C. 政策定型", "D. 消灭地主阶级"] },
+    { q: "47. 反蒋第二条战线的性质是", a: 2, type: "single", opts: ["A. 武装斗争", "B. 改良运动", "C. 广大群众自发的、反蒋爱国运动", "D. 议会政治斗争"] },
+    { q: "48. “金圆券改革”失败最根本的教训是", a: 1, type: "single", opts: ["A. 方案缺陷", "B. 战争状态下，脱离实体经济的金融改革注定失败", "C. 未打击投机", "D. 触动官僚利益"] },
+    { q: "49. 1948年“五一口号”在策略上的高明之处是", a: 1, type: "single", opts: ["A. 放弃领导权", "B. 将建国程序合法性与道义制高点牢牢掌握在手中", "C. 建立统一战线", "D. 迫使国民党协商"] },
+    { q: "50. 战略决战第一个战场选在东北的关键依据不包括", a: 3, type: "single", opts: ["A. 兵力优势", "B. 工业基础", "C. 背靠苏朝", "D. 蒋介石举棋不定（此项为依据之一，题目问不包括）"] },
+    { q: "51. 北平“和平解放”的主要战略考量是", a: 1, type: "single", opts: ["A. 缺乏武器", "B. 保护文化古城，并树立榜样", "C. 强攻损失大", "D. 响应将领"] },
+    { q: "52. 党的工作重心由乡村转移到城市的深层含义是", a: 1, type: "single", opts: ["A. 道路过时", "B. 标志着从革命党向执政党的战略转变", "C. 城市更重要", "D. 放弃农民"] },
+    { q: "53. 毛泽东提出的“两个务必”主要针对的是", a: 1, type: "single", opts: ["A. 轻敌冒进", "B. 骄傲自满、贪图享乐等执政考验", "C. 建设经验不足", "D. 外部干涉"] },
+    { q: "54. 《共同纲领》未能明确规定社会主义前途的现实原因是", a: 1, type: "single", opts: ["A. 尚未确立理想", "B. 团结各阶级完成新民主主义革命遗留任务", "C. 苏联影响", "D. 理论分歧"] },
+    { q: "55. “紫石英号事件”宣告了", a: 1, type: "single", opts: ["A. 国际支持", "B. 列强“炮舰政策”在中国已经一去不复返", "C. 海军强大", "D. 一边倒"] },
+    { q: "56. 美国“扶蒋反共”却“力不从心”的根源在于", a: 1, type: "single", opts: ["A. 国内舆论", "B. 国民党政权的腐败无能使其成为“扶不起的阿斗”", "C. 苏联警告", "D. 重心在欧"] },
+    { q: "57. 建立起广泛统一战线的关键前提是", a: 2, type: "single", opts: ["A. 经济援助", "B. 军事优势", "C. 政策和行动代表了最广大人民根本利益", "D. 政治让步"] },
+    { q: "58. 国民党军事迅速溃败最致命的内部因素是", a: 1, type: "single", opts: ["A. 装备落后", "B. 派系林立，指挥混乱，士气低落", "C. 失去美援", "D. 战术失误"] },
+    { q: "59. “纸老虎”论断的认识论基础是", a: 0, type: "single", opts: ["A. 辩证唯物主义与历史唯物主义", "B. 革命英雄主义", "C. 战斗力评估", "D. 国际形势"] },
+    { q: "60. 新中国的国体和政体分别是", a: 0, type: "single", opts: ["A. 人民民主专政；民主集中制的人代会制度", "B. 无产阶级专政；政协制度", "C. 联合专政；三权分立", "D. 社会主义共和国；苏维埃"] },
+
+    // 多选 1-5
+    { q: "1. 抗日战争胜利后，中共争取和平民主的战略意义举措包括", a: [0, 1, 2, 3], type: "multiple", opts: ["A. 毛泽东赴重庆谈判", "B. 让出南方八个解放区", "C. “向北发展，向南防御”", "D. 大规模练兵生产做好准备", "E. 拒绝军队国家化"] },
+    { q: "2. 《中国土地法大纲》相较于抗战时期政策的转变体现为", a: [0, 1, 2, 4], type: "multiple", opts: ["A. 废除剥削，实行耕者有其田", "B. 按人口平分土地", "C. 调动农民参军支前", "D. 保护富农经济", "E. 获得农民支持"] },
+    { q: "3. 战略进攻阶段后，中共采取的关键战略决策有", a: [0, 1, 2, 4], type: "multiple", opts: ["A. 千里跃进大别山", "B. 发布“五一口号”", "C. 发动三大战役", "D. 国统区学生运动", "E. 提出“打倒蒋介石，解放全中国”"] },
+    { q: "4. 反蒋第二条战线形成的社会根源在于", a: [0, 1, 2, 3, 4], type: "multiple", opts: ["A. 通胀恶化民生", "B. 独裁镇压", "C. 知识分子关怀", "D. 中共组织领导", "E. 民族资产阶级放弃幻想"] },
+    { q: "5. 解放战争胜利的深刻历史经验包括", a: [0, 1, 2, 3, 4], type: "multiple", opts: ["A. 广泛统一战线", "B. 党领导的人民军队", "C. 反对帝国主义", "D. 加强党的建设", "E. 马克思主义中国化"] }
+  ];
+
+  const sections = [
+    { title: "单选 1-20：战后博弈与内战爆发", start: 0, end: 20 },
+    { title: "单选 21-40：土地改革与第二条战线", start: 20, end: 40 },
+    { title: "单选 41-60：战略决战与新中国雏形", start: 40, end: 60 },
+    { title: "多项选择题：历史经验总结", start: 60, end: 65 }
+  ];
+
+  let userAnswers = new Array(questions.length).fill(null);
+
+  function init() {
+    const container = document.getElementById('quiz-app');
+    sections.forEach((sec, sIdx) => {
+      const secDiv = document.createElement('div');
+      secDiv.className = 'section-container';
+      secDiv.innerHTML = `<h2 class="section-title"><i class="fas fa-star"></i> ${sec.title}</h2><div id="sec-${sIdx}"></div>`;
+
+      const btnDiv = document.createElement('div');
+      btnDiv.className = 'btn-group';
+      btnDiv.innerHTML = `
+                <button class="btn btn-reset" onclick="resetSection(${sIdx})">重置本节</button>
+                <button class="btn btn-submit" onclick="submitSection(${sIdx})">校对本节</button>
+            `;
+      secDiv.appendChild(btnDiv);
+      container.appendChild(secDiv);
+
+      const qBox = secDiv.querySelector(`#sec-${sIdx}`);
+      for (let i = sec.start; i < sec.end; i++) {
+        qBox.appendChild(createQ(i));
+      }
+    });
+  }
+
+  function createQ(idx) {
+    const q = questions[idx];
+    const div = document.createElement('div');
+    div.className = 'question-item';
+    div.id = `q-box-${idx}`;
+
+    div.innerHTML = `
+            <div class="question-header">
+                <span class="question-number">第 ${idx < 60 ? idx + 1 : idx - 59} 题</span>
+                <span class="question-type ${q.type}-choice">${q.type === 'single' ? '单选' : '多选'}</span>
+            </div>
+            <div class="question-text">${q.q}</div>
+            <div class="options-container">
+                ${q.opts.map((o, oi) => `
+                    <div class="option" onclick="handleSel(${idx}, ${oi})">
+                        <input type="${q.type === 'single' ? 'radio' : 'checkbox'}" name="q${idx}" id="q${idx}o${oi}">
+                        <label>${o}</label>
+                    </div>
+                `).join('')}
+            </div>
+            <div class="feedback" id="fb-${idx}"></div>
+        `;
+    return div;
+  }
+
+  function handleSel(qi, oi) {
+    const q = questions[qi];
+    const container = document.getElementById(`q-box-${qi}`);
+    const inputs = container.querySelectorAll('input');
+    const opts = container.querySelectorAll('.option');
+
+    if (q.type === 'single') {
+      userAnswers[qi] = oi;
+      opts.forEach(o => o.classList.remove('selected'));
+      opts[oi].classList.add('selected');
+      inputs[oi].checked = true;
+    } else {
+      if (!userAnswers[qi]) userAnswers[qi] = [];
+      const pos = userAnswers[qi].indexOf(oi);
+      if (pos > -1) {
+        userAnswers[qi].splice(pos, 1);
+        opts[oi].classList.remove('selected');
+        inputs[oi].checked = false;
+      } else {
+        userAnswers[qi].push(oi);
+        opts[oi].classList.add('selected');
+        inputs[oi].checked = true;
+      }
+    }
+  }
+
+  function submitSection(sIdx) {
+    const sec = sections[sIdx];
+    let score = 0;
+    for (let i = sec.start; i < sec.end; i++) {
+      const q = questions[i];
+      const uAns = userAnswers[i];
+      let isCorrect = false;
+
+      if (q.type === 'single') {
+        isCorrect = (uAns === q.a);
+      } else {
+        if (uAns && Array.isArray(uAns)) {
+          isCorrect = uAns.length === q.a.length && uAns.every(v => q.a.includes(v));
+        }
+      }
+
+      if (isCorrect) score++;
+      const fb = document.getElementById(`fb-${i}`);
+      const item = document.getElementById(`q-box-${i}`);
+
+      item.className = `question-item ${isCorrect ? 'correct' : 'incorrect'}`;
+      fb.style.display = 'block';
+      fb.className = `feedback ${isCorrect ? 'correct' : 'incorrect'}`;
+
+      const correctStr = q.type === 'single' ?
+              q.opts[q.a] :
+              q.a.map(aIdx => String.fromCharCode(65 + aIdx)).join(', ');
+
+      fb.innerHTML = `
+                <strong>${isCorrect ? '正确' : '错误'}</strong><br>
+                正确答案：${correctStr}
+            `;
+    }
+    alert(`本节校对完成！正确率：${score} / ${sec.end - sec.start}`);
+  }
+
+  function resetSection(sIdx) {
+    const sec = sections[sIdx];
+    for (let i = sec.start; i < sec.end; i++) {
+      userAnswers[i] = null;
+      const item = document.getElementById(`q-box-${i}`);
+      item.className = 'question-item';
+      item.querySelectorAll('.option').forEach(o => o.classList.remove('selected'));
+      item.querySelectorAll('input').forEach(input => input.checked = false);
+      document.getElementById(`fb-${i}`).style.display = 'none';
+    }
+  }
+
+  window.onload = init;
+</script>
+
+</body>
+</html>

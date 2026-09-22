@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>HIS程序设计专项能力评测 </title>
+    <script>
+        function checkData() {
+            var name = document.getElementById('name').value;
+            var gender = document.querySelector('input[name="gender"]:checked');
+            var city = document.getElementById('city').value;
+            var history = document.querySelectorAll('input[name="history"]:checked');
+
+            // 清空所有提示区信息
+            document.getElementById('span_name').textContent = '';
+            document.getElementById('span_gender').textContent = '';
+            document.getElementById('span_city').textContent = '';
+            document.getElementById('span_history').textContent = '';
+
+            // 检查姓名是否为空
+            if (!name) {
+                document.getElementById('span_name').textContent = '姓名不能为空';
+            }
+
+            // 检查性别是否选择
+            if (!gender) {
+                document.getElementById('span_gender').textContent = '请选择性别';
+            }
+
+            // 检查市是否选中德阳
+            if (city !== '德阳') {
+                document.getElementById('span_city').textContent = '请选择德阳';
+            }
+
+            // 检查既往史是否至少选择一项
+            if (history.length === 0) {
+                document.getElementById('span_history').textContent = '请选择至少一项疾病';
+            }
+        }
+    </script>
+</head>
+HIS程序设计专项能力评测，前端程序设计专用。<br>
+患者首诊建档。<br>
+样式如下：<br>
+要求如下：<br>
+form的id为form_1,<br>
+姓名输入框的id,name为name;对应信息提示区span的id为span_name<br>
+身份证输入框的id,name为id;对应信息提示区span的id为span_id<br>
+性别控件的name为gender，id男为male，女为female，value男为01，女为02;对应信息提示区span的id为span_gender<br>
+家庭地址省控件的id,name为province，option的value及标题依次为四川，河北，云南;对应信息提示区span的id为span_province<br>
+家庭地址市控件的id,name为city，option的value及标题依次为成都，绵阳，德阳，默认选中德阳;对应信息提示区span的id为span_city<br>
+既往史的name为history，id高血压为hypertension、糖尿病为diabetes、 精神病为psychosis，value高血压为icd_01，糖尿病为icd_02，精神病为icd_03。对应信息提示区span的id为span_history<br>
+保存按钮的id,name,value为ok，type为button<br>
+实现函数checkData，完成如下功能<br>
+当姓名为空时，在姓名提示区显示：姓名不能为空<br>
+当性别为空时，在性别提示区显示：请选择性别<br>
+当市没有选中德阳，在市提示区显示：请选择德阳<br>
+既往史没有选定项时，在既往史提示区显示：请选择至少一项疾病<br>
+没有错误时，信息区显示空白<br>
+<body>
+<form id="form_1">
+    姓名: <input type="text" id="name" name="name"><br>
+    <span id="span_name"></span><br>
+
+    身份证: <input type="text" id="id" name="id"><br>
+    <span id="span_id"></span><br>
+
+    性别:
+    <input type="radio" name="gender" id="male" value="01"> 男
+    <input type="radio" name="gender" id="female" value="02"> 女<br>
+    <span id="span_gender"></span><br>
+
+    家庭地址：
+    <select id="province" name="province">
+        <option value="">请选择省</option>
+        <option value="四川">四川</option>
+        <option value="河北">河北</option>
+        <option value="云南">云南</option>
+    </select><br>
+    <select id="city" name="city">
+        <option value="成都">成都</option>
+        <option value="绵阳">绵阳</option>
+        <option value="德阳" selected>德阳</option>
+    </select><br>
+    <span id="span_province"></span>
+    <span id="span_city"></span><br>
+
+    既往史:
+    <input type="checkbox" name="history" id="hypertension" value="icd_01"> 高血压
+    <input type="checkbox" name="history" id="diabetes" value="icd_02"> 糖尿病
+    <input type="checkbox" name="history" id="psychosis" value="icd_03"> 精神病<br>
+    <span id="span_history"></span><br>
+
+    <button type="button" id="ok" name="ok" onclick="checkData()">保存</button>
+</form>
+</body>
+</html>

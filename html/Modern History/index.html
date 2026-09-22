@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>近代史刷题系统 - 智学版</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #1e293b;
+            --accent: #d4af37;
+            --success: #10b981;
+            --bg-gradient: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            --card-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
+            --transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', 'PingFang SC', sans-serif; }
+        body { background: var(--bg-gradient); color: var(--primary); min-height: 100vh; padding: 40px 20px; }
+        .container { max-width: 1400px; margin: 0 auto; }
+
+        header { text-align: center; margin-bottom: 50px; }
+        h1 { font-size: 3rem; font-weight: 800; color: var(--primary); margin-bottom: 10px; }
+        h1 i { color: var(--accent); margin-right: 15px; }
+        .subtitle { color: #64748b; font-size: 1.1rem; }
+
+        .stats { display: flex; justify-content: center; gap: 20px; margin-bottom: 40px; }
+        .stat-item {
+            background: white; padding: 15px 30px; border-radius: 12px;
+            box-shadow: var(--card-shadow); text-align: center; border: 1px solid #fff;
+        }
+        .stat-number { font-size: 1.8rem; font-weight: 800; color: var(--primary); display: block; }
+        .stat-label { font-size: 0.75rem; color: #94a3b8; text-transform: uppercase; letter-spacing: 1px; }
+
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 25px;
+            margin-bottom: 60px;
+        }
+
+        .chapter-card {
+            background: white; border-radius: 16px; padding: 30px;
+            box-shadow: var(--card-shadow); transition: var(--transition);
+            border: 1px solid transparent; position: relative;
+            display: flex; flex-direction: column; cursor: pointer;
+        }
+        .chapter-card:hover { transform: translateY(-8px); border-color: var(--accent); box-shadow: 0 20px 30px rgba(0,0,0,0.08); }
+
+        .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+        .card-header span { font-size: 1.25rem; font-weight: 700; }
+        .chapter-number {
+            font-size: 0.85rem; font-weight: 800; background: #f1f5f9;
+            color: var(--primary); width: 32px; height: 32px;
+            display: flex; align-items: center; justify-content: center; border-radius: 8px;
+        }
+
+        .card-content p { color: #64748b; font-size: 0.9rem; line-height: 1.6; margin-bottom: 20px; flex-grow: 1; }
+        .question-count { font-size: 0.8rem; font-weight: 600; color: var(--accent); margin-bottom: 12px; }
+
+        .menu-link {
+            display: block; width: 100%; padding: 12px;
+            background: var(--primary); color: white;
+            text-decoration: none; text-align: center; border-radius: 10px;
+            font-weight: 600; transition: 0.3s;
+        }
+        .chapter-card:hover .menu-link { background: var(--accent); }
+
+        /* 完成标记样式 */
+        .chapter-card.completed::after {
+            content: '\f058'; font-family: 'Font Awesome 6 Free'; font-weight: 900;
+            position: absolute; top: -10px; right: -10px; font-size: 22px;
+            color: var(--success); background: white; border-radius: 50%;
+        }
+
+        footer { text-align: center; color: #94a3b8; padding: 40px 0; border-top: 1px solid #e2e8f0; margin-top: 40px; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1><i class="fas fa-university"></i> 近代史刷题系统</h1>
+        <p class="subtitle">历史长河中的数字化知识评估平台</p>
+    </header>
+
+    <div class="stats">
+        <div class="stat-item"><span class="stat-number">10</span><span class="stat-label">学习模块</span></div>
+        <div class="stat-item"><span class="stat-number">18652</span><span class="stat-label">题库总量</span></div>
+        <div class="stat-item"><span class="stat-number">v4.0</span><span class="stat-label">系统版本</span></div>
+    </div>
+
+    <div class="menu-grid">
+        <div class="chapter-card">
+            <div class="card-header"><span>导论</span><div class="chapter-number">0</div></div>
+            <div class="card-content">
+                <p>近代史学习的方法论与宏观时空坐标。</p>
+                <div class="question-count">25 题</div>
+                <a href="导论.html" class="menu-link">开始学习</a>
+            </div>
+        </div>
+
+        <div class="chapter-card">
+            <div class="card-header"><span>第一章</span><div class="chapter-number">1</div></div>
+            <div class="card-content">
+                <p>反对外国侵略的斗争。鸦片战争与中国近代史的开端。</p>
+                <div class="question-count">30 题</div>
+                <a href="第一章.html" class="menu-link">开始学习</a>
+            </div>
+        </div>
+
+        <div class="chapter-card">
+            <div class="card-header"><span>第二章</span><div class="chapter-number">2</div></div>
+            <div class="card-content">
+                <p>对国家出路的早期探索。农民阶级与封建统治者的尝试。</p>
+                <div class="question-count">28 题</div>
+                <a href="第二章.html" class="menu-link">开始学习</a>
+            </div>
+        </div>
+
+        <div class="chapter-card">
+            <div class="card-header"><span>第三章</span><div class="chapter-number">3</div></div>
+            <div class="card-content">
+                <p>辛亥革命与君主专制制度的终结。资产阶级革命的兴起。</p>
+                <div class="question-count">32 题</div>
+                <a href="第三章.html" class="menu-link">开始学习</a>
+            </div>
+        </div>
+
+        <div class="chapter-card">
+            <div class="card-header"><span>第四章</span><div class="chapter-number">4</div></div>
+            <div class="card-content">
+                <p>开天辟地的大事变。五四运动与中国共产党的成立。</p>
+                <div class="question-count">26 题</div>
+                <a href="第四章.html" class="menu-link">开始学习</a>
+            </div>
+        </div>
+
+        <div class="chapter-card">
+            <div class="card-header"><span>第五章</span><div class="chapter-number">5</div></div>
+            <div class="card-content">
+                <p>中国革命的新道路。工农武装割据与土地革命战争。</p>
+                <div class="question-count">35 题</div>
+                <a href="第五章.html" class="menu-link">开始学习</a>
+            </div>
+        </div>
+
+        <div class="chapter-card">
+            <div class="card-header"><span>第六章</span><div class="chapter-number">6</div></div>
+            <div class="card-content">
+                <p>中华民族的抗日战争。抗日民族统一战线的建立与胜利。</p>
+                <div class="question-count">30 题</div>
+                <a href="第六章.html" class="menu-link">开始学习</a>
+            </div>
+        </div>
+
+        <div class="chapter-card">
+            <div class="card-header"><span>第七章</span><div class="chapter-number">7</div></div>
+            <div class="card-content">
+                <p>为新中国而奋斗。抗战胜利后的局势与解放战争。</p>
+                <div class="question-count">33 题</div>
+                <a href="第七章.html" class="menu-link">开始学习</a>
+            </div>
+        </div>
+
+        <div class="chapter-card">
+            <div class="card-header"><span>第八章</span><div class="chapter-number">8</div></div>
+            <div class="card-content">
+                <p>社会主义制度在中国的确立。从新民主主义向社会主义的过渡。</p>
+                <div class="question-count">34 题</div>
+                <a href="第八章.html" class="menu-link">开始学习</a>
+            </div>
+        </div>
+
+        <div class="chapter-card">
+            <div class="card-header"><span>第九、十章</span><div class="chapter-number">9&10</div></div>
+            <div class="card-content">
+                <p>社会主义建设在探索中曲折发展与改革开放的新篇章。</p>
+                <div class="question-count">45 题</div>
+                <a href="第九、十章.html" class="menu-link">开始学习</a>
+            </div>
+    </div>
+        <div class="chapter-card">
+            <div class="card-header"><span>多选专题</span><div class="chapter-number">多</div></div>
+            <div class="card-content">
+                <p>单独训练多选题，强化记忆</p>
+                <div class="question-count">60多道题</div>
+                <a href="多选专题.html" class="menu-link">开始学习</a>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>MODERN HISTORY LEARNING SYSTEM © 2024</p>
+    </footer>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const cards = document.querySelectorAll('.chapter-card');
+        cards.forEach(card => {
+            card.addEventListener('click', function(e) {
+                if (!e.target.classList.contains('menu-link')) {
+                    const link = this.querySelector('.menu-link');
+                    if (link) link.click();
+                }
+            });
+        });
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>grid布局</title>
+    <style>
+        .header{
+            grid-area: header;
+        }
+        .menu{
+            grid-area: menu;
+        }
+        .body{
+            grid-area: body;
+        }
+        .right{
+            grid-area: right;
+        }
+        .footer{
+            grid-area: footer;
+        }
+        .grid-container{
+            display: grid;
+            grid-template-areas:
+            "menu header header header header header header"
+            "menu body body body body body right"
+            "menu footer footer footer footer footer footer";
+            padding: 5px;
+            grid-gap: 5px;
+            grid-template-right: 80px 1fr 50px;
+        }
+        .grid-container>div{
+            background-color: darkgray;
+            text-align: center;
+            font-size: 26px;
+
+        }
+    </style>
+</head>
+<body>
+<a href="myweb_1.html">返回首页</a><br>
+<div class="grid-container">
+    <div class="header">页眉</div>
+    <div class="menu">菜单</div>
+    <div class="body">工作区</div>
+    <div class="right">轮播区</div>
+    <div class="footer">页脚</div>
+</div>
+</body>
+</html>

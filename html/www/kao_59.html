@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>使用Vue技术实现数据响应式处理</title>
+    <script src="/public_libs/vue.3.0.js"></script>
+</head>
+要求如下：<br>
+定义div，id为app1。在div中定义input输入框<br>
+输入框id与name都为name,Vue值占位符{{name}}在输入框后<br>
+vue的对象名为app1。(注意使用var定义此对象)<br>
+库地址："/public_libs/vue.3.0.js"<br>
+注：本题采用CDN方式引入vue，非CLI模式。<br>
+<body>
+<div id="app1">
+    name:
+    <input type="text" id="name" name="name" v-model="name">
+    {{name}}
+</div>
+
+<script>
+    var app1 = Vue.createApp({
+        data(){
+            return {
+                name:'hello'
+            }
+        }
+    }).mount('#app1')
+</script>
+</body>
+</html>

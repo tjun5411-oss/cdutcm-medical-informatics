@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>form表单的动态生成一</title>
+</head>
+<body>
+<a href="myweb_1.html">返回首页</a><br>
+
+<script>
+    let objForm=document.createElement("form");
+    objForm.action="";
+    objForm.method="post";
+    document.body.appendChild(objForm);
+
+    let objSpan=document.createElement("span");
+    objSpan.innerText="姓名:";
+    objForm.appendChild(objSpan);
+    // 姓名：<input type="text" id="name" name="name" value=""><br>
+
+    let objName=document.createElement("input");
+    objName.type="text";
+    objName.id="name";
+    objName.name="name";
+    objName.value="姓名不能为空";
+    objForm.appendChild(objName);
+
+    objForm.appendChild(document.createElement("br"));
+
+    objSpan=document.createElement("span");
+    objSpan.innerText="性别:";
+    objForm.appendChild(objSpan);
+
+    let objMale=document.createElement("input");
+    objMale.type="radio";
+    objMale.id="male";
+    objMale.name="gender";
+    objMale.value="1";
+    objForm.appendChild(objMale);
+
+    objSpan=document.createElement("span");
+    objSpan.innerText="男";
+    objForm.appendChild(objSpan);
+
+    let objFemale=document.createElement("input");
+    objFemale.type="radio";
+    objFemale.id="female";
+    objFemale.name="gender";
+    objFemale.value="2";
+    objForm.appendChild(objFemale);
+
+    objSpan=document.createElement("span");
+    objSpan.innerText="女";
+    objForm.appendChild(objSpan);
+
+    objForm.appendChild(document.createElement("br"));
+    objSpan=document.createElement("span");
+    objSpan.innerText="选课:";
+    objForm.appendChild(objSpan);
+
+    let objJavascript=document.createElement("input");
+    objJavascript.type="checkbox";
+    objJavascript.id="javascript";
+    objJavascript.name="course[]";
+    objJavascript.value="javascript";
+    objForm.appendChild(objJavascript);
+
+    objSpan=document.createElement("span");
+    objSpan.innerText="javascript";
+    objForm.appendChild(objSpan);
+
+    let objWebview=document.createElement("input");
+    objWebview.type="checkbox";
+    objWebview.id="webview";
+    objWebview.name="course[]";
+    objWebview.value="webview";
+    objForm.appendChild(objWebview);
+
+    objSpan=document.createElement("span");
+    objSpan.innerText="webview";
+    objForm.appendChild(objSpan);
+
+    objForm.appendChild(document.createElement("br"));
+    objSpan=document.createElement("span");
+    objSpan.innerText="籍贯:";
+    objForm.appendChild(objSpan);
+
+    objHometown=document.createElement("select");
+    objHometown.id="hometown";
+    objHometown.name="hometown";
+    objForm.appendChild(objHometown);
+
+    objOption=document.createElement("option");
+    objOption.value="北京";
+    objOption.innerText="北京";
+    objHometown.appendChild(objOption);
+    objOption=document.createElement("option");
+    objOption.value="成都";
+    objOption.innerText="成都";
+    objHometown.appendChild(objOption);
+    objForm.appendChild(document.createElement("br"));
+    objButton=document.createElement("input");
+    objButton.id="submit";
+    objButton.name="submit";
+    objButton.value="ok";
+    objButton.type="submit";
+    objForm.appendChild(objButton)
+
+
+</script>
+</body>
+</html>

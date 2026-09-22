@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>AJAX 编程</title>
+</head>
+AJAX编程。实现AJAX访问服务并动态更新div的内容<br>
+要求如下：<br>
+定义div，id为div_ajax<br>
+定义名为myAJAX的函数，此函数带有一个形参可传入服务器端地址<br>
+得到服务器端数据后，将此数据写入到div中。<br>
+Jquery的引入地址为"/public_libs/jquery.js"（注此项非强制,可用原生代码实现）<br>
+<body>
+<!-- 定义 div，id 为 div_ajax -->
+<div id="div_ajax"></div>
+<script>
+    function myAJAX(url) {
+        const xhr = new XMLHttpRequest();
+        xhr.open('GET', url, true);
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                document.getElementById('div_ajax').innerHTML = xhr.responseText;
+            }
+        };
+        xhr.send();
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>人民医院网站</title>
+    <style>
+        div{
+            position: relative;
+            float: left;
+            border:1px solid red;
+            margin:10px;
+            padding:5px;
+            box-sizing: border-box;
+        }
+        #main{
+            width:400px;
+            height:270px;
+        }
+        #top{
+            width:358px;
+            height:20px;
+        }
+        #left{
+            width:110px;
+            height:110px;
+        }
+        #right{
+            width:226px; /*（400-110-10*4-5*4-1*4）*/
+            height:110px;
+        }
+        #foot{
+            width:358px;
+            height:15px;
+        }
+    </style>
+</head>
+要求如下：<br>
+各div的id如图所示。<br>
+所有的div相对定位，左浮动，border都为实线,1px,红色。<br>
+所有的div的外边距为10px，内边距为5px。<br>
+main的宽为400px，高为270px;<br>
+top的宽为358px,高为20px。<br>
+foot的宽为358px，高为15px。<br>
+left的宽为110px，高为110px。<br>
+right的高为110px。<br>
+div内的文字不为判分条件，有即可。<br>
+<body>
+<div id="main">
+    <div id="top">人民医院网站</div>
+    <div id="left">
+        <ul>
+            <li>内科</li>
+            <li>外科</li>
+            <li>妇产科</li>
+            <li>精神科</li>
+        </ul>
+    </div>
+    <div id="right">
+        <ul>
+            <li>张医生 坐诊时间 周一</li>
+            <li>李医生 坐诊时间 周二</li>
+            <li>王医生 坐诊时间 周三</li>
+            <li>陈医生 坐诊时间 周四</li>
+        </ul>
+    </div>
+    <div id="foot">版权所有©软件公司</div>
+</div>
+</body>
+</html>

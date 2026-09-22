@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>医学数据分析与挖掘 - 第一章</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI','Microsoft YaHei',sans-serif}
+body{background:#f0f5fb;color:#333;line-height:1.6;padding:20px}
+.container{max-width:1400px;margin:0 auto}
+header{text-align:center;padding:20px;background:linear-gradient(135deg,#4A90D9 0%,#5BA0E9 100%);color:white;border-radius:12px;box-shadow:0 6px 15px rgba(74,144,217,0.2);margin-bottom:25px}
+h1{font-size:2.2rem;margin-bottom:10px;letter-spacing:1px}
+.subtitle{font-size:1.1rem;opacity:0.9}
+.section-container{background:white;border-radius:12px;padding:30px;box-shadow:0 5px 15px rgba(0,0,0,0.08);margin-bottom:30px}
+.section-title{font-size:1.5rem;margin-bottom:25px;color:#2C6FBB;padding-bottom:15px;border-bottom:2px solid #e0eaf5}
+.question-item{border:1px solid #e0eaf5;border-radius:10px;padding:20px;margin-bottom:20px;transition:all 0.3s}
+.question-item.correct{border-color:#4CAF50;background:#f9fff9}
+.question-item.incorrect{border-color:#f44336;background:#fff9f9}
+.question-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:15px}
+.question-number{font-size:1.2rem;font-weight:600;color:#2C6FBB}
+.question-type{display:inline-block;padding:4px 12px;border-radius:15px;font-size:0.85rem;font-weight:600}
+.single-choice{background:#e6f2ff;color:#0066cc}
+.multiple-choice{background:#f0e6ff;color:#6600cc}
+.true-false{background:#e6ffe6;color:#2e7d32}
+.question-text{font-size:1.1rem;margin-bottom:20px;line-height:1.6}
+.options-container{margin:15px 0}
+.option{margin-bottom:10px;padding:12px 15px;border:1px solid #dce8f5;border-radius:6px;cursor:pointer;transition:all 0.2s;display:flex;align-items:center}
+.option:hover{border-color:#a3c9f0;background:#f0f6fc}
+.option.selected{border-color:#4A90D9;background:#e6f0fb}
+.option.correct-answer{border-color:#4CAF50;background:#e6ffe6}
+.option.incorrect-answer{border-color:#f44336;background:#ffe6e6}
+.option input{margin-right:10px;cursor:pointer}
+.option label{cursor:pointer;flex:1}
+.feedback{padding:15px;border-radius:6px;margin-top:15px;font-size:0.95rem;display:none}
+.feedback.correct{background:#e6ffe6;border-left:4px solid #4CAF50}
+.feedback.incorrect{background:#ffe6e6;border-left:4px solid #f44336}
+.feedback-title{font-weight:600;margin-bottom:8px}
+.correct-answer{margin-top:10px;padding:8px;background:white;border-radius:4px;border:1px dashed #ccc;font-weight:600}
+.explanation{margin-top:15px;padding:12px;background:#f9f9f9;border-radius:6px;border-left:3px solid #4A90D9;font-size:0.95rem;line-height:1.5}
+.section-buttons{display:flex;gap:15px;margin-top:30px}
+.section-btn{padding:12px 25px;border:none;border-radius:6px;font-size:1rem;font-weight:600;cursor:pointer;transition:all 0.3s}
+.reset-btn{background:#7fb3e0;color:white}
+.reset-btn:hover{background:#5a9fd4}
+.submit-btn{background:#4A90D9;color:white}
+.submit-btn:hover{background:#2C6FBB}
+.nav{display:flex;justify-content:space-between;margin-top:30px}
+.nav-btn{padding:12px 30px;border:none;border-radius:6px;font-size:1.1rem;font-weight:600;cursor:pointer;transition:all 0.3s;display:flex;align-items:center;gap:10px}
+.prev-btn{background:#999;color:white}
+.prev-btn:hover{background:#777}
+.prev-btn:disabled{background:#ccc;cursor:not-allowed}
+.next-btn{background:#4A90D9;color:white}
+.next-btn:hover{background:#2C6FBB}
+.next-btn:disabled{background:#ccc;cursor:not-allowed}
+.footer{text-align:center;padding:20px;color:#999;font-size:0.9rem;margin-top:40px;border-top:1px solid #e0eaf5}
+@media(max-width:768px){.section-buttons,.nav{flex-direction:column}.nav-btn{width:100%;justify-content:center}h1{font-size:1.6rem}}
+</style></head><body><div class="container">
+<header><h1>第一章 数据挖掘概述</h1><p class="subtitle">共20题 | 单选题8题 | 多选题2题 | 判断题10题 | 每题附带解析</p></header>
+<div class="section-container"><h2 class="section-title">第一部分：单项选择题（1-8）</h2><div class="questions-container" id="s0"></div><div class="section-buttons"><button class="section-btn reset-btn" onclick="reset(0)">重置本小节</button><button class="section-btn submit-btn" onclick="sub(0)">提交本小节答案</button></div></div><div class="section-container"><h2 class="section-title">第二部分：多项选择题（9-10）</h2><div class="questions-container" id="s1"></div><div class="section-buttons"><button class="section-btn reset-btn" onclick="reset(1)">重置本小节</button><button class="section-btn submit-btn" onclick="sub(1)">提交本小节答案</button></div></div><div class="section-container"><h2 class="section-title">第三部分：判断题（11-20）</h2><div class="questions-container" id="s2"></div><div class="section-buttons"><button class="section-btn reset-btn" onclick="reset(2)">重置本小节</button><button class="section-btn submit-btn" onclick="sub(2)">提交本小节答案</button></div></div>
+<div class="nav"><button class="nav-btn prev-btn" disabled><i class="fas fa-arrow-left"></i> 上一章</button><button class="nav-btn next-btn" onclick="gt('第二章')">下一章 <i class="fas fa-arrow-right"></i></button></div>
+<div class="footer"><p>医学数据分析与挖掘 - 第一章 | 基于学堂在线课程</p><p style="font-size:0.8rem;margin-top:5px">共20题 | 每题附带解析</p></div></div>
+<script>
+var q=[{"type": "single", "text": "建立一个模型，通过这个模型根据已知的变量值来预测其他某个变量值属于数据挖掘的哪一类任务？", "options": ["A. 根据内容检索", "B. 建模描述", "C. 预测建模", "D. 寻找模式和规则"], "answer": 2, "explanation": "预测建模是通过已知变量值预测其他变量值的任务。"}, {"type": "single", "text": "在抽样方法中，当合适的样本容量很难确定时，可以使用抽样方法是", "options": ["A. 有放回的简单随机抽样", "B. 无放回的简单随机抽样", "C. 分层抽样", "D. 整群抽样"], "answer": 3, "explanation": "整群抽样适用于样本容量很难确定的情况。"}, {"type": "single", "text": "舆情研判，信息科学侧重哪个方面？", "options": ["A. 舆论的本体进行规律性的探索和研究", "B. 舆论控制研究", "C. 互联网文本挖掘和分析技术", "D. 用户行为分析"], "answer": 2, "explanation": "舆情研判中信息科学侧重互联网文本挖掘和分析技术。"}, {"type": "single", "text": "协同过滤分析用户兴趣，综合相似用户对某一信息的评价，形成系统对该指定用户对此信息的喜好程度，并将这些用户喜欢的项推荐给有相似兴趣的用户。", "options": ["A. 相似", "B. 相同", "C. 推荐", "D. 预测"], "answer": 3, "explanation": "协同过滤的核心是预测目标用户的喜好程度。"}, {"type": "single", "text": "大数据科学关注大数据网络发展运营过程中（ ）大数据规律及其与自然和社会活动之间的关系。", "options": ["A. 大数据网络发展和运营过程", "B. 规划建设运营管理", "C. 规律和验证", "D. 发现和验证"], "answer": 3, "explanation": "大数据科学关注发现和验证大数据规律。"}, {"type": "single", "text": "什么是KDD？", "options": ["A. 数据挖掘与知识发现", "B. 领域知识发现", "C. 文档知识发现", "D. 动态知识发现"], "answer": 0, "explanation": "KDD全称为Knowledge Discovery in Databases。"}, {"type": "single", "text": "使用交互式和可视化的技术对数据进行探索属于哪类任务？", "options": ["A. 内容检索", "B. 建模描述", "C. 预测建模", "D. 寻找模式和规则"], "answer": 3, "explanation": "探索性数据分析旨在寻找数据中的模式和规则。"}, {"type": "single", "text": "根据人群体征将体质分为平和体质、湿热体质等，属于哪类任务？", "options": ["A. 分类", "B. 回归", "C. 关联规则", "D. 聚类"], "answer": 3, "explanation": "无预设标签情况下分组属于聚类任务。"}, {"type": "multiple", "text": "数据挖掘的挖掘方法包括", "options": ["A. 决策树算法", "B. 关联规则分析", "C. 神经网络", "D. 聚类分析", "E. 回归分析"], "answer": [0, 1, 2, 3, 4], "explanation": "决策树、关联规则、神经网络、聚类分析、回归分析都是数据挖掘的常用方法。"}, {"type": "multiple", "text": "抽取数据的标准有", "options": ["A. 相关性", "B. 完整性", "C. 准确性", "D. 时效性", "E. 针对性"], "answer": [0, 1, 2], "explanation": "数据抽取的标准包括相关性、完整性和准确性。"}, {"type": "true-false", "text": "数据挖掘的主要任务是从数据中发现潜在的规则，从而能更好的完成描述数据、预测数据等任务。", "options": ["正确", "错误"], "answer": 0, "explanation": "正确，数据挖掘的核心就是从数据中发现潜在规则。"}, {"type": "true-false", "text": "数据取样时，除了要求抽样时严把质量关外，还要求抽样数据必须在足够范围内有代表性。", "options": ["正确", "错误"], "answer": 0, "explanation": "正确。"}, {"type": "true-false", "text": "模型的具体化就是预测公式，公式可以产生与观察值有相似结构的输出，这就是预测值。", "options": ["正确", "错误"], "answer": 0, "explanation": "正确。"}, {"type": "true-false", "text": "Web数据挖掘是通过数据库中的一些属性来预测另一个属性，它在验证用户提出的假设过程中提取信息。", "options": ["正确", "错误"], "answer": 1, "explanation": "错误，Web数据挖掘是从Web文档和服务中发现信息。"}, {"type": "true-false", "text": "数据质量的标准有两个方面：一是资料完整无缺；二是数据准确无误，且反应正常状态下的水平。", "options": ["正确", "错误"], "answer": 0, "explanation": "正确。"}, {"type": "true-false", "text": "在随机抽样中，首先将样本总体分成若干层次，每个层次中的观测值具有相同被选用的概率。", "options": ["正确", "错误"], "answer": 1, "explanation": "错误，这是分层抽样的描述。"}, {"type": "true-false", "text": "Python解释器易于扩展，可以使用C或C++扩展新的功能和数据类型。", "options": ["正确", "错误"], "answer": 0, "explanation": "正确。"}, {"type": "true-false", "text": "在选定主成分后，还需要结合应用对主成分进行解释，给出主成分的实际意义。", "options": ["正确", "错误"], "answer": 0, "explanation": "正确。"}, {"type": "true-false", "text": "医学数据分析与挖掘的主要步骤：目标分析、数据抽取、数据探索、数据预处理、数据建模与评价以及模型反馈。", "options": ["正确", "错误"], "answer": 0, "explanation": "正确。"}, {"type": "true-false", "text": "进行降维处理、缺失值处理等，都是数据预处理要解决的问题。", "options": ["正确", "错误"], "answer": 0, "explanation": "正确。"}];
+var s=[{"name": "第一部分：单项选择题（1-8）", "start": 0, "end": 8, "containerId": "s0"}, {"name": "第二部分：多项选择题（9-10）", "start": 8, "end": 10, "containerId": "s1"}, {"name": "第三部分：判断题（11-20）", "start": 10, "end": 20, "containerId": "s2"}];
+var u=new Array(q.length).fill(null),qs=new Array(q.length).fill(null);
+window.onload=function(){s.forEach(function(si,i){var c=document.getElementById(si.containerId);if(!c)return;for(var j=si.start;j<si.end;j++)c.appendChild(mkQ(q[j],j))})};
+function mkQ(qi,idx){var e=document.createElement('div');e.className='question-item';e.dataset.idx=idx;
+if(qs[idx]===true)e.classList.add('correct');else if(qs[idx]===false)e.classList.add('incorrect');
+var h=document.createElement('div');h.className='question-header';
+var n=document.createElement('div');n.className='question-number';n.textContent='第'+(idx+1)+'题';
+var t=document.createElement('span');var tm={'single':'single-choice','multiple':'multiple-choice','true-false':'true-false'};
+var lm={'single':'单选','multiple':'多选','true-false':'判断'};
+t.className='question-type '+tm[qi.type];t.textContent=lm[qi.type];
+h.appendChild(n);h.appendChild(t);
+var tx=document.createElement('div');tx.className='question-text';tx.textContent=qi.text;
+var oc=mkOpts(qi,idx);var fb=document.createElement('div');fb.className='feedback';fb.id='f'+idx;
+e.appendChild(h);e.appendChild(tx);e.appendChild(oc);e.appendChild(fb);return e;}
+function mkOpts(qi,idx){var c=document.createElement('div');c.className='options-container';
+qi.options.forEach(function(o,oi){var oe=document.createElement('div');oe.className='option';
+var st=(qi.type==='single'||qi.type==='true-false');
+var sel=st?(u[idx]===oi):(u[idx]&&u[idx].includes(oi));
+if(sel)oe.classList.add('selected');
+if(qs[idx]!==null){if(st){if(oi===qi.answer)oe.classList.add('correct-answer');else if(sel)oe.classList.add('incorrect-answer');}
+else{if(qi.answer.includes(oi))oe.classList.add('correct-answer');else if(sel&&!qi.answer.includes(oi))oe.classList.add('incorrect-answer');}}
+oe.dataset.oi=oi;oe.onclick=function(){selOpt(idx,oi,qi.type)};
+var inp=document.createElement('input');inp.type=(qi.type==='multiple')?'checkbox':'radio';
+inp.name='q'+idx;inp.id='q'+idx+'o'+oi;inp.checked=sel;
+var lb=document.createElement('label');lb.htmlFor='q'+idx+'o'+oi;lb.textContent=o;lb.style.cssText='cursor:pointer;flex:1';
+oe.appendChild(inp);oe.appendChild(lb);c.appendChild(oe)});return c}
+function selOpt(idx,oi,qt){var st=(qt==='single'||qt==='true-false');
+if(st){u[idx]=oi;var e=document.querySelector('[data-idx="'+idx+'"]');
+e.querySelectorAll('.option').forEach(function(o){o.classList.remove('selected');var i=o.querySelector('input');if(i)i.checked=false});
+var se=e.querySelector('[data-oi="'+oi+'"]');if(se){se.classList.add('selected');var i=se.querySelector('input');if(i)i.checked=true}}
+else{if(!u[idx])u[idx]=[];var a=u[idx],p=a.indexOf(oi);if(p===-1)a.push(oi);else a.splice(p,1);
+var e=document.querySelector('[data-idx="'+idx+'"]');
+var oe=e.querySelector('[data-oi="'+oi+'"]');var i=oe.querySelector('input');
+if(a.includes(oi)){oe.classList.add('selected');if(i)i.checked=true}else{oe.classList.remove('selected');if(i)i.checked=false}}
+var e2=document.querySelector('[data-idx="'+idx+'"]');if(e2)e2.classList.remove('correct','incorrect')}
+function sub(si){var sec=s[si];var hu=false,ui=[];
+for(var i=sec.start;i<sec.end;i++){var qi=q[i];var ans=(qi.type==='single'||qi.type==='true-false')?(u[i]!==null):(u[i]&&u[i].length>0);if(!ans){hu=true;ui.push(i+1)}}
+if(hu){alert('未完成：第'+ui.join(',')+'题');return}var cc=0;
+for(var i=sec.start;i<sec.end;i++){var qi=q[i],ic=false;
+if(qi.type==='single'||qi.type==='true-false')ic=(u[i]===qi.answer);
+else{var ua=u[i]?u[i].slice().sort():[],ca=qi.answer.slice().sort();ic=JSON.stringify(ua)===JSON.stringify(ca)}
+qs[i]=ic;if(ic)cc++;sf(i,ic,qi);
+var e=document.querySelector('[data-idx="'+i+'"]');if(e)e.classList.add(ic?'correct':'incorrect')}
+alert('正确:'+cc+'\n错误:'+(sec.end-sec.start-cc))}
+function sf(idx,ic,qi){var fe=document.getElementById('f'+idx);if(!fe)return;
+fe.className='feedback '+(ic?'correct':'incorrect');fe.style.display='block';
+var h=ic?'<div class="feedback-title">正确！</div>':'<div class="feedback-title">错误！</div>';
+if(!ic){var cat='';if(qi.type==='single'||qi.type==='true-false')cat=qi.options[qi.answer];
+else cat=qi.answer.map(function(i){return qi.options[i]}).join('<br>');
+h+='<div class="correct-answer">正确答案：<br>'+cat+'</div>'}
+if(qi.explanation)h+='<div class="explanation">解析：'+qi.explanation+'</div>';fe.innerHTML=h}
+function reset(si){if(!confirm('确定重置？'))return;var sec=s[si];
+for(var i=sec.start;i<sec.end;i++){u[i]=null;qs[i]=null;
+var e=document.querySelector('[data-idx="'+i+'"]');
+if(e){e.classList.remove('correct','incorrect');e.querySelectorAll('.option').forEach(function(o){o.classList.remove('selected','correct-answer','incorrect-answer');var i2=o.querySelector('input');if(i2)i2.checked=false})}
+var fe=document.getElementById('f'+i);if(fe)fe.style.display='none'}alert('已重置')}
+function gt(ch){for(var s2=0;s2<s.length;s2++){var sec=s[s2];for(var i=sec.start;i<sec.end;i++){if(qs[i]===null){alert('请先完成所有题目');return}}}
+window.location.href=ch+'.html'}
+</script></body></html>

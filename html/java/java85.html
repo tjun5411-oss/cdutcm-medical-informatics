@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Java语言程序设计 - 刷题汇总</title>
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --accent-color: #3498db;
+            --success-color: #27ae60;
+            --error-color: #e74c3c;
+            --bg-color: #f5f6fa;
+            --card-bg: #ffffff;
+        }
+
+        body {
+            font-family: "Segoe UI", "Microsoft YaHei", sans-serif;
+            background-color: var(--bg-color);
+            color: #333;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            color: var(--primary-color);
+        }
+
+        /* Navigation */
+        .pagination {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 20px;
+            position: sticky;
+            top: 10px;
+            z-index: 100;
+            background: rgba(245, 246, 250, 0.95);
+            padding: 10px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+
+        .page-btn {
+            background: var(--card-bg);
+            border: 1px solid #ddd;
+            padding: 8px 16px;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: all 0.2s;
+        }
+
+        .page-btn.active {
+            background-color: var(--accent-color);
+            color: white;
+            border-color: var(--accent-color);
+        }
+
+        .page-btn:hover:not(.active) {
+            background-color: #e9ecef;
+        }
+
+        /* Question Cards */
+        .question-card {
+            background: var(--card-bg);
+            padding: 25px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            border-left: 5px solid transparent;
+        }
+
+        .question-card.correct { border-left-color: var(--success-color); }
+        .question-card.wrong { border-left-color: var(--error-color);
+            animation: shake 0.4s ease-in-out; /* 当标记为错误时晃动一下 */ }
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+
+
+        .q-title {
+            font-weight: bold;
+            font-size: 1.1em;
+            margin-bottom: 15px;
+            color: var(--primary-color);
+        }
+
+        .code-block {
+            background-color: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 4px;
+            padding: 15px;
+            overflow-x: auto;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 0.9em;
+            margin: 10px 0;
+            white-space: pre;
+        }
+
+        .options-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .option-item {
+            margin-bottom: 8px;
+            padding: 8px;
+            border-radius: 4px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+        }
+
+        .option-item:hover {
+            background-color: #f8f9fa;
+        }
+
+        .option-item input {
+            margin-right: 10px;
+        }
+
+        textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            min-height: 80px;
+            margin-top: 10px;
+        }
+
+        .result-area {
+            margin-top: 15px;
+            padding: 15px;
+            background-color: #e8f5e9;
+            border-radius: 4px;
+            color: var(--success-color);
+            display: none;
+            font-weight: bold;
+        }
+
+        .result-area.show { display: block; }
+
+        .explanation {
+            font-weight: normal;
+            color: #333;
+            margin-top: 5px;
+            display: block;
+        }
+
+        /* Bottom Controls */
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+            margin-bottom: 50px;
+        }
+
+        .action-btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background 0.3s;
+        }
+
+        .btn-reset {
+            background-color: #95a5a6;
+            color: white;
+        }
+
+        .btn-submit {
+            background-color: var(--accent-color);
+            color: white;
+        }
+
+        .btn-reset:hover { background-color: #7f8c8d; }
+        .btn-submit:hover { background-color: #2980b9; }
+
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>Java语言程序设计 85题</h1>
+        <p>共 85 题 | 分 10 页 | A1 / A2 / 填空 / 判断 / 简答</p>
+    </header>
+
+    <div id="pagination" class="pagination">
+    </div>
+
+    <div id="quiz-area">
+    </div>
+
+    <div class="controls">
+        <button class="action-btn btn-reset" onclick="resetCurrentPage()">重置本页</button>
+        <button class="action-btn btn-submit" onclick="checkCurrentPage()">提交本页答案</button>
+    </div>
+</div>
+
+<script>
+    // Data Structure containing all 94 questions exactly as provided
+    const questions = [
+        // --- A1 Section ---
+        {
+            id: 1, type: 'choice', answer: 'A',
+            q: "应用程序的main方法中有以下语句，则输出的结果是( )。",
+            code: `String s1="0.5",s2="12";\ndouble x=Double.parseDouble(s1);\nint y=Integer.parseInt(s2);\nSystem.out.println(x+y);`,
+            options: ["A. 12.5", "B. 120.5", "C. 12", "D. \"12.5\""]
+        },
+        {
+            id: 2, type: 'choice', answer: 'C',
+            q: "下列语句序列执行后，k 的值是( )。",
+            code: `int i=10, j=18, k=30;\nswitch(j - i) {\n    case 8 : k++;\n    case 9 : k+=2;\n    case 10: k+=3;\n    default : k/=j;\n}`,
+            options: ["A. 31", "B. 32", "C. 2", "D. 33"]
+        },
+        {
+            id: 3, type: 'choice', answer: 'B',
+            q: "下面语句执行后，i 的值是( )。",
+            code: `for(int i=0, j=1; j<5; j+=3) i=i+j;`,
+            options: ["A. 4", "B. 5", "C. 6", "D. 7"]
+        },
+        {
+            id: 4, type: 'choice', answer: 'C',
+            q: "不能构成循环的语句是( )。",
+            code: null,
+            options: ["A. for 语句", "B. while 语句", "C. switch 语句", "D. do_while 语句"]
+        },
+        {
+            id: 5, type: 'choice', answer: 'A',
+            q: "下面关于继承的哪些叙述是正确的。",
+            code: null,
+            options: ["A. 在java中只允许单一继承。", "B. 在java中一个类只能实现一个接口。", "C. 在java中一个类不能同时继承一个类和实现一个接口。", "D. java接口的多继承会造成运行时的二义性。"]
+        },
+        {
+            id: 6, type: 'choice', answer: 'C',
+            q: "下列语句序列执行后，k 的值是( )。",
+            code: `int x=2, y=5, k=0;\nswitch(x%y) {\n    case 0: k=x+y; break;\n    case 1: k=x-y; break;\n    case 2: k=x*y; break;\n    default: k=x/y; break;\n}\nSystem.out.println(k);`,
+            options: ["A. 2", "B. 5", "C. 10", "D. 0"]
+        },
+        {
+            id: 7, type: 'choice', answer: 'A',
+            q: "应用程序的main方法中有以下语句，则输出的结果是( )。",
+            code: `int b[][]={{1,2,3},{4,5},{6,7}};\nint sum=0;\nfor(int i=0;i<b.length;i++)\n    for(int j=0;j<b[i].length;j++)\n        sum+=b[i][j];\nSystem.out.println("sum="+sum);`,
+            options: ["A. 28", "B. 6", "C. 9", "D. 13"]
+        },
+        {
+            id: 8, type: 'choice', answer: 'C',
+            q: "给出下面的代码片断，哪些行将导致错误？",
+            code: `1 String str = null;\n2 if ((str != null) && (str.length() > 10)) {\n3     System.out.println("more than 10");\n4 } else if ((str != null) & (str.length() < 5)) {\n5     System.out.println("less than 5");\n6 } else { \n7     System.out.println("end");\n8 }`,
+            options: ["A. 第1行", "B. 第2行", "C. 第5行 (此处位与运算非短路，str为null时调用length会空指针)", "D. 第8行"]
+        },
+        {
+            id: 9, type: 'choice', answer: 'B',
+            q: "下面关于变量及其范围的陈述哪些是不对的？",
+            code: null,
+            options: ["A. 实例变量是类的成员变量。", "B. 实例变量用关键字static声明。", "C. 在方法中定义的局部变量在该方法被执行时创建。", "D. 局部变量在使用前必须被初始化。"]
+        },
+        {
+            id: 10, type: 'choice', answer: 'C',
+            q: "下面的有关声明的哪些叙述是对的？",
+            code: null,
+            options: ["A. 对基本数据类型byte的变量的声明不会为该变量分配内存空间。", "B. 对基本数据类型String的变量的声明将为之分配内存空间。", "C. 对非基本数据类型String的变量的声明不会为该对象分配内存。", "D. 对非基本数据类型String的变量的声明会为该对象分配内存。"]
+        },
+        {
+            id: 11, type: 'choice', answer: 'B',
+            q: "设i、j 为int型变量名，a 为int型数组名，以下选项中，正确的赋值语句是( )。",
+            code: null,
+            options: ["A. i = i + 2", "B. a[0] = 7;", "C. i++ - --j;", "D. a(0) = 66;"]
+        },
+        {
+            id: 12, type: 'choice', answer: 'B',
+            q: "在调用方法时，若要使方法改变实参的值，可以（ ）。",
+            code: null,
+            options: ["A. 用基本数据类型作为参数", "B. 用对象作为参数", "C. A和B都对", "D. A和B都不对"]
+        },
+        {
+            id: 13, type: 'choice', answer: 'C',
+            q: "关于以下application的说明，正确的是（ ）。",
+            code: `class StaticStuff {\n    static int x=10;\n    static { x+=5; }\n    public static void main(String args[]) {\n        System.out.println("x=" + x);\n    }\n    static { x/=3; }\n}`,
+            options: ["A. 4行与9行不能通过编译", "B. 9行不能通过编译", "C. 编译通过，执行结果为：x=5", "D. 编译通过，执行结果为：x=3"]
+        },
+        {
+            id: 14, type: 'choice', answer: 'C',
+            q: "以下选项中循环结构合法的是（ ）。",
+            code: null,
+            options: ["A. while (int i<7) { i++; ... }", "B. int j=3; while(j) { ... }", "C. int j=0;for(int k=0; j + k !=10; j++,k++) { ... }", "D. int j=0; do{ ... if(j==3){continue loop;} } while(j<10);"]
+        },
+        {
+            id: 15, type: 'choice', answer: 'B',
+            q: "将以下哪种方法插入行6是不合法的。（ ）",
+            code: `public class Test1 {\n    public float aMethod(float a, float b) throws IOException { }\n}\npublic class Test2 extends Test1 {\n    // 插入行\n}`,
+            options: ["A. float aMethod(float a, float b) { }", "B. public int aMethod(int a, int b) throws Exception { }", "C. public float aMethod(float p, float q) { }", "D. public int aMethod(int a, int b) throws IOException { }"]
+        },
+        {
+            id: 16, type: 'choice', answer: 'A',
+            q: "以下标识符中哪项是不合法的（ ）。",
+            code: null,
+            options: ["A. const", "B. $double", "C. hello", "D. BigMeaninglessName"]
+        },
+        {
+            id: 17, type: 'choice', answer: 'D',
+            q: "以下哪个关键字可以用来为对象加互斥锁？（ ）",
+            code: null,
+            options: ["A. transient", "B. static", "C. serialize", "D. synchronized"]
+        },
+        {
+            id: 18, type: 'choice', answer: 'C',
+            q: "在Java中，一个类可同时定义许多同名的方法...这种面向对象程序的特性称为（ ）。",
+            code: null,
+            options: ["A. 隐藏", "B. 覆盖", "C. 重载", "D. Java不支持此特性"]
+        },
+        {
+            id: 19, type: 'choice', answer: 'B',
+            q: "下列哪些语句关于Java内存回收的说明是正确的？（ ）",
+            code: null,
+            options: ["A. 程序员必须创建一个线程来释放内存", "B. 内存回收程序负责释放无用内存", "C. 内存回收程序允许程序员直接释放内存", "D. 内存回收程序可以在指定的时间释放内存对象"]
+        },
+        {
+            id: 20, type: 'choice', answer: 'C',
+            q: "假设A类有如下定义，设a是A类的一个实例，下列语句调用哪个是错误的？（ ）",
+            code: `class A {\n    int i;\n    static String s;\n    void method1() { }\n    static void method2() { }\n}`,
+            options: ["A. System.out.println(a.i);", "B. a.method1();", "C. A.method1();", "D. A.method2()"]
+        },
+        {
+            id: 21, type: 'choice', answer: 'D',
+            q: "方法unsafe() 将抛出IOException，请问可将以下哪项填入第1行？（ ）",
+            code: `1) // 填入声明\n2) { if(unsafe()){ ... }\n3)   else if(safe()){ ... }\n4) }`,
+            options: ["A. public IOException methodName()", "B. public void methodName()", "C. public void methodName() throw IOException", "D. public void methodName() throws IOException"]
+        },
+        {
+            id: 22, type: 'choice', answer: 'C',
+            q: "下列关于构造方法的叙述中，错误的是（ ）。",
+            code: null,
+            options: ["A. Java语言规定构造方法名与类名必须相同", "B. Java语言规定构造方法没有返回值，但不用void声明", "C. Java语言规定构造方法不可以重载", "D. Java语言规定构造方法只能通过new自动调用"]
+        },
+        {
+            id: 23, type: 'choice', answer: 'D',
+            q: "执行语句 int i = 1, j = ++i; 后i与j的值分别为（ ）。",
+            code: null,
+            options: ["A. 1与1", "B. 2与1", "C. 1与2", "D. 2与2"]
+        },
+        {
+            id: 24, type: 'choice', answer: 'C',
+            q: "下面哪一个循环会导致死循环？（ ）",
+            code: null,
+            options: ["A. for (int k = 0; k < 0; k++)", "B. for (int k = 10; k > 0; k--)", "C. for (int k = 0; k < 10; k--)", "D. for (int k = 0; k > 0; k++)"]
+        },
+        {
+            id: 25, type: 'choice', answer: 'A',
+            q: "有如下程序段，则表达式 a == b 与 s2 == s1 的结果分别是：（ ）。",
+            code: `int a = b = 5;\nString s1 = "祝你今天考出好成绩！";\nString s2 = s1;`,
+            options: ["A. true与true", "B. false与true", "C. true与false", "D. false与false"]
+        },
+        {
+            id: 26, type: 'choice', answer: 'C',
+            q: "若在某一个类定义中定义有 abstract void performDial(); 该方法属于（ ）。",
+            code: null,
+            options: ["A. 接口方法", "B. 最终方法", "C. 抽象方法", "D. 空方法"]
+        },
+        {
+            id: 27, type: 'choice', answer: 'B',
+            q: "在Java中，\"456\"属于（ ）类的对象。",
+            code: null,
+            options: ["A. int", "B. String", "C. Integer", "D. Number"]
+        },
+        {
+            id: 28, type: 'choice', answer: 'A',
+            q: "为AB类的一个无形式参数无返回值的方法method书写方法头，使得使用类名AB作为前缀就可以调用它，该方法头的形式为( )。",
+            code: null,
+            options: ["A. static void method()", "B. public void method()", "C. final void method()", "D. abstract void method()"]
+        },
+        {
+            id: 29, type: 'choice', answer: 'D',
+            q: "下面声明数组的写法错误（ ）。",
+            code: null,
+            options: ["A. int a[ ];", "B. int[ ] a;", "C. int[3][ ] a;", "D. int[ ][3] a;"]
+        },
+        {
+            id: 30, type: 'choice', answer: 'C',
+            q: "指出正确的表达式（ ）。",
+            code: null,
+            options: ["A. byte=128;", "B. Boolean=null;", "C. long l=0xfffL;", "D. double=0.9239d;"]
+        },
+        {
+            id: 31, type: 'choice', answer: 'A',
+            q: "要从文件\"file.dat\"中读出第10个字节到变量c中，下列哪个方法适合？（ ）",
+            code: null,
+            options: ["A. FileInputStream... skip(9); read();", "B. FileInputStream... skip(10); read();", "C. FileInputStream... read();", "D. RandomAccessFile... skip(9); readByte();"]
+        },
+        {
+            id: 32, type: 'choice', answer: 'C',
+            q: "下面语句在编译时不会出现警告或错误的是（ ）。",
+            code: null,
+            options: ["A. float f=3.14;", "B. char c=\"c\";", "C. Boolean b=null;", "D. int i=10.0;"]
+        },
+        {
+            id: 33, type: 'choice', answer: 'A',
+            q: "下面这些类型的应用，哪个不使用Java语言来编写？（ ）",
+            code: null,
+            options: ["A. JavaScript", "B. Applet", "C. Servlet", "D. Java Swing"]
+        },
+        {
+            id: 34, type: 'choice', answer: 'D',
+            q: "声明成员变量时，如果不使用任何访问控制符...则以下哪种类型的类不能对该成员进行直接访问（ ）。",
+            code: null,
+            options: ["A. 同一类", "B. 同一包中的子类", "C. 同一包中的非子类", "D. 不同包中的子类"]
+        },
+        {
+            id: 35, type: 'choice', answer: 'D',
+            q: "选项中哪一行代码可以替换题目中 //add code here 而不产生编译错误？（ ）",
+            code: `public abstract class MyClass {\n    public int constInt = 5;\n    //add code here\n    public void method() { }\n}`,
+            options: ["A. public abstract void method(int a);", "B. value = value + 5;", "C. public int method();", "D. public abstract void anotherMethod() {}"]
+        },
+        {
+            id: 36, type: 'choice', answer: 'D',
+            q: "在执行new Child(\"mike\")的时候都有哪些构造方法被顺序调用？请选择输出结果( )。",
+            code: `class People {\n    String name;\n    public People() { System.out.print(1); }\n    public People(String name) {\n        System.out.print(2);\n        this.name = name;\n    }\n}\nclass Child extends People {\n    People father;\n    public Child(String name) {\n        System.out.print(3);\n        this.name = name;\n        father = new People(name + ":F");\n    }\n    public Child() { System.out.print(4); }\n}`,
+            options: ["A. 312", "B. 32", "C. 432", "D. 132 (Child构造第一行隐式super()调父类无参(1)，然后print(3)，然后new People调父类有参(2))"]
+        },
+        {
+            id: 37, type: 'choice', answer: 'D',
+            q: "下面哪个选项中的代码没有定义内部类，或者错误的定义了内部类？（ ）",
+            code: null,
+            options: ["A. 内部类在类中定义", "B. 匿名内部类在方法返回中", "C. 外部类后定义另一个类(非内部)", "D. 方法中定义内部类但语法可能有误 (选项D的Class关键字大小写错误或作用域问题)"]
+        },
+        {
+            id: 38, type: 'choice', answer: 'D',
+            q: "list是一个ArrayList的对象，哪个选项的代码填写到 //todo delete 处...？（ ）",
+            code: `Iterator it = list.iterator();\nint index = 0;\nwhile (it.hasNext()) {\n    Object obj = it.next();\n    if (needDelete(obj)) {\n        //todo delete\n    }\n    index++;\n}`,
+            options: ["A. list.remove(obj);", "B. list.remove(index);", "C. list.remove(it.next());", "D. it.remove();"]
+        },
+        {
+            id: 39, type: 'choice', answer: 'B',
+            q: "编译Java Application源程序文件将产生相应的字节码文件，这些字节码文件的扩展名为（ ）。",
+            code: null,
+            options: ["A. .java", "B. .class", "C. .html", "D. .exe"]
+        },
+        {
+            id: 40, type: 'choice', answer: 'A',
+            q: "为AB类的一个无形式参数无返回值的方法method书写方法头，使得使用类名AB作为前缀就可以调用它...",
+            code: null,
+            options: ["A. static void method()", "B. public void method()", "C. final void method()", "D. abstract void method()"]
+        },
+        {
+            id: 41, type: 'choice', answer: 'C',
+            q: "类Person和类Student的关系是（ ）。",
+            code: `class Person { ... }\nclass Student extends Person { ... }`,
+            options: ["A. 包含关系", "B. 关联关系", "C. 继承关系", "D. 无关系"]
+        },
+        {
+            id: 42, type: 'choice', answer: 'A',
+            q: "下面哪一个选项能正确地创建一个InputStreamReader对象（ ）。",
+            code: null,
+            options: ["A. new InputStreamReader(new FileInputStream(\"data\"))", "B. new InputStreamReader(new FileReader(\"data\"))", "C. new InputStreamReader(new BufferedReader(\"data\"))", "D. new InputStreamReader(\"data\")"]
+        },
+        {
+            id: 43, type: 'choice', answer: 'B',
+            q: "对于构造函数，下列叙述不正确的是（ ）。",
+            code: null,
+            options: ["A. 构造函数是类的一种特殊函数，它的方法名必须与类名相同。", "B. 构造函数的返回类型只能是void型。", "C. 构造函数的主要作用是完成对类的对象的初始化工作。", "D. 一般在创建新对象时，系统会自动调用构造函数。"]
+        },
+        {
+            id: 44, type: 'choice', answer: 'A',
+            q: "顺序执行如下语句后输出结果为：（ ）",
+            code: `class AA { void show() { System.out.println("我喜欢Java!"); } }\nclass BB extends AA { void show() { System.out.println("我喜欢C++!"); } }\n// main\nAA a = new AA();\nBB b = new BB();\na.show();\nb.show();`,
+            options: ["A. 我喜欢Java! 我喜欢C++!", "B. 我喜欢C++! 我喜欢Java!", "C. 我喜欢Java! 我喜欢Java!", "D. 我喜欢C++! 我喜欢C++!"]
+        },
+        {
+            id: 45, type: 'choice', answer: 'B',
+            q: "在Java中，调用Math.random() 方法可能返回的结果是（ ）。",
+            code: null,
+            options: ["A. 132.34", "B. 0.342", "C. 29.34E10", "D. 1.0009"]
+        },
+        {
+            id: 46, type: 'choice', answer: 'C',
+            q: "事件剪裁类如WindowAdapter（它实现了WindowListener接口）的优点是什么？（ ）。",
+            code: null,
+            options: ["A. 继承了那个类的所有行为", "B. 子类自动成为监听器", "C. 没有必要实现不使用的任何WindowListener接口中定义的方法", "D. 可以自动充当事件的监听者"]
+        },
+        {
+            id: 47, type: 'choice', answer: 'B',
+            q: "在用Java构建动画时，（ ）方法创建新线程并启动它运行。",
+            code: null,
+            options: ["A. init()", "B. start()", "C. run()", "D. paint()"]
+        },
+        {
+            id: 48, type: 'choice', answer: 'A',
+            q: "下列正确的Java的标识符是：（ ）。",
+            code: null,
+            options: ["A. userName", "B. %passwd", "C. 3d_game", "D. class"]
+        },
+        {
+            id: 49, type: 'choice', answer: 'C',
+            q: "为了使用Vector类，需要在程序的开始引入（ ）。",
+            code: null,
+            options: ["A. Java.Vector.*;", "B. java.io.*;", "C. java.util.Vector;", "D. java.util.Collection。"]
+        },
+        // --- A2 Section ---
+        {
+            id: 50, type: 'choice', answer: 'D',
+            q: "第十行(t.printValue(10))的声明将调用哪些方法？",
+            code: `class Person {\n    public void printValue(int i, int j) { }\n    public void printValue(int i) { }\n}\npublic class Teacher extends Person {\n    public void printValue() { }\n    public void printValue(int i) { }\n    public static void main(String args[]) {\n        Person t = new Teacher();\n        t.printValue(10);\n    }\n}`,
+            options: ["A. 第2行的方法", "B. 第3行的方法", "C. 第6行的方法", "D. 第7行的方法 (多态: 编译看父类Person有该方法，运行看子类Teacher重写了该方法)"]
+        },
+        {
+            id: 51, type: 'choice', answer: 'D',
+            q: "在oneMethod()方法运行正常的情况下将显示什么？",
+            code: `public void test() {\n    try {\n        oneMethod();\n    } catch(ArrayIndexOutOfBoundsException e) {\n        System.out.println("condition 2");\n    } catch(Exception e) {\n        System.out.println("condition 3");\n    } finally {\n        System.out.println("finally");\n    }\n}`,
+            options: ["A. condition 1", "B. condition 2", "C. condition 3", "D. finally"]
+        },
+        {
+            id: 52, type: 'choice', answer: 'D',
+            q: "哪个选项中的表达式可以加入printValue()方法的注释部分？",
+            code: `class Person {\n    String name, department;\n    public void printValue() {\n        System.out.println("name is " + name);\n        System.out.println("department is " + department);\n    }\n}\npublic class Teacher extends Person {\n    int salary;\n    public void printValue() {\n        // 完成父类代码中printValue()相同的工作\n        System.out.println("salary is " + salary);\n    }\n}`,
+            options: ["A. printValue();", "B. this.printValue();", "C. person.printValue();", "D. super.printValue();"]
+        },
+        {
+            id: 53, type: 'choice', answer: 'D',
+            q: "分析下面的程序段，程序的运行结果是：（ ）。",
+            code: `public class Example {\n    public static void main(String args[]) {\n        int l = 0;\n        do {\n            System.out.println("Doing it for l is:" + l);\n        } while(--l > 0);\n    }\n}`,
+            options: ["A. Doing it for l is 3", "B. Doing it for l is 1", "C. Doing it for l is 2", "D. Doing it for l is 0 (执行一次do，l变-1，-1>0为假，循环结束)"]
+        },
+        {
+            id: 54, type: 'choice', answer: 'D',
+            q: "下面程序段的输出结果是（ ）。",
+            code: `public class Foo {\n    public static void main(String args[]) {\n        StringBuffer a = new StringBuffer("A");\n        StringBuffer b = new StringBuffer("B");\n        operate(a, b);\n        System.out.println(a + "," + b);\n    }\n    static void operate(StringBuffer x, StringBuffer y) {\n        x.append(y);\n        y = x;\n    }\n}`,
+            options: ["A. A,B", "B. A,A", "C. B,B", "D. AB,B"]
+        },
+        // --- Fill in Blanks ---
+        { id: 55, type: 'fill', answer: 'import myPackage.*;', q: "导入myPackage包中的所有类的命令是 ______" },
+        { id: 56, type: 'fill', answer: 'interface', q: "定义类的保留字是class，定义接口的保留字是 ______" },
+        { id: 57, type: 'fill', answer: '1', q: "线程的优先级在 ______ 至10之间，数值越大即优先级越高任务越紧急" },
+        { id: 58, type: 'fill', answer: 'new Random().nextInt(51) + 125;', q: "请写出产生一个在125与175之间的随机整数的语句 ______" },
+        { id: 59, type: 'fill', answer: 'dos.writeDouble(score);', q: "向DataOutputStream对象dos的当前位置处书写一个保存在变量score中的浮点数的语句是：______" },
+        { id: 60, type: 'fill', answer: 'Hello', q: "写出下面程序段的运行结果 ______\n(boolean a = false; if(a=true)...)" },
+        { id: 61, type: 'fill', answer: '抽象', q: "______ 方法是一种仅有方法头，没有具体方法体和操作实现的方法，该方法必须在抽象类之中定义" },
+        { id: 62, type: 'fill', answer: '0,1,2,4,i=5', q: "写出运行下面程序片段后的屏幕输出：______\n(for loop skipping 3)" },
+        { id: 63, type: 'fill', answer: '.class', q: "Java编译生成的字节码文件的扩展名为 ______" },
+        { id: 64, type: 'fill', answer: '!=', q: "Java中，用于两个数不相等比较的运算符是 ______" },
+        // --- True/False ---
+        { id: 65, type: 'tf', answer: 'F', q: "子类所继承父类的成员都可以在子类中访问。" },
+        { id: 66, type: 'tf', answer: 'F', q: "静态方法只能处理静态变量。" },
+        { id: 67, type: 'tf', answer: 'T', q: "Java语言是一种强类型语言，数据类型转换有两种：隐含转换和强制转换。" },
+        { id: 68, type: 'tf', answer: 'T', q: "Java语言中，构造方法是不可以继承的。" },
+        { id: 69, type: 'tf', answer: 'F', q: "Map接口是自Collection接口继承而来。" },
+        { id: 70, type: 'tf', answer: 'T', q: "文件缓冲流的作用是提高文件的读/写效率。" },
+        { id: 71, type: 'tf', answer: 'F', q: "在运行字节码文件时，使用java命令，一定要给出字节码文件的扩展名.class。" },
+        { id: 72, type: 'tf', answer: 'F', q: "Java语言的源程序不是编译型的，而是编译解释型的。" },
+        { id: 73, type: 'tf', answer: 'F', q: "实例方法中不能引用类变量。" },
+        { id: 74, type: 'tf', answer: 'T', q: "Error类所定义的异常是无法捕获的。" },
+        { id: 75, type: 'tf', answer: 'T', q: "java.util.Scanner(System.in)可以接收用户从键盘输入的简单数据。" },
+        { id: 76, type: 'tf', answer: 'T', q: "使用Thread子类创建线程...Java不支持多继承，Thread类的子类不能再扩展其他的类。" },
+        { id: 77, type: 'tf', answer: 'F', q: "调用this 或super构造方法的语句必须放在第一条语句。（题干少说了'构造方法中'，但语境下F通常指必须放在构造方法内第一条）" },
+        { id: 78, type: 'tf', answer: 'T', q: "Serializable接口是个空接口，它只是一个表示对象可以串行化的特殊标记。" },
+        { id: 79, type: 'tf', answer: 'F', q: "引用一个类的属性或调用其方法，必须以这个类的对象为前缀。" },
+        { id: 80, type: 'tf', answer: 'F', q: "设String对象的s=\"Hi,\",则语句System.out.println(s.concat(\"Yohaoo!\"))的输出结果是：Hi, Yohaoo!" },
+        { id: 81, type: 'tf', answer: 'T', q: "Java的数据类型分为原始类型和引用类型。" },
+        { id: 82, type: 'tf', answer: 'F', q: "判断语句组正确性：int array[10] = new int[10]; array[10] = 10;" },
+        { id: 83, type: 'tf', answer: 'F', q: "使用方法length( )可以获得字符串或数组的长度。" },
+        { id: 84, type: 'tf', answer: 'T', q: "Java系统包提供了很多预定义类，我们可以直接引用它们而不必从头开始编写程序。" },
+        // --- Short Answer ---
+        { id: 85, type: 'sa', answer: 'a=60\nb=20\nc=30', q: "写出下面程序的运行结果。", code: `... SubSubClass x = new SubSubClass(10, 20, 30);\nx.show(); ...` }
+    ];
+
+    const itemsPerPage = 10;
+    let currentPage = 1;
+    const totalPages = Math.ceil(questions.length / itemsPerPage);
+
+    function init() {
+        renderPagination();
+        showPage(1);
+    }
+
+    function renderPagination() {
+        const pagDiv = document.getElementById('pagination');
+        let html = '';
+        for (let i = 1; i <= totalPages; i++) {
+            html += `<button class="page-btn ${i === 1 ? 'active' : ''}" onclick="showPage(${i})">第 ${i} 页</button>`;
+        }
+        pagDiv.innerHTML = html;
+    }
+
+    function showPage(pageNum) {
+        currentPage = pageNum;
+
+        // Update Buttons
+        document.querySelectorAll('.page-btn').forEach((btn, idx) => {
+            if (idx + 1 === pageNum) btn.classList.add('active');
+            else btn.classList.remove('active');
+        });
+
+        // Render Questions
+        const start = (pageNum - 1) * itemsPerPage;
+        const end = Math.min(start + itemsPerPage, questions.length);
+        const pageQuestions = questions.slice(start, end);
+
+        const quizArea = document.getElementById('quiz-area');
+        quizArea.innerHTML = '';
+
+        // 确保脚本末尾有这个辅助函数，否则 innerHTML 会因为特殊字符报错
+        function escapeHtml(text) {
+            if (!text) return "";
+            const map = {
+                '&': '&amp;',
+                '<': '&lt;',
+                '>': '&gt;',
+                '"': '&quot;',
+                "'": '&#039;'
+            };
+            return text.toString().replace(/[&<>"']/g, function(m) { return map[m]; });
+        }
+        pageQuestions.forEach(q => {
+            const card = document.createElement('div');
+            card.className = 'question-card';
+            card.id = `card-${q.id}`;
+
+            let html = `<div class="q-title">${q.id}. ${escapeHtml(q.q)}</div>`;
+            if (q.code) {
+                html += `<div class="code-block">${escapeHtml(q.code)}</div>`;
+            }
+
+            if (q.type === 'choice') {
+                html += `<ul class="options-list">`;
+                q.options.forEach((opt, idx) => {
+                    const val = opt.charAt(0); // Assumes "A. ..."
+                    html += `<li class="option-item">
+                                <label style="width:100%; cursor:pointer;">
+                                    <input type="radio" name="q-${q.id}" value="${val}"> ${escapeHtml(opt)}
+                                </label>
+                             </li>`;
+                });
+                html += `</ul>`;
+            } else if (q.type === 'fill') {
+                html += `<input type="text" id="input-${q.id}" placeholder="在此输入答案" style="width:100%; padding:8px;">`;
+            } else if (q.type === 'tf') {
+                html += `<ul class="options-list">
+                            <li class="option-item"><label><input type="radio" name="q-${q.id}" value="T"> 正确 (True)</label></li>
+                            <li class="option-item"><label><input type="radio" name="q-${q.id}" value="F"> 错误 (False)</label></li>
+                         </ul>`;
+            } else if (q.type === 'sa') {
+                html += `<textarea id="input-${q.id}" placeholder="在此输入简答..."></textarea>`;
+            }
+
+            // Result Area (Hidden initially)
+            html += `<div class="result-area" id="res-${q.id}">
+                        <div id="res-txt-${q.id}"></div>
+                        <span class="explanation">参考答案：${escapeHtml(q.answer)}</span>
+                     </div>`;
+
+            card.innerHTML = html;
+            quizArea.appendChild(card);
+        });
+
+        // Scroll to top of questions
+        window.scrollTo(0, 0);
+    }
+
+    // 第 455 行：修改函数开始
+    // 第 455 行：函数开始
+    function checkCurrentPage() {
+        const start = (currentPage - 1) * itemsPerPage;
+        const end = Math.min(start + itemsPerPage, questions.length);
+        const pageQuestions = questions.slice(start, end);
+
+        let correctCount = 0; // 【新增】用于统计本页答对的题数
+        let objectiveCount = 0; // 【新增】用于统计本页客观题总数
+        let firstErrorCard = null; // 【关键】用于记录本页第一个错误的 DOM 元素
+
+        pageQuestions.forEach(q => {
+            const resArea = document.getElementById(`res-${q.id}`);
+            const resTxt = document.getElementById(`res-txt-${q.id}`);
+            const card = document.getElementById(`card-${q.id}`);
+
+            if (!resArea || !card) return; // 【防错】防止找不到元素导致脚本崩溃
+
+            resArea.classList.add('show');
+            card.classList.remove('correct', 'wrong');
+
+            if (q.type === 'choice' || q.type === 'tf') {
+                objectiveCount++; // 客观题总数+1
+                const selected = document.querySelector(`input[name="q-${q.id}"]:checked`);
+                const userVal = selected ? selected.value : null;
+
+                if (userVal === q.answer) {
+                    resTxt.innerText = "✅ 回答正确";
+                    card.classList.add('correct');
+                    correctCount++; // 正确数+1
+                } else {
+                    resTxt.innerText = "❌ 回答错误";
+                    card.classList.add('wrong');
+                    // 【跳转逻辑】如果是本页第一个错题，记录它的位置
+                    if (!firstErrorCard) firstErrorCard = card;
+                }
+            } else {
+                // 填空和简答题处理
+                resTxt.innerText = "🔵 请对照参考答案自评";
+                card.classList.add('correct');
+            }
+        });
+
+        // 【新增】准确率弹窗提示
+        const accuracy = objectiveCount > 0 ? ((correctCount / objectiveCount) * 100).toFixed(2) : 0;
+        alert(`本页提交完毕！\n--------------------\n客观题准确率：${accuracy}%\n(对题数：${correctCount} / 总题数：${objectiveCount})`);
+
+        // 【新增】平滑跳转到第一个错题
+        if (firstErrorCard) {
+            firstErrorCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+    }
+    function resetCurrentPage() {
+        if (confirm("确定要重置本页所有答案吗？")) {
+            // 通过重新调用渲染函数来刷新当前页面视图
+            showPage(currentPage);
+        }
+    }
+
+    // Initialize
+    init();
+
+</script>
+
+</body>
+</html>

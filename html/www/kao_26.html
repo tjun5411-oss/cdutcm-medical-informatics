@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>DOM编程</title>
+
+</head>
+DOM编程<br>
+要求如下：<br>
+定义div，此div的id为div_1，且此div的innerHTML为空。<br>
+定义函数appendDOM()动态添加DOM<br>
+appendDOM包含一个形参，用于接受传过来的DOM对象（注意参数类型是DOM对象）<br>
+所传入的DOM对象包含三个节点，此三个节点的关系为DOM_1⊃DOM_2⊃DOM_3(⊃为包含的意思)<br>
+将此DOM对象添加为div_1的直接子节点<br>
+找到id属性值为exam的节点，输出该节点的值<br>
+此题在提交时，请把自行测试时调用appendDOM()的代码行注释掉或是删除，否则无法自动评分。<br>
+注： 所传入的DOM对象的结构为形如<br>
+<div id="xx">xx<div id="exam">yy<div id="zz">zz</div></div></div>
+的格式<br>
+注意xx,exam,zz都是随机的，此处仅是演示可能的结构。<br>
+<body>
+<div id="div_1"></div>
+
+<script>
+
+    function appendDOM(DOM){
+        document.getElementById("div_1").appendChild(DOM)
+        var a;
+        if(window.document.childNodes[0].childNodes[2].childNodes[1].childNodes[0].id=="exam")a=window.document.childNodes[0].childNodes[2].childNodes[1].childNodes[0].childNodes[0].nodeValue
+        if(window.document.childNodes[0].childNodes[2].childNodes[1].childNodes[0].childNodes[1].id=="exam")a=window.document.childNodes[0].childNodes[2].childNodes[1].childNodes[0].childNodes[1].childNodes[0].nodeValue
+        if(window.document.childNodes[0].childNodes[2].childNodes[1].childNodes[0].childNodes[1].childNodes[1].id=="exam")a=window.document.childNodes[0].childNodes[2].childNodes[1].childNodes[0].childNodes[1].childNodes[1].childNodes[0].nodeValue
+        console.log(a)
+        return a;
+
+    }
+
+
+</script>
+</body>
+</html>

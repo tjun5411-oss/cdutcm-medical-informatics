@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>鼠标事件编程:事件冒泡 </title>
+    <style>
+        div{
+            position: absolute;
+        }
+        #div_1{
+            width: 300px;
+            height: 300px;
+            top: 200px;
+            left: 200px;
+        }
+        #div_2{
+            width: 200px;
+            height: 200px;
+            top: 20px;
+            left: 20px;
+        }
+        #div_3{
+            width: 100px;
+            height: 100px;
+            top: 20px;
+            left: 20px;
+        }
+    </style>
+</head>
+鼠标事件编程:事件冒泡。<br>
+要求如下：<br>
+body的区域定义为600*600<br>
+在body内依次添加三个div,ID分别为div_1,div_2,div_3<br>
+四者关系为body⊃div_1⊃div_2⊃div_3(⊃为包含的意思)<br>
+div_1的width,height为300px,div_2的width,height为200px,div_3的width,height为100px<br>
+div_1、div_2、div_3都为绝对定位，其中<br>
+div_1的top,left分别为200px,200px<br>
+div_2的top,left分别为20px,20px<br>
+div_3的top,left分别为20px,20px<br>
+给body添加onmousedown事件监听<br>
+定义div，id为tip<br>
+产生事件后，在id为tip的div中显示如下信息<br>
+产生事件对象的id及事件坐标。如 div_3|10:10<br>
+<body onmousedown="bodyevent">
+<div id="div_1" onmousedown="bodyevent(event)">
+    <div id="div_2" onmousedown="bodyevent(event)">
+        <div id="div_3" onmousedown="bodyevent(event)"></div>
+    </div>
+</div>
+<div id="tip"></div>
+<script>
+    function bodyevent(event){
+        document.querySelector('#tip').innerHTML=event.target.id +"|"+event.x+":"+event.y;
+    }
+</script>
+</body>
+</html>

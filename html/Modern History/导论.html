@@ -1,0 +1,1076 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>中国近现代史纲要 - 导论</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
+        }
+
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            padding: 20px;
+            background: linear-gradient(135deg, #8B0000 0%, #B22222 100%);
+            color: white;
+            border-radius: 12px;
+            box-shadow: 0 6px 15px rgba(139, 0, 0, 0.2);
+            margin-bottom: 25px;
+        }
+
+        h1 {
+            font-size: 2.4rem;
+            margin-bottom: 10px;
+            letter-spacing: 1px;
+        }
+
+        .subtitle {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .section-container {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            margin-bottom: 30px;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            margin-bottom: 25px;
+            color: #8B0000;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #eee;
+        }
+
+        .question-item {
+            border: 1px solid #eaeaea;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .question-item.correct {
+            border-color: #4CAF50;
+            background-color: #f9fff9;
+        }
+
+        .question-item.incorrect {
+            border-color: #f44336;
+            background-color: #fff9f9;
+        }
+
+        .question-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .question-number {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #8B0000;
+        }
+
+        .question-type {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 15px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .single-choice {
+            background-color: #e6f2ff;
+            color: #0066cc;
+        }
+
+        .multiple-choice {
+            background-color: #f0e6ff;
+            color: #6600cc;
+        }
+
+        .question-text {
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .options-container {
+            margin: 15px 0;
+        }
+
+        .option {
+            margin-bottom: 10px;
+            padding: 12px 15px;
+            border: 1px solid #eaeaea;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+        }
+
+        .option:hover {
+            border-color: #ffb3b3;
+            background-color: #fff5f5;
+        }
+
+        .option.selected {
+            border-color: #ff6b6b;
+            background-color: #ffe6e6;
+        }
+
+        .option.correct-answer {
+            border-color: #4CAF50;
+            background-color: #e6ffe6;
+        }
+
+        .option.incorrect-answer {
+            border-color: #f44336;
+            background-color: #ffe6e6;
+        }
+
+        .option input {
+            margin-right: 10px;
+            cursor: pointer;
+        }
+
+        .feedback {
+            padding: 15px;
+            border-radius: 6px;
+            margin-top: 15px;
+            font-size: 0.95rem;
+            display: none;
+        }
+
+        .feedback.correct {
+            background-color: #e6ffe6;
+            border-left: 4px solid #4CAF50;
+        }
+
+        .feedback.incorrect {
+            background-color: #ffe6e6;
+            border-left: 4px solid #f44336;
+        }
+
+        .feedback-title {
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .correct-answer {
+            margin-top: 10px;
+            padding: 8px;
+            background-color: white;
+            border-radius: 4px;
+            border: 1px dashed #ccc;
+            font-weight: 600;
+        }
+
+        .explanation {
+            margin-top: 15px;
+            padding: 12px;
+            background-color: #f9f9f9;
+            border-radius: 6px;
+            border-left: 3px solid #ff6b6b;
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        .section-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .section-btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .reset-section-btn {
+            background-color: #cc3300;
+            color: white;
+        }
+
+        .reset-section-btn:hover {
+            background-color: #b32b00;
+        }
+
+        .submit-section-btn {
+            background-color: #8B0000;
+            color: white;
+        }
+
+        .submit-section-btn:hover {
+            background-color: #660000;
+        }
+
+        .chapter-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+        }
+
+        .chapter-btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 6px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .prev-chapter-btn {
+            background-color: #666;
+            color: white;
+        }
+
+        .prev-chapter-btn:hover {
+            background-color: #555;
+        }
+
+        .prev-chapter-btn:disabled {
+            background-color: #aaa;
+            cursor: not-allowed;
+        }
+
+        .next-chapter-btn {
+            background-color: #8B0000;
+            color: white;
+        }
+
+        .next-chapter-btn:hover {
+            background-color: #660000;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 20px;
+            color: #777;
+            font-size: 0.9rem;
+            margin-top: 40px;
+            border-top: 1px solid #eee;
+        }
+
+        @media (max-width: 768px) {
+            .section-buttons {
+                flex-direction: column;
+            }
+
+            .chapter-navigation {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .chapter-btn {
+                width: 100%;
+                justify-content: center;
+            }
+
+            h1 {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <header>
+        <h1>中国近现代史纲要 - 导论</h1>
+        <p class="subtitle">共25题 | 单项选择题20题 | 多项选择题5题 | 每题附带详细解析</p>
+    </header>
+
+    <!-- 第一部分：单项选择题 (1-10) -->
+    <div class="section-container">
+        <h2 class="section-title">第一部分：单项选择题 (1-10)</h2>
+        <div class="questions-container" id="questions-section-1">
+            <!-- 题目将在这里动态生成 -->
+        </div>
+        <div class="section-buttons">
+            <button class="section-btn reset-section-btn" onclick="resetSection(0)">重置本小节</button>
+            <button class="section-btn submit-section-btn" onclick="submitSection(0)">提交本小节答案</button>
+        </div>
+    </div>
+
+    <!-- 第一部分：单项选择题 (11-20) -->
+    <div class="section-container">
+        <h2 class="section-title">第一部分：单项选择题 (11-20)</h2>
+        <div class="questions-container" id="questions-section-2">
+            <!-- 题目将在这里动态生成 -->
+        </div>
+        <div class="section-buttons">
+            <button class="section-btn reset-section-btn" onclick="resetSection(1)">重置本小节</button>
+            <button class="section-btn submit-section-btn" onclick="submitSection(1)">提交本小节答案</button>
+        </div>
+    </div>
+
+    <!-- 第二部分：多项选择题 (21-25) -->
+    <div class="section-container">
+        <h2 class="section-title">第二部分：多项选择题 (21-25)</h2>
+        <div class="questions-container" id="questions-section-3">
+            <!-- 题目将在这里动态生成 -->
+        </div>
+        <div class="section-buttons">
+            <button class="section-btn reset-section-btn" onclick="resetSection(2)">重置本小节</button>
+            <button class="section-btn submit-section-btn" onclick="submitSection(2)">提交本小节答案</button>
+        </div>
+    </div>
+
+    <!-- 章节导航 -->
+    <div class="chapter-navigation">
+        <button class="chapter-btn prev-chapter-btn" disabled>
+            <i class="fas fa-arrow-left"></i> 上一章
+        </button>
+        <button class="chapter-btn next-chapter-btn" onclick="goToNextChapter()">
+            下一章 <i class="fas fa-arrow-right"></i>
+        </button>
+    </div>
+
+    <div class="footer">
+        <p>中国近现代史纲要 - 导论 &copy; 2025 | 基于《中国近现代史纲要》教材</p>
+        <p style="font-size: 0.8rem; margin-top: 5px;">题目总数: 25题 | 每小节10题 | 每题附带详细解析</p>
+    </div>
+</div>
+
+<script>
+    // 中国近现代史纲要导论题库
+    const questions = [
+        // ==================== 第一部分：单项选择题 (1-10) ====================
+        {
+            type: "single",
+            text: "将中国近代史的开端界定于1840年鸦片战争，其最根本的学理依据是",
+            options: [
+                "A. 此后中国社会内部矛盾取代民族矛盾成为主要矛盾",
+                "B. 此后中国社会性质开始发生根本性变化，逐渐沦为半殖民地半封建社会",
+                "C. 此后中国自然经济完全解体，民族资本主义开始产生",
+                "D. 此后清政府改变了闭关锁国的对外政策"
+            ],
+            answer: 1,
+            knowledge: "中国近代史的开端",
+            explanation: "鸦片战争后，中国开始从独立的封建社会逐步沦为半殖民地半封建社会，这是中国近代史开端的根本标志。"
+        },
+        {
+            type: "single",
+            text: "关于'半殖民地半封建社会'中'半殖民地'的准确理解是",
+            options: [
+                "A. 一半领土被殖民，一半保持独立",
+                "B. 在形式上保持独立国家形态，但在政治、经济、文化上受帝国主义列强控制",
+                "C. 帝国主义与封建主义联合统治，各占一半势力范围",
+                "D. 封建社会与资本主义社会因素各占一半"
+            ],
+            answer: 1,
+            knowledge: "半殖民地半封建社会",
+            explanation: "'半殖民地'指的是国家形式上保持独立，但实际上在政治、经济、文化等方面受帝国主义控制和支配。"
+        },
+        {
+            type: "single",
+            text: "中国近代社会最主要的矛盾是",
+            options: [
+                "A. 农民阶级与地主阶级的矛盾",
+                "B. 无产阶级与资产阶级的矛盾",
+                "C. 帝国主义与中华民族的矛盾",
+                "D. 封建主义与人民大众的矛盾"
+            ],
+            answer: 2,
+            knowledge: "近代社会主要矛盾",
+            explanation: "帝国主义与中华民族的矛盾是近代中国社会最主要的矛盾，贯穿整个中国近代史。"
+        },
+        {
+            type: "single",
+            text: "中国现代史的开端通常界定于1949年中华人民共和国成立，其根本标志是",
+            options: [
+                "A. 新民主主义革命的基本胜利和向社会主义过渡的开始",
+                "B. 社会主义制度在中国的完全确立",
+                "C. 中国进入了改革开放的新时期",
+                "D. 中国实现了国家的工业化"
+            ],
+            answer: 0,
+            knowledge: "中国现代史的开端",
+            explanation: "1949年中华人民共和国成立标志着新民主主义革命的基本胜利和中国开始向社会主义过渡，是中国现代史的开端。"
+        },
+        {
+            type: "single",
+            text: "在近代中国，革命与现代化的关系是",
+            options: [
+                "A. 相互排斥，必须先完成革命再进行现代化",
+                "B. 相互促进，革命为现代化扫清障碍，现代化是革命的目标之一",
+                "C. 完全等同，革命就是现代化",
+                "D. 先后顺序可以任意调整"
+            ],
+            answer: 1,
+            knowledge: "革命与现代化的关系",
+            explanation: "在近代中国，革命与现代化是相互促进的关系：革命为现代化扫清障碍，现代化是革命的重要目标。"
+        },
+        {
+            type: "single",
+            text: "学习《中国近现代史纲要》的根本目的在于",
+            options: [
+                "A. 熟记所有历史事件和人物",
+                "B. 掌握历史研究的专业技能",
+                "C. 深刻领会历史和人民怎样选择了马克思主义、选择了中国共产党、选择了社会主义道路、选择了改革开放",
+                "D. 了解中国古代史向近现代史转变的具体细节"
+            ],
+            answer: 2,
+            knowledge: "学习目的",
+            explanation: "学习《中国近现代史纲要》的根本目的是深刻领会历史和人民怎样选择了马克思主义、中国共产党、社会主义道路和改革开放。"
+        },
+        {
+            type: "single",
+            text: "近代中国历次反侵略战争失败的根本原因是",
+            options: [
+                "A. 经济技术的落后",
+                "B. 社会制度的腐败",
+                "C. 军事指挥的失误",
+                "D. 帝国主义力量过于强大"
+            ],
+            answer: 1,
+            knowledge: "反侵略战争失败原因",
+            explanation: "近代中国历次反侵略战争失败的根本原因是社会制度的腐败，经济技术的落后是重要原因但不是根本原因。"
+        },
+        {
+            type: "single",
+            text: "标志着中国旧民主主义革命向新民主主义革命转变的历史事件是",
+            options: [
+                "A. 太平天国运动",
+                "B. 辛亥革命",
+                "C. 新文化运动",
+                "D. 五四运动"
+            ],
+            answer: 3,
+            knowledge: "革命转变的标志",
+            explanation: "五四运动是中国旧民主主义革命向新民主主义革命转变的标志性事件，促进了马克思主义在中国的传播。"
+        },
+        {
+            type: "single",
+            text: "中国近代历史上第一个比较系统的发展资本主义的方案是",
+            options: [
+                "A. 《天朝田亩制度》",
+                "B. 《资政新篇》",
+                "C. 《中华民国临时约法》",
+                "D. 《实业计划》"
+            ],
+            answer: 1,
+            knowledge: "资本主义发展方案",
+            explanation: "《资政新篇》是太平天国后期由洪仁玕提出的中国近代第一个比较系统的发展资本主义的方案。"
+        },
+        {
+            type: "single",
+            text: "近代中国社会阶级结构发生的新变化中，最革命、最进步的阶级是",
+            options: [
+                "A. 农民阶级",
+                "B. 地主阶级",
+                "C. 民族资产阶级",
+                "D. 无产阶级"
+            ],
+            answer: 3,
+            knowledge: "近代社会阶级结构",
+            explanation: "近代中国社会阶级结构发生的新变化中，无产阶级是最革命、最进步的阶级，是中国革命的领导阶级。"
+        },
+        // ==================== 第一部分：单项选择题 (11-20) ====================
+        {
+            type: "single",
+            text: "在近代中国，实现国家富强和人民富裕的前提条件是",
+            options: [
+                "A. 学习西方先进技术",
+                "B. 推翻帝国主义和封建主义的统治，争取民族独立和人民解放",
+                "C. 发展资本主义经济",
+                "D. 进行思想文化启蒙"
+            ],
+            answer: 1,
+            knowledge: "国家富强的前提",
+            explanation: "在近代中国，实现国家富强和人民富裕的前提条件是推翻帝国主义和封建主义的统治，争取民族独立和人民解放。"
+        },
+        {
+            type: "single",
+            text: "中国选择社会主义道路的历史必然性，根植于",
+            options: [
+                "A. 民族资产阶级力量过于弱小，资本主义道路在中国走不通",
+                "B. 苏联社会主义模式的强大吸引力",
+                "C. 中国传统文化中蕴含的社会主义基因",
+                "D. 中国共产党人的主观愿望"
+            ],
+            answer: 0,
+            knowledge: "社会主义道路的历史必然性",
+            explanation: "中国选择社会主义道路的历史必然性根植于民族资产阶级力量过于弱小，资本主义道路在中国走不通。"
+        },
+        {
+            type: "single",
+            text: "中国近代史的'高一级阶段'通常指的是",
+            options: [
+                "A. 旧民主主义革命时期",
+                "B. 新民主主义革命时期",
+                "C. 社会主义革命和建设时期",
+                "D. 改革开放和社会主义现代化建设新时期"
+            ],
+            answer: 1,
+            knowledge: "近代史阶段划分",
+            explanation: "中国近代史的'高一级阶段'通常指的是新民主主义革命时期，这是中国近代史发展的更高阶段。"
+        },
+        {
+            type: "single",
+            text: "理解中国近现代史的主线和主题，关键在于把握",
+            options: [
+                "A. 帝王将相的丰功伟绩",
+                "B. 中国人民为争取民族独立、人民解放和实现国家富强、人民幸福而不懈奋斗的历史",
+                "C. 中外文化交流与碰撞的历史",
+                "D. 经济发展与科技进步的历史"
+            ],
+            answer: 1,
+            knowledge: "近现代史的主线",
+            explanation: "理解中国近现代史的主线和主题，关键在于把握中国人民为争取民族独立、人民解放和实现国家富强、人民幸福而不懈奋斗的历史。"
+        },
+        {
+            type: "single",
+            text: "'告别革命论'的思潮在方法论上的错误在于",
+            options: [
+                "A. 承认革命具有破坏性",
+                "B. 忽视了革命发生的深刻历史根源和社会条件",
+                "C. 强调了改良的积极作用",
+                "D. 肯定了现代化的价值"
+            ],
+            answer: 1,
+            knowledge: "历史方法论",
+            explanation: "'告别革命论'在方法论上的错误在于忽视了革命发生的深刻历史根源和社会条件，片面否定革命的历史作用。"
+        },
+        {
+            type: "single",
+            text: "中国近代历次救亡图存运动失败的一个重要启示是",
+            options: [
+                "A. 必须依靠外部力量拯救中国",
+                "B. 必须有先进阶级及其政党的领导，并有科学理论的指导",
+                "C. 必须全盘西化，彻底抛弃传统文化",
+                "D. 必须首先发展经济，再进行政治改革"
+            ],
+            answer: 1,
+            knowledge: "救亡图存运动的启示",
+            explanation: "中国近代历次救亡图存运动失败的一个重要启示是必须有先进阶级及其政党的领导，并有科学理论的指导。"
+        },
+        {
+            type: "single",
+            text: "新中国成立后，中国社会进入了",
+            options: [
+                "A. 资本主义社会",
+                "B. 新民主主义社会",
+                "C. 社会主义社会",
+                "D. 共产主义社会初级阶段"
+            ],
+            answer: 1,
+            knowledge: "新中国成立后的社会性质",
+            explanation: "新中国成立后，中国社会进入了新民主主义社会，这是一个过渡性质的社会形态。"
+        },
+        {
+            type: "single",
+            text: "改革开放以来中国取得一切成绩和进步的根本原因是",
+            options: [
+                "A. 引进了外资和技术",
+                "B. 开辟了中国特色社会主义道路，形成了中国特色社会主义理论体系",
+                "C. 加入了世界贸易组织",
+                "D. 自然资源和劳动力丰富"
+            ],
+            answer: 1,
+            knowledge: "改革开放成就的根本原因",
+            explanation: "改革开放以来中国取得一切成绩和进步的根本原因是开辟了中国特色社会主义道路，形成了中国特色社会主义理论体系。"
+        },
+        {
+            type: "single",
+            text: "学习历史需要树立正确历史观，其核心是",
+            options: [
+                "A. 坚持唯物史观",
+                "B. 坚持英雄史观",
+                "C. 坚持文明史观",
+                "D. 坚持全球史观"
+            ],
+            answer: 0,
+            knowledge: "正确历史观",
+            explanation: "学习历史需要树立正确历史观，其核心是坚持唯物史观，即历史唯物主义。"
+        },
+        {
+            type: "single",
+            text: "中国近代社会发展的'两个过程'论，指的是",
+            options: [
+                "A. 帝国主义把中国变为半殖民地和中国人民反抗帝国主义及其走狗的过程",
+                "B. 资本主义发展和封建主义衰亡的过程",
+                "C. 城市发展与农村衰败的过程",
+                "D. 对外开放与闭关自守交替的过程"
+            ],
+            answer: 0,
+            knowledge: "近代社会发展理论",
+            explanation: "中国近代社会发展的'两个过程'论，指的是帝国主义把中国变为半殖民地和中国人民反抗帝国主义及其走狗的过程。"
+        },
+
+        // ==================== 第二部分：多项选择题 (21-25) ====================
+        {
+            type: "multiple",
+            text: "中国半殖民地半封建社会的基本特征包括",
+            options: [
+                "A. 资本-帝国主义侵略势力日益成为统治中国的决定性力量",
+                "B. 中国的封建势力同帝国主义侵略势力相互勾结，成为其统治中国的社会基础",
+                "C. 封建剥削制度的根基依然存在，中国新兴的民族资本主义经济发展缓慢",
+                "D. 中国各地区经济、政治和文化的发展表现出极端的不平衡",
+                "E. 中国人民特别是农民日益贫困化以至大批地破产，过着饥寒交迫和毫无政治权利的生活"
+            ],
+            answer: [0, 1, 2, 3, 4],
+            knowledge: "半殖民地半封建社会特征",
+            explanation: "中国半殖民地半封建社会具有以上所有特征，这些特征共同构成了近代中国的基本国情。"
+        },
+        {
+            type: "multiple",
+            text: "近代以来中华民族面临的两大历史任务是",
+            options: [
+                "A. 实现国家的社会主义工业化",
+                "B. 争取民族独立和人民解放",
+                "C. 进行无产阶级社会主义革命",
+                "D. 实现国家繁荣富强和人民共同富裕",
+                "E. 完成资产阶级民主革命"
+            ],
+            answer: [1, 3],
+            knowledge: "中华民族的历史任务",
+            explanation: "近代以来中华民族面临的两大历史任务是：争取民族独立和人民解放；实现国家繁荣富强和人民共同富裕。"
+        },
+        {
+            type: "multiple",
+            text: "关于中国近代史的'基本线索'，学术界的主要观点包括",
+            options: [
+                "A. '两个过程'论（帝国主义侵略与中国人民反抗）",
+                "B. '四个阶梯'论（太平天国—洋务运动—戊戌变法—辛亥革命）",
+                "C. '现代化（近代化）'论",
+                "D. '革命范式'与'现代化范式'的辩证统一",
+                "E. '冲击—反应'模式"
+            ],
+            answer: [0, 1, 2, 3, 4],
+            knowledge: "近代史基本线索",
+            explanation: "学术界关于中国近代史'基本线索'的主要观点包括以上所有选项，这些观点从不同角度解读中国近代史。"
+        },
+        {
+            type: "multiple",
+            text: "学习《中国近现代史纲要》的主要方法包括",
+            options: [
+                "A. 坚持历史唯物主义和辩证唯物主义的立场、观点和方法",
+                "B. 把握历史发展的主题、主线和主流、本质",
+                "C. 将历史事件置于特定的历史条件下进行分析和评价",
+                "D. 反对历史虚无主义，正确评价重要历史人物和事件",
+                "E. 注重理论联系实际，做到学以致用、用以促学"
+            ],
+            answer: [0, 1, 2, 3, 4],
+            knowledge: "学习方法",
+            explanation: "学习《中国近现代史纲要》应当采用以上所有方法，以全面、客观、科学地理解中国近现代史。"
+        },
+        {
+            type: "multiple",
+            text: "中国共产党的成立是开天辟地的大事变，因为它",
+            options: [
+                "A. 深刻改变了近代以后中华民族发展的方向和进程",
+                "B. 深刻改变了中国人民和中华民族的前途和命运",
+                "C. 深刻改变了世界发展的趋势和格局",
+                "D. 给中国革命带来了全新的指导思想——马克思列宁主义",
+                "E. 使中国革命有了坚强的领导核心"
+            ],
+            answer: [0, 1, 2, 3, 4],
+            knowledge: "中国共产党成立的意义",
+            explanation: "中国共产党的成立是开天辟地的大事变，具有以上所有重要意义，它使中国革命的面貌焕然一新。"
+        }
+    ];
+
+    // 应用状态
+    const sections = [
+        { start: 0, end: 10, containerId: "questions-section-1", name: "单项选择题 (1-10)" },
+        { start: 10, end: 20, containerId: "questions-section-2", name: "单项选择题 (11-20)" },
+        { start: 20, end: 25, containerId: "questions-section-3", name: "多项选择题 (21-25)" }
+    ];
+
+    let userAnswers = new Array(questions.length).fill(null);
+    let questionStatus = new Array(questions.length).fill(null); // null=未答, true=正确, false=错误
+
+    // 初始化
+    document.addEventListener('DOMContentLoaded', function() {
+        renderAllQuestions();
+    });
+
+    // 渲染所有题目
+    function renderAllQuestions() {
+        sections.forEach((section, sectionIndex) => {
+            const container = document.getElementById(section.containerId);
+            if (!container) return;
+
+            for (let i = section.start; i < section.end; i++) {
+                const question = questions[i];
+                const questionElement = createQuestionElement(question, i);
+                container.appendChild(questionElement);
+            }
+        });
+    }
+
+    // 创建题目元素
+    function createQuestionElement(question, index) {
+        const questionElement = document.createElement('div');
+        questionElement.className = 'question-item';
+        questionElement.dataset.index = index;
+
+        // 根据答题状态设置样式
+        if (questionStatus[index] === true) {
+            questionElement.classList.add('correct');
+        } else if (questionStatus[index] === false) {
+            questionElement.classList.add('incorrect');
+        }
+
+        // 题目头部
+        const questionHeader = document.createElement('div');
+        questionHeader.className = 'question-header';
+
+        const questionNumber = document.createElement('div');
+        questionNumber.className = 'question-number';
+        questionNumber.textContent = `第${index + 1}题`;
+
+        const questionType = document.createElement('span');
+        questionType.className = `question-type ${question.type === 'single' ? 'single-choice' : 'multiple-choice'}`;
+        questionType.textContent = question.type === 'single' ? '单选题' : '多选题';
+
+        questionHeader.appendChild(questionNumber);
+        questionHeader.appendChild(questionType);
+
+        // 题目内容
+        const questionText = document.createElement('div');
+        questionText.className = 'question-text';
+        questionText.textContent = question.text;
+
+        // 题目选项区域
+        const questionContent = createChoiceContent(question, index);
+
+        // 反馈区域
+        const feedbackElement = document.createElement('div');
+        feedbackElement.className = 'feedback';
+        feedbackElement.id = `feedback-${index}`;
+
+        // 组装题目元素
+        questionElement.appendChild(questionHeader);
+        questionElement.appendChild(questionText);
+        questionElement.appendChild(questionContent);
+        questionElement.appendChild(feedbackElement);
+
+        return questionElement;
+    }
+
+    // 创建选择题内容（单选和多选）
+    function createChoiceContent(question, index) {
+        const container = document.createElement('div');
+        container.className = 'options-container';
+
+        question.options.forEach((option, optionIndex) => {
+            const optionElement = document.createElement('div');
+            optionElement.className = 'option';
+
+            // 检查是否已选择该选项
+            let isSelected = false;
+            if (question.type === 'single') {
+                isSelected = (userAnswers[index] === optionIndex);
+            } else if (question.type === 'multiple') {
+                isSelected = userAnswers[index] && userAnswers[index].includes(optionIndex);
+            }
+
+            if (isSelected) {
+                optionElement.classList.add('selected');
+            }
+
+            // 如果已经提交过答案，显示正确答案和错误答案的样式
+            if (questionStatus[index] !== null) {
+                if (question.type === 'single') {
+                    if (optionIndex === question.answer) {
+                        optionElement.classList.add('correct-answer');
+                    } else if (isSelected && optionIndex !== question.answer) {
+                        optionElement.classList.add('incorrect-answer');
+                    }
+                } else if (question.type === 'multiple') {
+                    if (question.answer.includes(optionIndex)) {
+                        optionElement.classList.add('correct-answer');
+                    } else if (isSelected && !question.answer.includes(optionIndex)) {
+                        optionElement.classList.add('incorrect-answer');
+                    }
+                }
+            }
+
+            optionElement.dataset.optionIndex = optionIndex;
+            optionElement.onclick = () => selectOption(index, optionIndex, question.type);
+
+            const input = document.createElement('input');
+            input.type = question.type === 'single' ? 'radio' : 'checkbox';
+            input.name = `question-${index}`;
+            input.id = `question-${index}-option-${optionIndex}`;
+            input.checked = isSelected;
+
+            const label = document.createElement('label');
+            label.htmlFor = `question-${index}-option-${optionIndex}`;
+            label.textContent = option;
+            label.style.cursor = 'pointer';
+            label.style.flex = '1';
+
+            optionElement.appendChild(input);
+            optionElement.appendChild(label);
+            container.appendChild(optionElement);
+        });
+
+        return container;
+    }
+
+    // 选择选项
+    function selectOption(questionIndex, optionIndex, questionType) {
+        const question = questions[questionIndex];
+
+        if (questionType === 'single') {
+            // 单选题：直接选择
+            userAnswers[questionIndex] = optionIndex;
+
+            // 更新选项显示
+            const questionElement = document.querySelector(`.question-item[data-index="${questionIndex}"]`);
+            const options = questionElement.querySelectorAll('.option');
+
+            options.forEach(option => {
+                option.classList.remove('selected');
+                const input = option.querySelector('input');
+                if (input) input.checked = false;
+            });
+
+            // 设置选中的选项
+            const selectedOption = questionElement.querySelector(`.option[data-option-index="${optionIndex}"]`);
+            if (selectedOption) {
+                selectedOption.classList.add('selected');
+                const input = selectedOption.querySelector('input');
+                if (input) input.checked = true;
+            }
+        } else if (questionType === 'multiple') {
+            // 多选题：切换选择状态
+            if (!userAnswers[questionIndex]) {
+                userAnswers[questionIndex] = [];
+            }
+
+            const currentAnswers = userAnswers[questionIndex];
+            const optionIndexInArray = currentAnswers.indexOf(optionIndex);
+
+            if (optionIndexInArray === -1) {
+                // 未选中，添加
+                currentAnswers.push(optionIndex);
+            } else {
+                // 已选中，移除
+                currentAnswers.splice(optionIndexInArray, 1);
+            }
+
+            // 更新选项显示
+            const questionElement = document.querySelector(`.question-item[data-index="${questionIndex}"]`);
+            const optionElement = questionElement.querySelector(`.option[data-option-index="${optionIndex}"]`);
+            const input = optionElement.querySelector('input');
+
+            if (currentAnswers.includes(optionIndex)) {
+                optionElement.classList.add('selected');
+                if (input) input.checked = true;
+            } else {
+                optionElement.classList.remove('selected');
+                if (input) input.checked = false;
+            }
+        }
+
+        // 更新答题状态显示
+        const questionElement = document.querySelector(`.question-item[data-index="${questionIndex}"]`);
+        if (questionElement) {
+            questionElement.classList.remove('correct', 'incorrect');
+        }
+    }
+
+    // 提交当前小节答案
+    function submitSection(sectionIndex) {
+        const section = sections[sectionIndex];
+        let hasUnanswered = false;
+        let unansweredIndices = [];
+
+        // 检查本小节所有题目是否已答
+        for (let i = section.start; i < section.end; i++) {
+            const question = questions[i];
+            let isAnswered = false;
+
+            if (question.type === 'single') {
+                isAnswered = userAnswers[i] !== null;
+            } else if (question.type === 'multiple') {
+                isAnswered = userAnswers[i] && userAnswers[i].length > 0;
+            }
+
+            if (!isAnswered) {
+                hasUnanswered = true;
+                unansweredIndices.push(i + 1);
+            }
+        }
+
+        if (hasUnanswered) {
+            alert(`本小节还有未完成的题目：第 ${unansweredIndices.join(', ')} 题，请先完成所有题目再提交！`);
+            return;
+        }
+
+        // 提交本小节答案
+        let sectionCorrectCount = 0;
+
+        for (let i = section.start; i < section.end; i++) {
+            const question = questions[i];
+            let isCorrect = false;
+
+            if (question.type === 'single') {
+                isCorrect = (userAnswers[i] === question.answer);
+            } else if (question.type === 'multiple') {
+                // 检查多选题答案：必须完全匹配
+                const userAnswer = userAnswers[i] ? [...userAnswers[i]].sort() : [];
+                const correctAnswer = [...question.answer].sort();
+                isCorrect = JSON.stringify(userAnswer) === JSON.stringify(correctAnswer);
+            }
+
+            // 更新答题状态
+            questionStatus[i] = isCorrect;
+
+            if (isCorrect) {
+                sectionCorrectCount++;
+            }
+
+            // 显示反馈
+            showFeedback(i, isCorrect, question);
+
+            // 更新题目样式
+            const questionElement = document.querySelector(`.question-item[data-index="${i}"]`);
+            if (questionElement) {
+                questionElement.classList.add(isCorrect ? 'correct' : 'incorrect');
+            }
+        }
+
+        // 显示本小节答题结果
+        const sectionQuestionCount = section.end - section.start;
+        alert(`本小节答题完成！\n正确: ${sectionCorrectCount}题\n错误: ${sectionQuestionCount - sectionCorrectCount}题`);
+    }
+
+    // 显示反馈
+    function showFeedback(questionIndex, isCorrect, question) {
+        const feedbackElement = document.getElementById(`feedback-${questionIndex}`);
+        if (!feedbackElement) return;
+
+        feedbackElement.className = `feedback ${isCorrect ? 'correct' : 'incorrect'}`;
+        feedbackElement.style.display = 'block';
+
+        let feedbackHTML = '';
+        if (isCorrect) {
+            feedbackHTML = '<div class="feedback-title">回答正确！</div><div>恭喜你，答案正确。</div>';
+        } else {
+            feedbackHTML = '<div class="feedback-title">回答错误！</div><div>你的答案不正确。</div>';
+
+            // 显示正确答案
+            let correctAnswerText = '';
+            if (question.type === 'single') {
+                correctAnswerText = question.options[question.answer];
+            } else if (question.type === 'multiple') {
+                const correctOptions = question.answer.map(idx => question.options[idx]);
+                correctAnswerText = correctOptions.join('<br>');
+            }
+
+            feedbackHTML += `<div class="correct-answer">正确答案：<br>${correctAnswerText}</div>`;
+        }
+
+        // 添加解析
+        if (question.explanation) {
+            feedbackHTML += `<div class="explanation">解析：${question.explanation}</div>`;
+        }
+
+        feedbackElement.innerHTML = feedbackHTML;
+    }
+
+    // 重置当前小节
+    function resetSection(sectionIndex) {
+        if (confirm(`确定要重置第${sectionIndex + 1}小节的答题内容吗？本小节的答题进度将被清除。`)) {
+            const section = sections[sectionIndex];
+
+            for (let i = section.start; i < section.end; i++) {
+                // 重置本小节的答题数据
+                userAnswers[i] = null;
+                questionStatus[i] = null;
+
+                // 重置选项显示
+                const questionElement = document.querySelector(`.question-item[data-index="${i}"]`);
+                if (questionElement) {
+                    questionElement.classList.remove('correct', 'incorrect');
+
+                    const options = questionElement.querySelectorAll('.option');
+                    options.forEach(option => {
+                        option.classList.remove('selected', 'correct-answer', 'incorrect-answer');
+                        const input = option.querySelector('input');
+                        if (input) input.checked = false;
+                    });
+                }
+
+                // 重置反馈显示
+                const feedbackElement = document.getElementById(`feedback-${i}`);
+                if (feedbackElement) {
+                    feedbackElement.style.display = 'none';
+                }
+            }
+
+            alert(`第${sectionIndex + 1}小节已重置！`);
+        }
+    }
+
+    // 跳转到下一章
+    function goToNextChapter() {
+        // 检查是否所有小节都已提交
+        let allSectionsSubmitted = true;
+        let unsubmittedSections = [];
+
+        for (let s = 0; s < sections.length; s++) {
+            const section = sections[s];
+            let sectionSubmitted = true;
+
+            for (let i = section.start; i < section.end; i++) {
+                if (questionStatus[i] === null) {
+                    sectionSubmitted = false;
+                    break;
+                }
+            }
+
+            if (!sectionSubmitted) {
+                allSectionsSubmitted = false;
+                unsubmittedSections.push(s + 1);
+            }
+        }
+
+        if (!allSectionsSubmitted) {
+            alert(`还有未提交的小节：第 ${unsubmittedSections.join(', ')} 小节，请先完成所有题目再进入下一章！`);
+            return;
+        }
+
+        // 跳转到下一章
+        window.location.href = '第一章.html';
+    }
+</script>
+</body>
+</html>

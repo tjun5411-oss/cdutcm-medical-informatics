@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>患者病历</title>
+    <style>
+        body { font-family: Arial, sans-serif; }
+        .container { max-width: 800px; margin: 0 auto; }
+        .form-group { margin-bottom: 15px; }
+        label { display: inline-block; width: 100px; text-align: right; margin-right: 10px; }
+        input, select, textarea { width: 200px; padding: 5px; }
+        textarea { height: 80px; vertical-align: top; }
+    </style>
+</head>
+项目实训专用。<br>
+患者病历。<br>
+样式如下：<br>
+要求如下：<br>
+没有专门指定id与name的控件自行命名<br>
+姓名输入框的id,name为name<br>
+性别下拉框的id,name为gender，选择支value男为01，女为02<br>
+年龄输入框的id,name为age<br>
+婚姻下拉框的id,name为marriage，选择支value已婚为01，未婚为02<br>
+主诉输入框的id,name为chief_complaints<br>
+现病史输入框的id,name为present_illness<br>
+既往史输入框的id,name为past_medical_history<br>
+个人史输入框的id,name为personal_history<br>
+家族史输入框的id,name为family_history<br>
+检查结果输入框的id,name为physical_examination<br>
+初步诊断下拉框的id,name为icd_1<br>
+处置框的id,name为process<br>
+大标题为h1，样式属性默认<br>
+整体布局参考样式示例<br>
+本实训模块采用原生实现<br>
+所有模块皆可动态设置值。<br>
+<body>
+<div class="container">
+    <h1>患者病历</h1>
+
+    <div class="form-group">
+        <label>姓名:</label>
+        <input type="text" id="name" name="name">
+    </div>
+
+    <div class="form-group">
+        <label>性别:</label>
+        <select id="gender" name="gender">
+            <option value="">请选择</option>
+            <option value="01">男</option>
+            <option value="02">女</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label>年龄:</label>
+        <input type="number" id="age" name="age">
+    </div>
+
+    <div class="form-group">
+        <label>婚姻:</label>
+        <select id="marriage" name="marriage">
+            <option value="">请选择</option>
+            <option value="01">已婚</option>
+            <option value="02">未婚</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label>主诉:</label>
+        <textarea id="chief_complaints" name="chief_complaints"></textarea>
+    </div>
+
+    <div class="form-group">
+        <label>现病史:</label>
+        <textarea id="present_illness" name="present_illness"></textarea>
+    </div>
+
+    <div class="form-group">
+        <label>既往史:</label>
+        <textarea id="past_medical_history" name="past_medical_history"></textarea>
+    </div>
+
+    <div class="form-group">
+        <label>个人史:</label>
+        <textarea id="personal_history" name="personal_history"></textarea>
+    </div>
+
+    <div class="form-group">
+        <label>家族史:</label>
+        <textarea id="family_history" name="family_history"></textarea>
+    </div>
+
+    <div class="form-group">
+        <label>检查结果:</label>
+        <textarea id="physical_examination" name="physical_examination"></textarea>
+    </div>
+
+    <div class="form-group">
+        <label>初步诊断:</label>
+        <select id="icd_1" name="icd_1">
+            <option value="">请选择</option>
+            <!-- 这里应填充实际诊断选项 -->
+            <option value="J18.9">肺炎，未特指</option>
+            <option value="I25.9">慢性缺血性心脏病，未特指</option>
+            <option value="E11.9">2型糖尿病，未特指并发症</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label>处置:</label>
+        <textarea id="process" name="process"></textarea>
+    </div>
+</div>
+
+<script>
+
+    function setFormValues(data) {
+        for (const [key, value] of Object.entries(data)) {
+            const element = document.getElementById(key);
+            if (element) {
+                if (element.type === 'checkbox') {
+                    element.checked = value;
+                } else if (element.type === 'radio') {
+                    document.querySelector(`input[name="${key}"][value="${value}"]`).checked = true;
+                } else {
+                    element.value = value;
+                }
+            }
+        }
+    }
+    setFormValues({
+        name: '张三',
+        gender: '01',
+        age: 45,
+        marriage: '01',
+        chief_complaints: '咳嗽、发热3天',
+        present_illness: '患者3天前受凉后出现咳嗽...',
+        past_medical_history: '高血压病史5年',
+        personal_history: '否认吸烟、饮酒史',
+        family_history: '父亲有高血压病史',
+        physical_examination: 'T 38.5℃，P 90次/分...',
+        icd_1: 'J18.9',
+        process: '1. 血常规、C反应蛋白检查\n2. 头孢呋辛酯0.25g tid po'
+    });
+</script>
+</body>
+</html>

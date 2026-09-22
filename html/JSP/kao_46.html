@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>通过动态改变对象的类来实现动态样式设置</title>
+    <style>
+
+        .red{
+            position: absolute;
+            top:200px;
+            left:200px;
+            width:100px;
+            hight:100px;
+            background-color: red;
+            z-index:6;
+            border-radius: 50%;
+
+
+        }
+        .green{
+            position: absolute;
+            top:200px;
+            left:200px;
+            width:100px;
+            hight:100px;
+            background-color: green;
+            z-index:6;
+            border-radius: 50%;
+
+        }
+        .black{
+            position: absolute;
+            top:200px;
+            left:100px;
+            width:100px;
+            hight:100px;
+            background-color: black;
+            z-index:6;
+            border-radius: 50%;
+
+        }
+
+    </style>
+</head>
+<body>
+要求如下：<br>
+通过动态改变对象的类来实现动态样式设置。<br>
+有三个类样式定义，其颜色样式属性，分别是red(#ff0000),green(#ff0000),off(#000000)。<br>
+两个灯，第一个灯为红灯，第二灯为绿灯。<br>
+默认是绿灯亮，红灯灭。<br>
+定义开关函数turnOn，有一个形参，接受[red]或[green]两个参数。<br>
+当参数是red时，红灯亮，绿灯灭。<br>
+当参数是green时，红灯灭，绿灯亮。<br>
+<br>
+选择器优先级:id>类>标签<br>
+<div id="div_1" class="black">div_1</div>
+<div id="div_2" class="green">>div_2</div>
+
+<script>
+    function	turnOn(color){
+        console.log(color.type)
+        let left=document.getElementById("div_1")
+        let right=document.getElementById("div_2")
+        if(color=="red"){
+            left.class="red"
+            right.class="black";
+        }
+        if(color=="green"){
+            left.class="black";
+            right.class="green";
+        }
+    }
+
+</script>
+</body>
+</html>

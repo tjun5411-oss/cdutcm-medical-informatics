@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>try cath错误处理</title>
+    <script>
+        function myTryCatch(code) {
+            try {
+                eval(code);
+            } catch (error) {
+                document.getElementById('div_1').innerText = "error";
+            }
+        }
+    </script>
+</head>
+try cath错误处理。<br>
+要求如下：<br>
+定义div，id为div_1<br>
+定义函数myTryCatch(code)<br>
+在函数中用eval执行code中的代码<br>
+如：eval(code);<br>
+当接收到正确的代码时，不做任何操作<br>
+当接收到错误的代码时，在div中显示“error”<br>
+<body>
+<!-- 定义一个div，用于显示错误信息 -->
+<div id="div_1"></div>
+
+<!-- 按钮用于测试myTryCatch函数 -->
+<button onclick="myTryCatch('undefinedVariable;')">测试错误的代码</button>
+<button onclick="myTryCatch('1 + 1;')">测试正确的代码</button>
+</body>
+</html>

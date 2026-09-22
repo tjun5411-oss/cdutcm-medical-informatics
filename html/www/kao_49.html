@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Javascript事件处理编程</title>
+</head>
+Javascript事件处理编程<br>
+要求如下：<br>
+定义div，id为div_1,内容为空。<br>
+定义一个文本框，id为name。<br>
+给name文本框添加changed事件监听处理程序。<br>
+给name文本框添加blur事件监听处理程序。<br>
+事件处理程序修改div_1的内容为 值+":"+事件字符串（不要引号）。<br>
+如：在name框中输入mike，则事件响应时，div中显示 mike:changed或是mike:blur<br><body>
+<div id="div_1"></div>
+<input type="text" id="name">
+
+
+
+<script>
+    let objdiv=document.getElementById("div_1")
+    let objname=document.getElementById("name");
+
+    objname.addEventListener("changed",
+        function(Event){
+            objdiv.innerHTML=objname.value+":"+"changed"
+
+
+        })
+    objname.addEventListener("blur",
+        function(keyEvent){
+            objdiv.innerHTML=objname.value+":"+"blur"
+
+
+
+        })
+</script>
+</body>
+</html>

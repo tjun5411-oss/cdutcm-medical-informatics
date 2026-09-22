@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>文本框复制</title>
+    <style>
+        form {
+            display: flex;
+            align-items: center;
+        }
+
+        label {
+            margin-right: 10px;
+        }
+
+        input {
+            padding: 5px;
+        }
+    </style>
+</head>
+
+<body>
+请实现一个表单，包含姓名文本框与显示文本框。样式如下<br>
+
+要求如下：<br>
+姓名框的id与name的值为name 显示框的id与name的值为show。<br>
+ok按钮的id、name、value的值为ok。<br>
+实现自定义函数myCopy，其功能为可将输入到姓名框中的值前面加上hello:后复制到显示框中。<br>
+比如姓名框中输入的是mike，则复制后显示框中显示hello:mike<br>
+<form>
+    <label for="name">姓名：</label>
+    <input type="text" id="name" name="name">
+    <label for="show">显示：</label>
+    <input type="text" id="show" name="show">
+    <input type="button" id="ok" name="ok" value="ok" onclick="myCopy()">
+</form>
+<script>
+    function myCopy() {
+        var nameValue = document.getElementById('name').value;
+        var showValue = 'hello:' + nameValue;
+        document.getElementById('show').value = showValue;
+    }
+</script>
+</body>
+
+</html>

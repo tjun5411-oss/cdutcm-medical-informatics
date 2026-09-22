@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>通过动态改变对象的类来实现动态样式设置</title>
+    <style>
+
+        .red{
+            position: absolute;
+            top:200px;
+            left:200px;
+            width:100px;
+            hight:100px;
+            background-color: red;
+            z-index:6;
+            border-radius: 50%;
+
+
+        }
+        .green{
+            position: absolute;
+            top:200px;
+            left:200px;
+            width:100px;
+            hight:100px;
+            background-color: green;
+            z-index:6;
+            border-radius: 50%;
+
+        }
+        .black{
+            position: absolute;
+            top:200px;
+            left:100px;
+            width:100px;
+            hight:100px;
+            background-color: black;
+            z-index:6;
+            border-radius: 50%;
+
+        }
+
+    </style>
+</head>
+<body>
+表单编程,样式如下<br>
+要求如下：<br>
+form的id为form_1,提交方式为post,action为空<br>
+姓名框为text类型，控件的id、name为name。<br>
+电话框为text类型，控件的id、name为phone。<br>
+密码框为password类型，控件的的id、name为password<br>
+性别框为radio类型，控件的的name为gender,id分别为male,famale。<br>
+课程框为checkbox类型，控件的的name为course,id分别为asp,jsp,php,javascript。<br>
+籍贯框为select类型，控件的id、name为hometown。选择支的value分别为 bj,cd,cq<br>
+照片上传框为file类型，控件的id、name为photo。 。<br>
+保存按钮(type='submit')的id、name值为ok，value的值为保存。<br>
+<br>
+选择器优先级:id>类>标签<br>
+<div id="div_1" class="black">div_1</div>
+<div id="div_2" class="green">>div_2</div>
+
+<script>
+    function	turnOn(color){
+        console.log(color.type)
+        let left=document.getElementById("div_1")
+        let right=document.getElementById("div_2")
+        if(color=="red"){
+            left.class="red"
+            right.class="black";
+        }
+        if(color=="green"){
+            left.class="black";
+            right.class="green";
+        }
+    }
+
+</script>
+</body>
+</html>

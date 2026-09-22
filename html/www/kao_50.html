@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>前端正则编程</title>
+</head>
+前端正则编程。<br>
+要求如下：<br>
+定义方法checkValid(str)。<br>
+接受一个字符串参数。<br>
+实现对传入的数据进行正则验证。<br>
+本题验证身份证号：<br>
+长度为18位，51开头，出生日期在1970年后的身份证号，返回字符1<br>
+其他返回字符2<br>
+<body>
+<div id="div_1"></div>
+<script>
+    function checkValid(str){
+        let objstr=str.split();
+        let regular=/51\d{16}/;//没有引号
+        console.log(regular.test(objstr));
+        console.log(str.substring(6,10))
+        if(regular.test(objstr)&&str.substring(6,10)>1970)
+        {return 1}
+        else{
+            return 2
+        }
+    }
+
+</script>
+</body>
+</html>

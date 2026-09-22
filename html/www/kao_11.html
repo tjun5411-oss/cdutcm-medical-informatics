@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>XML解析示例</title>
+</head>
+<body>
+实现myXML函数，带有一个形参，解析传过来的XML，并返回name节点的值<br>
+XML的样式如：<br>
+<student><name>mike</name><age>18</age><class>one</class></student>
+<textarea id="xmlInput" rows="5" cols="50">
+<student>
+    <name>mike</name>
+    <age>18</age>
+    <class>one</class>
+</student>
+    </textarea>
+<button onclick="parseXML()">解析XML</button>
+<p id="result">Name节点的值: <span id="nameValue">-</span></p>
+
+<script>
+    function myXML(xmlString) {
+        const parser = new DOMParser();
+        const xmlDoc = parser.parseFromString(xmlString, "text/xml");
+
+        // 获取name节点的值
+        const nameNode = xmlDoc.querySelector("name");
+        return nameNode ? nameNode.textContent : null;
+    }
+
+    function parseXML() {
+        const xmlString = document.getElementById('xmlInput').value;
+        const nameValue = myXML(xmlString);
+        document.getElementById('nameValue').textContent = nameValue || '未找到';
+    }
+</script>
+</body>
+</html>

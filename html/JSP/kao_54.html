@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="gbk">
+    <title>使用cookie实现离线存储</title>
+</head>
+使用cookie实现离线存储。<br>
+要求如下：<br>
+姓名输入文本框的id与name为name。<br>
+保存按钮id,name,value为ok。<br>
+点击保存按钮后采用cookie进行存储。cookie过期时间为20秒。<br>
+刷新页面后，自动将存储的姓名恢复到姓名输入框中。<br>
+注：如果调试不成功，请检查考生浏览器是否禁止了cookie。<br>
+<body>
+<label>姓名：</label>
+<input type="text" id="name" name="name"><br>
+<input type="button" value="保存" id="ok" name="ok" onclick="saveName()">
+<script>
+    function saveName() {
+        var nameValue = document.getElementById("name").value;
+        document.cookie = "name=" + nameValue + ";expires=" + new Date(Date.now() + 20000).toUTCString();
+    }
+
+    function restoreName() {
+        var nameValue = getCookie("name");
+        if (nameValue) {
+            document.getElementById("name").value = nameValue;
+        }
+    }
+    function getCookie(cookieName) {
+        var name = cookieName + "=";
+        var decodedCookie = decodeURIComponent(document.cookie);
+        var cookieArray = decodedCookie.split(';');
+        for(var i = 0; i < cookieArray.length; i++) {
+            var c = cookieArray[i];
+            while (c.charAt(0) == ' ') {
+                c = c.substring(1);
+            }
+            if (c.indexOf(name) == 0) {
+                return c.substring(name.length, c.length);
+            }
+        }
+        return "";
+    }
+    restoreName();
+</script>
+</body>
+</html>

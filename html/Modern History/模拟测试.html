@@ -1,0 +1,953 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>在线模拟考试系统</title>
+    <style>
+        :root {
+            --primary-color: #2563eb;
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --text-main: #1e293b;
+        }
+
+        body {
+            font-family: "PingFang SC", "Microsoft YaHei", sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: var(--card-bg);
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .question-card {
+            background: var(--card-bg);
+            padding: 25px;
+            margin-bottom: 20px;
+            border-radius: 12px;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.05);
+            transition: transform 0.2s;
+        }
+
+        .type-badge {
+            font-size: 12px;
+            padding: 4px 8px;
+            border-radius: 4px;
+            margin-right: 10px;
+            vertical-align: middle;
+        }
+
+        .type-single { background: #dbeafe; color: #1e40af; }
+        .type-multiple { background: #fef3c7; color: #92400e; }
+
+        .option-item {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            margin: 8px 0;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .option-item:hover { background-color: #f1f5f9; }
+        .option-item input { margin-right: 12px; width: 18px; height: 18px; }
+
+        .submit-area {
+            text-align: center;
+            margin: 40px 0;
+        }
+
+        button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 18px;
+            border-radius: 30px;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(37, 99, 235, 0.2);
+        }
+
+        button:hover { opacity: 0.9; transform: translateY(-1px); }
+
+        #result-modal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 0 50px rgba(0,0,0,0.3);
+            z-index: 100;
+            text-align: center;
+            min-width: 300px;
+        }
+
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 99;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>模拟考试</h1>
+        <p>题目构成：40道单选 + 10道多选</p>
+    </header>
+
+    <form id="quiz-form">
+        <div id="questions-container">
+        </div>
+
+        <div class="submit-area">
+            <button type="button" onclick="calculateScore()">提交试卷</button>
+        </div>
+    </form>
+</div>
+
+<div class="overlay" id="overlay"></div>
+<div id="result-modal">
+    <h2>考试结束</h2>
+    <div id="score-display" style="font-size: 48px; color: var(--primary-color); margin: 20px 0;">0</div>
+    <p id="detail-display"></p>
+    <button onclick="location.reload()">重新考试</button>
+</div>
+
+<script>
+    /**
+     * 1. 题库数据格式说明
+     * type: "single" (单选) 或 "multiple" (多选)
+     * answer: 索引数组，[0] 代表 A，[1] 代表 B，以此类推
+     */
+    const questions = [
+        // ==================== 单项选择题 (1-40) ====================
+        {
+            id: 1,
+            type: "single",
+            text: "将中国近代史的开端界定于1840年鸦片战争，其最根本的学理依据是",
+            options: [
+                "A. 此后中国社会内部矛盾取代民族矛盾成为主要矛盾",
+                "B. 此后中国社会性质开始发生根本性变化，逐渐沦为半殖民地半封建社会",
+                "C. 此后中国自然经济完全解体，民族资本主义开始产生",
+                "D. 此后清政府改变了闭关锁国的对外政策"
+            ],
+            answer: [1],
+            knowledge: "中国近代史的开端",
+            explanation: "鸦片战争后，中国开始从独立的封建社会逐步沦为半殖民地半封建社会，这是中国近代史开端的根本标志。"
+        },
+        {
+            id: 2,
+            type: "single",
+            text: "关于“半殖民地半封建社会”中“半殖民地”的准确理解是",
+            options: [
+                "A. 一半领土被殖民，一半保持独立",
+                "B. 在形式上保持独立国家形态，但在政治、经济、文化上受帝国主义列强控制",
+                "C. 帝国主义与封建主义联合统治，各占一半势力范围",
+                "D. 封建社会与资本主义社会因素各占一半"
+            ],
+            answer: [1],
+            knowledge: "半殖民地半封建社会",
+            explanation: "“半殖民地”指的是国家形式上保持独立，但实际上在政治、经济、文化等方面受帝国主义控制和支配。"
+        },
+        {
+            id: 3,
+            type: "single",
+            text: "中国近代社会最主要的矛盾是",
+            options: [
+                "A. 农民阶级与地主阶级的矛盾",
+                "B. 无产阶级与资产阶级的矛盾",
+                "C. 帝国主义与中华民族的矛盾",
+                "D. 封建主义与人民大众的矛盾"
+            ],
+            answer: [2],
+            knowledge: "近代社会主要矛盾",
+            explanation: "帝国主义与中华民族的矛盾是近代中国社会最主要的矛盾，它是各种矛盾中最主要的矛盾。"
+        },
+        {
+            id: 4,
+            type: "single",
+            text: "中国现代史的开端通常界定于1949年中华人民共和国成立，其根本标志是",
+            options: [
+                "A. 新民主主义革命的基本胜利和向社会主义过渡的开始",
+                "B. 社会主义制度在中国的完全确立",
+                "C. 中国进入了改革开放的新时期",
+                "D. 中国实现了国家的工业化"
+            ],
+            answer: [0],
+            knowledge: "中国现代史的开端",
+            explanation: "1949年新中国成立标志着新民主主义革命基本胜利，中国进入新民主主义社会并开始向社会主义过渡。"
+        },
+        {
+            id: 5,
+            type: "single",
+            text: "在近代中国，革命与现代化的关系是",
+            options: [
+                "A. 相互排斥，必须先完成革命再进行现代化",
+                "B. 相互促进，革命为现代化扫清障碍，现代化是革命的目标之一",
+                "C. 完全等同，革命就是现代化",
+                "D. 先后顺序可以任意调整"
+            ],
+            answer: [1],
+            knowledge: "革命与现代化的关系",
+            explanation: "革命是现代化的先决条件，为现代化开辟道路；现代化是革命的后续追求和物质基础。"
+        },
+        {
+            id: 6,
+            type: "single",
+            text: "学习《中国近现代史纲要》的根本目的在于深刻领会历史和人民选择了",
+            options: [
+                "A. 马克思主义",
+                "B. 中国共产党",
+                "C. 社会主义道路",
+                "D. 以上皆是"
+            ],
+            answer: [3],
+            knowledge: "学习目的",
+            explanation: "即“四个选择”：选择了马克思主义、中国共产党、社会主义道路、改革开放。"
+        },
+        {
+            id: 7,
+            type: "single",
+            text: "近代中国历次反侵略战争失败的根本原因是",
+            options: [
+                "A. 经济技术的落后",
+                "B. 社会制度的腐败",
+                "C. 军事指挥的失误",
+                "D. 帝国主义力量过于强大"
+            ],
+            answer: [1],
+            knowledge: "反侵略战争失败原因",
+            explanation: "根本原因是社会制度的腐败，这是导致军事失败和技术落后的深层根源。"
+        },
+        {
+            id: 8,
+            type: "single",
+            text: "标志着中国旧民主主义革命向新民主主义革命转变的历史事件是",
+            options: [
+                "A. 太平天国运动",
+                "B. 辛亥革命",
+                "C. 新文化运动",
+                "D. 五四运动"
+            ],
+            answer: [3],
+            knowledge: "革命转变的标志",
+            explanation: "五四运动中工人阶级登上历史舞台，标志着新民主主义革命的开端。"
+        },
+        {
+            id: 9,
+            type: "single",
+            text: "中国近代历史上第一个比较系统的发展资本主义的方案是",
+            options: [
+                "A. 《天朝田亩制度》",
+                "B. 《资政新篇》",
+                "C. 《中华民国临时约法》",
+                "D. 《实业计划》"
+            ],
+            answer: [1],
+            knowledge: "资本主义发展方案",
+            explanation: "洪仁玕在《资政新篇》中提出向西方学习，发展工商业，具有鲜明的资本主义色彩。"
+        },
+        {
+            id: 10,
+            type: "single",
+            text: "近代中国社会阶级结构发生的新变化中，最革命、最进步的阶级是",
+            options: [
+                "A. 农民阶级",
+                "B. 地主阶级",
+                "C. 民族资产阶级",
+                "D. 无产阶级"
+            ],
+            answer: [3],
+            knowledge: "近代社会阶级结构",
+            explanation: "中国无产阶级深受三重压迫，且分布集中，是最革命的阶级。"
+        },
+        {
+            id: 11,
+            type: "single",
+            text: "在近代中国，实现国家富强和人民富裕的前提条件是",
+            options: [
+                "A. 学习西方先进技术",
+                "B. 推翻帝国主义和封建主义的统治，争取民族独立和人民解放",
+                "C. 发展资本主义经济",
+                "D. 进行思想文化启蒙"
+            ],
+            answer: [1],
+            knowledge: "国家富强的前提",
+            explanation: "不改变半殖民地半封建的社会地位，就不可能实现真正的现代化和富强。"
+        },
+        {
+            id: 12,
+            type: "single",
+            text: "中国选择社会主义道路的历史必然性，根植于",
+            options: [
+                "A. 民族资产阶级力量过于弱小，资本主义道路在中国走不通",
+                "B. 苏联社会主义模式的强大吸引力",
+                "C. 中国传统文化中蕴含的社会主义基因",
+                "D. 中国共产党人的主观愿望"
+            ],
+            answer: [0],
+            knowledge: "社会主义道路的历史必然性",
+            explanation: "由于中国民族资产阶级的软弱性，无法领导民主革命取得彻底胜利，资本主义方案宣告破产。"
+        },
+        {
+            id: 13,
+            type: "single",
+            text: "中国近代史的“高一级阶段”通常指的是",
+            options: [
+                "A. 旧民主主义革命时期",
+                "B. 新民主主义革命时期",
+                "C. 社会主义革命和建设时期",
+                "D. 改革开放和社会主义现代化建设新时期"
+            ],
+            answer: [1],
+            knowledge: "近代史阶段划分",
+            explanation: "新民主主义革命是近代史发展的更高阶段，拥有了无产阶级的领导和马克思主义的指导。"
+        },
+        {
+            id: 14,
+            type: "single",
+            text: "理解中国近现代史的主线和主题，关键在于把握",
+            options: [
+                "A. 帝王将相的丰功伟绩",
+                "B. 中国人民为争取民族独立、人民解放和实现国家富强、人民幸福而不懈奋斗的历史",
+                "C. 中外文化交流与碰撞的历史",
+                "D. 经济发展与科技进步的历史"
+            ],
+            answer: [1],
+            knowledge: "近现代史的主线",
+            explanation: "中国近代史是一部奋斗史、探索史，其核心是实现民族复兴。"
+        },
+        {
+            id: 15,
+            type: "single",
+            text: "“告别革命论”的思潮在方法论上的错误在于",
+            options: [
+                "A. 承认革命具有破坏性",
+                "B. 忽视了革命发生的深刻历史根源和社会条件",
+                "C. 强调了改良的积极作用",
+                "D. 肯定了现代化的价值"
+            ],
+            answer: [1],
+            knowledge: "历史方法论",
+            explanation: "革命不是少数人主观制造的，而是由社会基本矛盾激化、统治者无法照旧统治下去的结果。"
+        },
+        {
+            id: 16,
+            type: "single",
+            text: "中国近代历次救亡图存运动失败的一个重要启示是",
+            options: [
+                "A. 必须依靠外部力量拯救中国",
+                "B. 必须有先进阶级及其政党的领导，并有科学理论的指导",
+                "C. 必须全盘西化，彻底抛弃传统文化",
+                "D. 必须首先发展经济，再进行政治改革"
+            ],
+            answer: [1],
+            knowledge: "救亡图存运动的启示",
+            explanation: "农民阶级、民族资产阶级都因自身局限性无法完成革命任务，需要先进政党领导。"
+        },
+        {
+            id: 17,
+            type: "single",
+            text: "新中国成立后，中国社会进入了",
+            options: [
+                "A. 资本主义社会",
+                "B. 新民主主义社会",
+                "C. 社会主义社会初级阶段",
+                "D. 共产主义社会"
+            ],
+            answer: [1],
+            knowledge: "新中国成立后的社会性质",
+            explanation: "1949-1956年是新民主主义社会，是一个向社会主义过渡的社会形态。"
+        },
+        {
+            id: 18,
+            type: "single",
+            text: "改革开放以来中国取得一切成绩和进步的根本原因是",
+            options: [
+                "A. 引进了外资和技术",
+                "B. 开辟了中国特色社会主义道路，形成了中国特色社会主义理论体系",
+                "C. 加入了世界贸易组织",
+                "D. 自然资源和劳动力丰富"
+            ],
+            answer: [1],
+            knowledge: "改革开放成就的根本原因",
+            explanation: "根本原因在于开辟了道路，形成了理论体系，确立了制度，发展了文化。"
+        },
+        {
+            id: 19,
+            type: "single",
+            text: "学习历史需要树立正确历史观，其核心是",
+            options: [
+                "A. 坚持唯物史观",
+                "B. 坚持英雄史观",
+                "C. 坚持文明史观",
+                "D. 坚持全球史观"
+            ],
+            answer: [0],
+            knowledge: "正确历史观",
+            explanation: "坚持唯物史观，科学地评价历史事件和人物。"
+        },
+        {
+            id: 20,
+            type: "single",
+            text: "中国近代社会发展的“两个过程”论，指的是",
+            options: [
+                "A. 帝国主义把中国变为半殖民地和中国人民反抗帝国主义及其走狗的过程",
+                "B. 资本主义发展和封建主义衰亡的过程",
+                "C. 城市发展与农村衰败的过程",
+                "D. 对外开放与闭关自守交替的过程"
+            ],
+            answer: [0],
+            knowledge: "近代社会发展理论",
+            explanation: "这是毛泽东提出的著名论断，揭示了中国近代史的本质。"
+        },
+        {
+            id: 21,
+            type: "single",
+            text: "鸦片战争前，中英贸易中中国长期处于出超地位的根本原因是",
+            options: [
+                "A. 英国对中国茶叶、生丝等商品需求旺盛",
+                "B. 清政府实行闭关锁国的对外贸易政策",
+                "C. 中国自给自足的自然经济结构占统治地位",
+                "D. 英国工业品不符合中国消费者的习惯"
+            ],
+            answer: [2],
+            knowledge: "鸦片战争前的中国经济结构",
+            explanation: "自然经济具有稳固的防御性，导致英国工业品难以进入中国市场。"
+        },
+        {
+            id: 22,
+            type: "single",
+            text: "英国发动鸦片战争最深刻的动因是",
+            options: [
+                "A. 维护其罪恶的鸦片贸易",
+                "B. 扭转对华贸易逆差，打开中国市场",
+                "C. 报复林则徐的虎门销烟",
+                "D. 传播西方的基督教文明"
+            ],
+            answer: [1],
+            knowledge: "鸦片战争的根本原因",
+            explanation: "工业革命后的英国急于寻找海外市场和原料产地，这是其发动战争的根本动力。"
+        },
+        {
+            id: 23,
+            type: "single",
+            text: "《南京条约》中最能反映英国发动战争本质意图的条款是",
+            options: [
+                "A. 割让香港岛",
+                "B. 赔款2100万银元",
+                "C. 开放五处通商口岸",
+                "D. 协定关税"
+            ],
+            answer: [3],
+            knowledge: "《南京条约》的关键条款",
+            explanation: "协定关税破坏了中国的关税自主权，使英国能以低税率向中国倾销商品，最直接服务于其贸易扩张意图。"
+        },
+        {
+            id: 24,
+            type: "single",
+            text: "鸦片战争后，中国社会最主要的矛盾是",
+            options: [
+                "A. 地主阶级与农民阶级的矛盾",
+                "B. 封建主义与人民大众的矛盾",
+                "C. 帝国主义与中华民族的矛盾",
+                "D. 资产阶级与无产阶级的矛盾"
+            ],
+            answer: [2],
+            knowledge: "近代中国社会主要矛盾",
+            explanation: "随着侵略加深，民族矛盾成为社会最主要的矛盾。"
+        },
+        {
+            id: 25,
+            type: "single",
+            text: "第二次鸦片战争期间，侵占中国领土最多的国家是",
+            options: [
+                "A. 英国",
+                "B. 法国",
+                "C. 俄国",
+                "D. 美国"
+            ],
+            answer: [2],
+            knowledge: "第二次鸦片战争与领土丧失",
+            explanation: "沙俄乘人之危，割占了中国东北、西北150多万平方公里土地。"
+        },
+        {
+            id: 26,
+            type: "single",
+            text: "马克思在评论近代中国时提到的“奇异的对联式悲歌”具体是指",
+            options: [
+                "A. 鸦片战争与闭关锁国的对抗",
+                "B. 清政府对内镇压与对外屈服的矛盾",
+                "C. 太平天国运动与第二次鸦片战争在时间上的并存",
+                "D. 儒家文化与基督教文化的冲突"
+            ],
+            answer: [2],
+            knowledge: "马克思对近代中国的评论",
+            explanation: "马克思认为内部革命与外部战争同时发生，构成了一种历史性的“对联”。"
+        },
+        {
+            id: 27,
+            type: "single",
+            text: "近代中国“睁眼看世界第一人”林则徐主持编译的著作是",
+            options: [
+                "A. 《海国图志》",
+                "B. 《四洲志》",
+                "C. 《瀛寰志略》",
+                "D. 《康輶纪行》"
+            ],
+            answer: [1],
+            knowledge: "林则徐与开眼看世界",
+            explanation: "林则徐根据西方书籍编译《四洲志》，魏源后在其基础上编成《海国图志》。"
+        },
+        {
+            id: 28,
+            type: "single",
+            text: "魏源在《海国图志》中提出的思想是",
+            options: [
+                "A. “师夷长技以制夷”",
+                "B. “物竞天择，适者生存”",
+                "C. “中学为体，西学为用”",
+                "D. “振兴中华”"
+            ],
+            answer: [0],
+            knowledge: "魏源的《海国图志》",
+            explanation: "“师夷长技以制夷”明确提出了学习西方军事技术来抵抗侵略。"
+        },
+        {
+            id: 29,
+            type: "single",
+            text: "中国工人阶级最早出现于",
+            options: [
+                "A. 19世纪四五十年代的外国在华企业中",
+                "B. 19世纪六十年代的洋务企业中",
+                "C. 19世纪七十年代的民族资本企业中",
+                "D. 第一次世界大战期间"
+            ],
+            answer: [0],
+            knowledge: "中国工人阶级的产生",
+            explanation: "中国工人阶级的产生早于民族资产阶级，最早诞生于通商口岸的外资企业。"
+        },
+        {
+            id: 30,
+            type: "single",
+            text: "近代中国半殖民地半封建社会的起点是",
+            options: [
+                "A. 第一次鸦片战争和《南京条约》的签订",
+                "B. 第二次鸦片战争和《天津条约》《北京条约》的签订",
+                "C. 甲午战争和《马关条约》的签订",
+                "D. 八国联军侵华和《辛丑条约》的签订"
+            ],
+            answer: [0],
+            knowledge: "半殖民地半封建社会的开端",
+            explanation: "1840年鸦片战争是中国历史的分水岭。"
+        },
+        {
+            id: 31,
+            type: "single",
+            text: "标志着帝国主义列强对华经济侵略方式由商品输出为主转为资本输出为主的条约是",
+            options: [
+                "A. 《南京条约》",
+                "B. 《北京条约》",
+                "C. 《马关条约》",
+                "D. 《辛丑条约》"
+            ],
+            answer: [2],
+            knowledge: "经济侵略方式的变化",
+            explanation: "《马关条约》规定允许日本在通商口岸开设工厂，这诱发了列强对华资本输出的浪潮。"
+        },
+        {
+            id: 32,
+            type: "single",
+            text: "近代中国人民第一次大规模的反侵略武装斗争是",
+            options: [
+                "A. 三元里人民的抗英斗争",
+                "B. 太平天国运动",
+                "C. 义和团运动",
+                "D. 台湾人民反割台斗争"
+            ],
+            answer: [0],
+            knowledge: "早期反侵略斗争",
+            explanation: "1841年广州三元里民众自发组织的武装斗争，打击了侵略者的嚣张气焰。"
+        },
+        {
+            id: 33,
+            type: "single",
+            text: "19世纪70年代侵入新疆，并得到英、俄两国承认的伪政权领导者是",
+            options: [
+                "A. 阿古柏",
+                "B. 华尔",
+                "C. 戈登",
+                "D. 瓦德西"
+            ],
+            answer: [0],
+            knowledge: "19世纪边疆危机",
+            explanation: "阿古柏在英俄支持下入侵新疆，后被左宗棠率军粉碎。"
+        },
+        {
+            id: 34,
+            type: "single",
+            text: "在近代中国，提出“振兴中华”口号的是",
+            options: [
+                "A. 林则徐",
+                "B. 魏源",
+                "C. 孙中山",
+                "D. 毛泽东"
+            ],
+            answer: [2],
+            knowledge: "“振兴中华”口号",
+            explanation: "1894年孙中山在兴中会成立时首次明确提出了这一口号。"
+        },
+        {
+            id: 35,
+            type: "single",
+            text: "鸦片战争后，中国社会性质发生的根本变化是",
+            options: [
+                "A. 中国的白银大量外流",
+                "B. 独立的中国逐步变成半殖民地的中国，封建的中国逐步变成半封建的中国",
+                "C. 自然经济完全解体",
+                "D. 地主阶级与农民阶级的矛盾被彻底取代"
+            ],
+            answer: [1],
+            knowledge: "社会性质变化",
+            explanation: "这是近代史纲要最基础的定义性命题。"
+        },
+        {
+            id: 36,
+            type: "single",
+            text: "第二次鸦片战争中，扮演了“既是帮凶，又单独作案”角色的国家是",
+            options: [
+                "A. 俄国",
+                "B. 美国",
+                "C. 德国",
+                "D. 意大利"
+            ],
+            answer: [0],
+            knowledge: "二鸦期间的国家关系",
+            explanation: "俄国在充当英法联军“调停人”的同时，趁火打劫非法侵占大片领土。"
+        },
+        {
+            id: 37,
+            type: "single",
+            text: "太平天国运动与以往农民战争相比，新的时代特点是",
+            options: [
+                "A. 建立了与清王朝对峙的政权",
+                "B. 提出了反映农民土地要求的纲领",
+                "C. 肩负起反封建反侵略的双重使命",
+                "D. 遭到了顽固派的疯狂镇压"
+            ],
+            answer: [2],
+            knowledge: "太平天国新特点",
+            explanation: "处在半殖民地半封建社会，反帝反封建成为近代农民战争的新任务。"
+        },
+        {
+            id: 38,
+            type: "single",
+            text: "《天朝田亩制度》和《资政新篇》的共同之处在于",
+            options: [
+                "A. 都主张发展资本主义",
+                "B. 都反映了农民阶级的迫切愿望",
+                "C. 都具有反封建的进步性",
+                "D. 都符合当时中国的社会实际"
+            ],
+            answer: [2],
+            knowledge: "太平天国纲领比较",
+            explanation: "两者性质不同，但都从政治和经济上对封建制度进行了抨击。"
+        },
+        {
+            id: 39,
+            type: "single",
+            text: "近代中国海关管理权长期被外国人把持，担任总税务司长达40余年的英国人是",
+            options: [
+                "A. 赫德",
+                "B. 李泰国",
+                "C. 璞鼎查",
+                "D. 马戛尔尼"
+            ],
+            answer: [0],
+            knowledge: "海关主权丧失",
+            explanation: "赫德（Robert Hart）长期执掌中国海关，是西方侵略势力干预中国内政的重要体现。"
+        },
+        {
+            id: 40,
+            type: "single",
+            text: "帝国主义列强不能灭亡和瓜分中国的最根本原因是",
+            options: [
+                "A. 帝国主义列强之间的矛盾和互相制约",
+                "B. 清朝政府的顽强抵抗",
+                "C. 中华民族进行的不屈不挠的反侵略斗争",
+                "D. 中国地域广阔，人口众多"
+            ],
+            answer: [2],
+            knowledge: "中国未被瓜分的原因",
+            explanation: "列强之间的矛盾是客观原因，而中国人民的反抗才是粉碎瓜分阴谋的根本动力。"
+        },
+
+        // ==================== 多项选择题 (41-50) ====================
+        {
+            id: 41,
+            type: "multiple",
+            text: "中国半殖民地半封建社会的基本特征包括",
+            options: [
+                "A. 资本-帝国主义侵略势力日益成为统治中国的决定性力量",
+                "B. 中国的封建势力同帝国主义侵略势力相互勾结",
+                "C. 封建剥削制度的根基依然存在",
+                "D. 中国各地区经济、政治和文化的发展表现出极端的不平衡",
+                "E. 民族资本主义发展缓慢，力量微弱"
+            ],
+            answer: [0, 1, 2, 3, 4],
+            knowledge: "半殖民地半封建社会特征",
+            explanation: "这些特征共同构成了中国近代社会的基本面貌。"
+        },
+        {
+            id: 42,
+            type: "multiple",
+            text: "近代以来中华民族面临的两大历史任务是",
+            options: [
+                "A. 建立君主立宪制",
+                "B. 争取民族独立和人民解放",
+                "C. 实现国家繁荣富强和人民共同富裕",
+                "D. 全盘西化",
+                "E. 推翻所有宗教信仰"
+            ],
+            answer: [1, 2],
+            knowledge: "中华民族的历史任务",
+            explanation: "争取独立是前提，实现富强是目的。两者互为因果，缺一不可。"
+        },
+        {
+            id: 43,
+            type: "multiple",
+            text: "关于中国近代史的“基本线索”，学术界的主要观点包括",
+            options: [
+                "A. “两个过程”论",
+                "B. “四个阶梯”论",
+                "C. “现代化”视角",
+                "D. 革命范式与现代化范式的统一",
+                "E. “冲击-反应”模式"
+            ],
+            answer: [0, 1, 2, 3, 4],
+            knowledge: "近代史基本线索",
+            explanation: "这些观点从不同维度（阶级斗争、经济发展、文明交互等）解读了这段历史。"
+        },
+        {
+            id: 44,
+            type: "multiple",
+            text: "学习《中国近现代史纲要》应把握的方法有",
+            options: [
+                "A. 坚持唯物史观",
+                "B. 反对历史虚无主义",
+                "C. 把握历史的主题与主线",
+                "D. 理论联系实际",
+                "E. 将历史事件置于世界大背景下考察"
+            ],
+            answer: [0, 1, 2, 3, 4],
+            knowledge: "学习方法",
+            explanation: "要求学生不仅记住事件，更要学会科学分析历史规律。"
+        },
+        {
+            id: 45,
+            type: "multiple",
+            text: "中国共产党的成立深刻改变了",
+            options: [
+                "A. 近代以后中华民族发展的方向和进程",
+                "B. 中国人民和中华民族的前途和命运",
+                "C. 世界发展的趋势和格局",
+                "D. 封建地主阶级的统治基础",
+                "E. 中国封建文明的存续"
+            ],
+            answer: [0, 1, 2],
+            knowledge: "中国共产党成立的意义",
+            explanation: "这是习近平总书记在庆祝中国共产党成立100周年大会上总结的“三个深刻改变”。"
+        },
+        {
+            id: 46,
+            type: "multiple",
+            text: "关于鸦片战争后中国社会的变化，准确的有",
+            options: [
+                "A. 丧失了完全独立的主权",
+                "B. 封建剥削制度同买办资本、高利贷资本相结合",
+                "C. 自然经济开始解体",
+                "D. 中国社会阶级构成出现了工人阶级和资产阶级",
+                "E. 中国完全变成了帝国主义的行政省份"
+            ],
+            answer: [0, 1, 2, 3],
+            knowledge: "社会性质的微观变化",
+            explanation: "E选项错误，中国是半殖民地，形式上仍保留清政府，而非完全行政占领。"
+        },
+        {
+            id: 47,
+            type: "multiple",
+            text: "下列关于太平天国运动的评价，正确的有",
+            options: [
+                "A. 是中国旧式农民战争的最高峰",
+                "B. 冲击了孔子和儒家经典的权威",
+                "C. 提出了发展资本主义的方案",
+                "D. 动摇了清政府的统治基础",
+                "E. 彻底推翻了帝国主义在华统治"
+            ],
+            answer: [0, 1, 2, 3],
+            knowledge: "太平天国评价",
+            explanation: "E选项错误，农民阶级由于阶级局限性，无法彻底战胜帝国主义。"
+        },
+        {
+            id: 48,
+            type: "multiple",
+            text: "资本-帝国主义列强对中国进行文化渗透的手段包括",
+            options: [
+                "A. 披着宗教外衣进行侵略活动",
+                "B. 创办报刊、发行书籍",
+                "C. 兴办学校",
+                "D. 宣扬“种族优劣论”",
+                "E. 破坏中国古迹、洗劫文物"
+            ],
+            answer: [0, 1, 2, 3],
+            knowledge: "文化渗透手段",
+            explanation: "E选项属于军事和经济掠夺范畴，不属于软实力的“文化渗透”。"
+        },
+        {
+            id: 49,
+            type: "multiple",
+            text: "19世纪70至80年代，中国边疆危机的表现包括",
+            options: [
+                "A. 英国入侵西藏、云南",
+                "B. 法国入侵广西并挑起中法战争",
+                "C. 日本侵犯台湾、吞并琉球",
+                "D. 俄国侵占伊犁",
+                "E. 德军强占胶州湾"
+            ],
+            answer: [0, 1, 2, 3],
+            knowledge: "边疆危机",
+            explanation: "E选项属于19世纪90年代甲午战争后的瓜分狂潮。"
+        },
+        {
+            id: 50,
+            type: "multiple",
+            text: "中国近现代史上，反侵略战争失败的主要原因有",
+            options: [
+                "A. 社会制度腐败",
+                "B. 经济技术落后",
+                "C. 民族觉醒程度不高",
+                "D. 统治阶级议和心态重",
+                "E. 儒家文化的阻碍"
+            ],
+            answer: [0, 1, 2, 3],
+            knowledge: "反侵略失败原因深度分析",
+            explanation: "主要归结为制度腐败（根本原因）和经济落后（重要原因）。"
+        }
+    ];
+
+    let currentPaper = []; // 存储当前选中的50道题
+
+    // 初始化考试
+    function initExam() {
+        const singles = questions.filter(q => q.type === 'single');
+        const multiples = questions.filter(q => q.type === 'multiple');
+
+        if (singles.length < 40 || multiples.length < 10) {
+            console.warn("题库数量不足：当前单选 " + singles.length + "，多选 " + multiples.length);
+        }
+
+        // 随机抽取
+        const selectedSingles = shuffle(singles).slice(0, 40);
+        const selectedMultiples = shuffle(multiples).slice(0, 10);
+
+        // 合并并打乱试卷顺序
+        currentPaper = shuffle([...selectedSingles, ...selectedMultiples]);
+
+        renderQuestions();
+    }
+
+    // 洗牌算法
+    function shuffle(array) {
+        let m = array.length, t, i;
+        while (m) {
+            i = Math.floor(Math.random() * m--);
+            t = array[m];
+            array[m] = array[i];
+            array[i] = t;
+        }
+        return array;
+    }
+
+    // 渲染题目到页面
+    function renderQuestions() {
+        const container = document.getElementById('questions-container');
+        container.innerHTML = currentPaper.map((q, idx) => `
+            <div class="question-card" data-idx="${idx}">
+                <p>
+                    <strong>${idx + 1}.</strong>
+                    <span class="type-badge ${q.type === 'single' ? 'type-single' : 'type-multiple'}">
+                        ${q.type === 'single' ? '单选' : '多选'}
+                    </span>
+                    ${q.question}
+                </p>
+                <div class="options">
+                    ${q.options.map((opt, optIdx) => `
+                        <label class="option-item">
+                            <input type="${q.type === 'single' ? 'radio' : 'checkbox'}"
+                                   name="q${idx}"
+                                   value="${optIdx}">
+                            ${String.fromCharCode(65 + optIdx)}. ${opt}
+                        </label>
+                    `).join('')}
+                </div>
+            </div>
+        `).join('');
+    }
+
+    // 计算得分
+    function calculateScore() {
+        let score = 0;
+        let correctCount = 0;
+
+        currentPaper.forEach((q, idx) => {
+            const selected = Array.from(document.querySelectorAll(`input[name="q${idx}"]:checked`))
+                .map(el => parseInt(el.value));
+
+            // 比较数组是否一致 (需先排序)
+            const isCorrect = JSON.stringify(selected.sort()) === JSON.stringify(q.answer.sort());
+
+            if (isCorrect) {
+                // 假设单选2分，多选2分，共100分；或者根据你需求调整
+                score += 2;
+                correctCount++;
+            }
+        });
+
+        // 显示结果
+        document.getElementById('score-display').innerText = score + " 分";
+        document.getElementById('detail-display').innerText = `答对了 ${correctCount} / ${currentPaper.length} 题`;
+        document.getElementById('overlay').style.display = 'block';
+        document.getElementById('result-modal').style.display = 'block';
+        window.scrollTo(0, 0);
+    }
+
+    // 启动
+    initExam();
+</script>
+
+</body>
+</html>
